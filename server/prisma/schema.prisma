@@ -21,6 +21,10 @@ model User {
   firstname   String
   lastname    String
   Author_Post Author_Post[]
+
+  Comment Comment[]
+
+  Like Like[]
 }
 
 model Author_Post {
@@ -41,6 +45,9 @@ model Post {
   Author_Post Author_Post[]
 
   Image_Post Image_Post[]
+  Comment    Comment[]
+
+  Like Like[]
 }
 
 model Image {
@@ -58,4 +65,29 @@ model Image_Post {
   post_id Int
 
   @@id([img_id, post_id]) // Composite primary key
+}
+
+model Comment {
+  post Post @relation(fields: [post_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  post_id Int
+  user_id Int
+
+  comment String
+  created DateTime @default(now())
+
+  @@id([post_id, user_id])
+}
+
+model Like {
+  post Post @relation(fields: [post_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  post_id Int
+  user_id Int
+
+  like Boolean @default(false)
+
+  @@id([post_id, user_id])
 }
