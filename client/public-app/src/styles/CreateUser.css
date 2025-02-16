@@ -1,0 +1,87 @@
+
+
+
+.create-user-form {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 1rem 2rem;
+    width: fit-content;
+    justify-self: center;
+    margin: 2rem;
+
+    h2 {
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    p {
+        text-align: center;
+    }
+
+    button {
+        margin: 1rem;
+    }
+}
+
+.create-user-input {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.input-fieldset {
+    border-radius: 10px;
+    transition: ease-in-out 0.2s;
+}
+
+.input-fieldset:has(input:focus) {
+
+    border: 2px solid #646cff;
+
+    svg {
+        fill: #646cff;
+    }
+
+    legend {
+        color: #646cff;
+    }
+}
+
+.input-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+
+    > input {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 1.2rem;
+    }
+}
+
+
+
+.password-input:has(input:focus) {
+    .password-checks {
+        background-color: orange;
+    }
+}
+
+.password-checks.show {
+    opacity: 1;
+}
+
+.password-checks {
+    opacity: 0;
+    transition: ease-in-out opacity 0.25s;
+
+    p {
+        color: red;
+        margin: 0;
+        text-align: left;
+    }
+}

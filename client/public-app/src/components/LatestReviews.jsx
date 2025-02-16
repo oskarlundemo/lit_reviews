@@ -6,8 +6,7 @@ export const LatestReviews = () => {
 
 
     return (
-        <main className="latest-reviews">
-
+        <div className="latest-reviews">
 
             <h2>Latest reviews</h2>
 
@@ -126,11 +125,7 @@ export const LatestReviews = () => {
 
                     <h3><a href="#">Read more</a></h3>
                 </article>
-
             </div>
-
-
-
-        </main>
+        </div>
     )
 }
