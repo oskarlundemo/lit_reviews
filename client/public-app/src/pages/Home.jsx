@@ -23,14 +23,6 @@ export default function Home  () {
         <div className="home-container">
             <AboutSection/>
             <LatestReviews/>
-
-            {(getUsers.length === 0) ? (
-                <p>Loading...</p>
-            ) : (
-                getUsers.users.map((user, i) => {
-                    return <p key={i}>{user}</p>
-                })
-            )}
             <Footer/>
         </div>
     )

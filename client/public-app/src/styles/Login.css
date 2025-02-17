@@ -1,0 +1,66 @@
+
+
+
+.login-box {
+    width: 60%;
+    height: 80%;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    display: flex;
+    overflow: hidden;
+}
+
+
+.login-box-right, .login-box-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 2rem;
+    background: var(--background-color);
+    width: 50%;
+}
+
+.login-box-left {
+    text-align: center;
+    h2 {
+        font-weight: 400;
+    }
+    h3 {
+        span {
+            font-style: italic;
+        }
+    }
+}
+
+.divider {
+    width: 2px;
+    margin: 4rem 0;
+    background-color: var(--secondary-color);
+}
+
+
+
+form {
+    width: 80%;
+    display: flex;
+}
+
+
+.login-user-input {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    p {
+        margin: 0 0 1rem 0;
+        text-align: left;
+        color: var(--error-color);
+        padding-left: 0.5rem;
+    }
+}
+
+.error-msg {
+    height: 1rem;
+}

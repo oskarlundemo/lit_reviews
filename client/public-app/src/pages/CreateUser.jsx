@@ -10,7 +10,15 @@ export default function CreateUser() {
 
 
     const [isPasswordFocused, setPasswordFocused] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    const [isPasswordLenght, setIsPasswordLength] = useState(false);
+    const [isNumber, setIsNumber] = useState(false);
+    const [isSymbol, setIsSymbol] = useState(false);
+
+
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
 
     const [formData, setFormData] = useState({
@@ -19,20 +27,64 @@ export default function CreateUser() {
         email: '',
     })
 
+    const validatePassword = (password) => {
+        const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const isValidLength = password.length >= 8;
 
+        setIsPasswordLength(isValidLength);
+        setIsNumber(hasNumber);
+        setIsSymbol(hasSpecialChar);
 
+        return isValidLength && hasSpecialChar && hasNumber;
+    }
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
+        const { name, value } = e.target;
+
+        setFormData((prevData) => {
+            const updatedData = {
+                ...prevData,
+                [name]: value
+            };
+
+            validatePassword(updatedData.password);
+            setIsDisabled(!(updatedData.username && validatePassword(updatedData.password) && updatedData.email))
+            return updatedData;
+        });
+    };
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+
+        try {
+
+            const response = await fetch('/create-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+
+            const result = await response.json(); // Parse JSON response from backend
+            setSuccess('User created successfully!');
+            setError(null);
+            console.log(result);
+
+        } catch (err) {
+            setError('There was an error creating the user');
+            setSuccess(null);
+            console.error('Error:', err);
+        }
     }
 
 
     return (
-            <form className="create-user-form" method="POST" action="/">
+            <form onSubmit={handleSubmit} className="create-user-form">
                 <h2>Sign Up</h2>
                 <p>Let's get started with your reading trial</p>
                 <div className="create-user-input">
@@ -50,6 +102,12 @@ export default function CreateUser() {
                         </div>
                     </fieldset>
 
+
+                    {success && <p style={{ color: 'green' }}>{success}</p>}
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
+
+                    <p className="errors-msg username-error"></p>
+
                     <fieldset className="input-fieldset">
                         <legend>E-mail</legend>
                         <div className="input-card">
@@ -62,8 +120,8 @@ export default function CreateUser() {
                             />
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
                         </div>
-
                     </fieldset>
+                    <p className="errors-msg email-error"></p>
 
                     <fieldset className="input-fieldset">
                         <legend>Password</legend>
@@ -83,12 +141,29 @@ export default function CreateUser() {
                     </fieldset>
 
                     <div className={`password-checks ${isPasswordFocused ? "show" : ""}`}>
-                        <p>At least 8 characters</p>
-                        <p>Contains a number or symbol</p>
+
+                        <div className={`password-check ${isPasswordLenght ? "length" : ""}`}>
+                            {isPasswordLenght ? (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z"/></svg>)
+                                : (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>)}
+                            <p>At least 8 characters</p>
+                        </div>
+
+
+                        <div className={`password-check ${isNumber ? "special" : ""}`}>
+                            {isNumber ? (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z"/></svg>)
+                                : (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>)}
+                            <p>Contains a number</p>
+                        </div>
+
+                        <div className={`password-check ${isSymbol ? "special" : ""}`}>
+                            {isNumber ? (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z"/></svg>)
+                                : (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>)}
+                            <p>Contains a symbol ex. (!@$%&)</p>
+                        </div>
                     </div>
 
                 </div>
-                <button type="submit" disabled={isDisabled}>Sign Up</button>
+                <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Sign Up</button>
                 <p>Already have an account? <a>Log in</a></p>
             </form>
     )

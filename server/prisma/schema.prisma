@@ -18,13 +18,10 @@ model User {
   username    String        @unique
   email       String        @unique
   password    String
-  firstname   String
-  lastname    String
   Author_Post Author_Post[]
 
   Comment Comment[]
-
-  Like Like[]
+  Like    Like[]
 }
 
 model Author_Post {
@@ -33,7 +30,7 @@ model Author_Post {
   post    Post @relation(fields: [post_id], references: [id])
   post_id Int
 
-  @@id([user_id, post_id]) // Composite primary key
+  @@id([user_id, post_id])
 }
 
 model Post {

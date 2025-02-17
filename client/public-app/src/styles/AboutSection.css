@@ -2,7 +2,7 @@
 
 .about-section {
 
-    background-color: lightgray;
+    background-color: var(--secondary-color);
     padding: 1rem 4rem;
 
     display: flex;

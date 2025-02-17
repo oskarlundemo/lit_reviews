@@ -25,27 +25,28 @@
 
 .create-user-input {
     display: flex;
-    gap: 1rem;
     flex-direction: column;
     width: 100%;
+
+    p {
+        margin: 0 0 1rem 0;
+        text-align: left;
+        color: var(--error-color);
+        padding-left: 0.5rem;
+    }
 }
 
 
 .input-fieldset {
+    padding: 0.5rem;
     border-radius: 10px;
     transition: ease-in-out 0.2s;
 }
 
 .input-fieldset:has(input:focus) {
-
     border: 2px solid #646cff;
-
-    svg {
-        fill: #646cff;
-    }
-
-    legend {
-        color: #646cff;
+    svg, legend {
+        fill: var(--accent-color)
     }
 }
 
@@ -60,14 +61,7 @@
         border: none;
         outline: none;
         font-size: 1.2rem;
-    }
-}
-
-
-
-.password-input:has(input:focus) {
-    .password-checks {
-        background-color: orange;
+        background: transparent;
     }
 }
 
@@ -79,9 +73,30 @@
     opacity: 0;
     transition: ease-in-out opacity 0.25s;
 
+    div {
+        display: flex;
+        align-items: center;
+        svg {
+            fill: var(--error-color);
+        }
+    }
     p {
-        color: red;
+        color: var(--error-color);
         margin: 0;
         text-align: left;
     }
 }
+
+
+.password-check.special, .password-check.length {
+    p {
+        color: green;
+    }
+
+    svg {
+        fill: green;
+    }
+}
+
+
+
