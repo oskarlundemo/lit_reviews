@@ -45,9 +45,7 @@ export const Login = () => {
             </div>
 
 
-            <div className="divider">
-
-            </div>
+            <div className="divider"></div>
 
 
             <div className="login-box-right">
