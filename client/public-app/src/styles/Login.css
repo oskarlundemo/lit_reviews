@@ -9,6 +9,8 @@
     border-radius: 15px;
     display: flex;
     overflow: hidden;
+    justify-self: center;
+    margin: 2rem;
 }
 
 
@@ -40,11 +42,13 @@
     background-color: var(--secondary-color);
 }
 
-
-
 form {
     width: 80%;
     display: flex;
+
+    button {
+        margin-top: 1rem;
+    }
 }
 
 
@@ -52,15 +56,11 @@ form {
     display: flex;
     flex-direction: column;
     width: 100%;
-
-    p {
-        margin: 0 0 1rem 0;
-        text-align: left;
-        color: var(--error-color);
-        padding-left: 0.5rem;
-    }
 }
 
 .error-msg {
-    height: 1rem;
+    color: var(--error-color);
+    text-align: left !important;
+    font-size: 1rem;
+    padding: 0 0 0 0.5rem;
 }

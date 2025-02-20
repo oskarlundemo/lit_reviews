@@ -9,16 +9,6 @@ export default function Home  () {
     const [getUsers, setUsers] = useState([]);
 
 
-    useEffect(() => {
-        fetch('/api')
-            .then((res) => res.json())
-            .then((data) => setUsers(data))
-            .catch((error) => {
-                console.error('Error fetching users:', error);
-            });
-    }, []);
-
-
     return (
         <div className="home-container">
             <AboutSection/>

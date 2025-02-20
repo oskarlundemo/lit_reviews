@@ -1,11 +1,35 @@
 
 
 import '../styles/Header.css';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext.jsx";
 
 
 
 export const Header = () => {
+    const {user, logout} = useAuth();
+
+
+    if (user) {
+        return (
+            <header className="App-header">
+                <Link to="/"><h1>Lundemo's library</h1></Link>
+                <nav>
+                    {user.admin ? (
+                        <div className="admin-container">
+                            <p>Welcome {user.username}</p>
+                            <Link to="/dashboard">Admin Dashboard</Link>
+                        </div>
+                    ) : (
+                        <p>Welcome {user.username}</p>
+                    )}
+                    <button onClick={logout}>Sign out</button>
+                </nav>
+            </header>
+        );
+    }
+
+
     return (
         <header className="App-header">
             <Link to="/"><h1>Lundemo's library</h1></Link>

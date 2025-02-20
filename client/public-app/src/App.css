@@ -14,10 +14,11 @@
   width: 100%;
 }
 
-header {
-  height: 10%;
-}
 
 .main-content {
   height: 90%;
+}
+
+header {
+  height: 10%
 }

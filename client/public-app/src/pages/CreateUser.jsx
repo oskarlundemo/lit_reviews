@@ -2,7 +2,8 @@
 
 import '../styles/CreateUser.css';
 import {useState} from "react";
-
+import { useNavigate } from 'react-router-dom';
+import {useAuth} from "../context/AuthContext.jsx";
 
 
 
@@ -11,14 +12,16 @@ export default function CreateUser() {
 
     const [isPasswordFocused, setPasswordFocused] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
+    const navigate = useNavigate(); // Create navigate function
 
     const [isPasswordLenght, setIsPasswordLength] = useState(false);
     const [isNumber, setIsNumber] = useState(false);
     const [isSymbol, setIsSymbol] = useState(false);
 
 
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const { login } = useAuth();
+    const [usernameError, setUsernameError] = useState(null);
+    const [emailError, setEmailError] = useState(null);
 
 
     const [formData, setFormData] = useState({
@@ -55,13 +58,14 @@ export default function CreateUser() {
     };
 
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setUsernameError(null);
+        setEmailError(null)
+        setIsDisabled(false);
 
         try {
-
             const response = await fetch('/create-user', {
                 method: 'POST',
                 headers: {
@@ -69,16 +73,23 @@ export default function CreateUser() {
                 },
                 body: JSON.stringify(formData)
             })
+            const result = await response.json();
 
-            const result = await response.json(); // Parse JSON response from backend
-            setSuccess('User created successfully!');
-            setError(null);
-            console.log(result);
+            if (!response.ok) {
+                if (result.error.includes('Username')) {
+                    setUsernameError(result.error)
+                } else if (result.error.includes('Email')) {
+                    setEmailError(result.error)
+                } else {
+                    throw new Error(result.error || 'Something went wrong');
+                }
+                return;
+            }
 
+            login(result.token);
+            navigate('/');
         } catch (err) {
-            setError('There was an error creating the user');
-            setSuccess(null);
-            console.error('Error:', err);
+            console.error('Error creating user', err);
         }
     }
 
@@ -102,11 +113,7 @@ export default function CreateUser() {
                         </div>
                     </fieldset>
 
-
-                    {success && <p style={{ color: 'green' }}>{success}</p>}
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-
-                    <p className="errors-msg username-error"></p>
+                    <p className="error-msg">{usernameError}</p>
 
                     <fieldset className="input-fieldset">
                         <legend>E-mail</legend>
@@ -121,7 +128,8 @@ export default function CreateUser() {
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
                         </div>
                     </fieldset>
-                    <p className="errors-msg email-error"></p>
+
+                    <p className="error-msg">{emailError}</p>
 
                     <fieldset className="input-fieldset">
                         <legend>Password</legend>

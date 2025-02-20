@@ -10,10 +10,8 @@ const app = express();
 
 const loginRoute = require('./routes/loginRoute');
 const createRoute = require('./routes/createRoute');
+
 app.use(express.json());
-
-
-
 app.use('/create-user', createRoute);
 app.use('/login',loginRoute);
 

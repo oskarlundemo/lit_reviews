@@ -27,13 +27,13 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+}
 
-    p {
-        margin: 0 0 1rem 0;
-        text-align: left;
-        color: var(--error-color);
-        padding-left: 0.5rem;
-    }
+.error-msg {
+    color: var(--error-color);
+    text-align: left !important;
+    font-size: 1rem;
+    padding: 0 0 0 0.5rem;
 }
 
 

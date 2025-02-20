@@ -22,29 +22,57 @@ model User {
 
   Comment Comment[]
   Like    Like[]
+
+  Admin Admin[]
+}
+
+model Admin {
+  id      Int  @default(autoincrement())
+  user_id Int
+  user    User @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, id])
 }
 
 model Author_Post {
-  user    User @relation(fields: [user_id], references: [id])
+  user    User   @relation(fields: [user_id], references: [id])
   user_id Int
-  post    Post @relation(fields: [post_id], references: [id])
+  post    Review @relation(fields: [post_id], references: [id])
   post_id Int
 
   @@id([user_id, post_id])
 }
 
-model Post {
+model Book {
+  id        Int    @id @default(autoincrement())
+  title     String
+  pages     Int
+  author_id Int
+
+  Author Author   @relation(fields: [author_id], references: [id])
+  Review Review[]
+}
+
+model Author {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Book Book[]
+}
+
+model Review {
   id          Int           @id @default(autoincrement())
   published   Boolean       @default(false)
   title       String
   body        String
   created     DateTime      @default(now())
   Author_Post Author_Post[]
+  book_id     Int
 
+  Book       Book         @relation(fields: [book_id], references: [id])
   Image_Post Image_Post[]
   Comment    Comment[]
-
-  Like Like[]
+  Like       Like[]
 }
 
 model Image {
@@ -58,15 +86,15 @@ model Image_Post {
   img    Image @relation(fields: [img_id], references: [id])
   img_id Int
 
-  post    Post @relation(fields: [post_id], references: [id])
+  post    Review @relation(fields: [post_id], references: [id])
   post_id Int
 
   @@id([img_id, post_id]) // Composite primary key
 }
 
 model Comment {
-  post Post @relation(fields: [post_id], references: [id])
-  user User @relation(fields: [user_id], references: [id])
+  post Review @relation(fields: [post_id], references: [id])
+  user User   @relation(fields: [user_id], references: [id])
 
   post_id Int
   user_id Int
@@ -78,8 +106,8 @@ model Comment {
 }
 
 model Like {
-  post Post @relation(fields: [post_id], references: [id])
-  user User @relation(fields: [user_id], references: [id])
+  post Review @relation(fields: [post_id], references: [id])
+  user User   @relation(fields: [user_id], references: [id])
 
   post_id Int
   user_id Int
