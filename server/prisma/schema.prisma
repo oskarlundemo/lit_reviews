@@ -14,16 +14,16 @@ datasource db {
 }
 
 model User {
-  id          Int           @id @default(autoincrement())
-  username    String        @unique
-  email       String        @unique
-  password    String
-  Author_Post Author_Post[]
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
 
   Comment Comment[]
   Like    Like[]
 
-  Admin Admin[]
+  Admin  Admin[]
+  Review Review[]
 }
 
 model Admin {
@@ -34,20 +34,12 @@ model Admin {
   @@id([user_id, id])
 }
 
-model Author_Post {
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id Int
-  post    Review @relation(fields: [post_id], references: [id])
-  post_id Int
-
-  @@id([user_id, post_id])
-}
-
 model Book {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   title     String
   pages     Int
   author_id Int
+  about     String?
 
   Author Author   @relation(fields: [author_id], references: [id])
   Review Review[]
@@ -61,15 +53,17 @@ model Author {
 }
 
 model Review {
-  id          Int           @id @default(autoincrement())
-  published   Boolean       @default(false)
-  title       String
-  body        String
-  created     DateTime      @default(now())
-  Author_Post Author_Post[]
-  book_id     Int
+  id              Int      @id @default(autoincrement())
+  published       Boolean  @default(false)
+  title           String
+  body            String
+  favouriteQuoute String?
+  created         DateTime @default(now())
+  book_id         Int
+  user_id         Int
 
   Book       Book         @relation(fields: [book_id], references: [id])
+  User       User         @relation(fields: [user_id], references: [id])
   Image_Post Image_Post[]
   Comment    Comment[]
   Like       Like[]

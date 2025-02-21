@@ -1,7 +1,6 @@
 
 
 
-
 footer {
     text-align: center;
     display: flex;
@@ -23,7 +22,6 @@ form {
     flex-direction: column;
     width: 50%;
 }
-
 
 
 .contact-info {

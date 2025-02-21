@@ -1,0 +1,48 @@
+
+
+
+
+
+
+.dashboard {
+    display: grid;
+    grid-template: 1fr / repeat(3, 1fr);
+
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 4rem;
+
+    div {
+        transition: 200ms ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column-reverse;
+        padding: 1rem 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        h2 {
+            text-wrap: nowrap;
+        }
+
+        svg {
+            width: 6rem;
+            height: 6rem;
+        }
+    }
+
+    div:hover {
+        cursor: pointer;
+        scale: 1.01;
+
+        h2 {
+            color: var(--accent-color);
+        }
+
+        svg {
+            fill: var(--accent-color);
+        }
+    }
+}

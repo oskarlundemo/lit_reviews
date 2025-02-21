@@ -12,7 +12,7 @@ export default function CreateUser() {
 
     const [isPasswordFocused, setPasswordFocused] = useState(false);
     const [isDisabled, setIsDisabled] = useState(true);
-    const navigate = useNavigate(); // Create navigate function
+    const navigate = useNavigate();
 
     const [isPasswordLenght, setIsPasswordLength] = useState(false);
     const [isNumber, setIsNumber] = useState(false);
@@ -95,6 +95,7 @@ export default function CreateUser() {
 
 
     return (
+        <main className="create-user">
             <form onSubmit={handleSubmit} className="create-user-form">
                 <h2>Sign Up</h2>
                 <p>Let's get started with your reading trial</p>
@@ -174,5 +175,6 @@ export default function CreateUser() {
                 <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Sign Up</button>
                 <p>Already have an account? <a>Log in</a></p>
             </form>
+        </main>
     )
 }

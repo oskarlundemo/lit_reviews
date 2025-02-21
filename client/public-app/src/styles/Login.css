@@ -10,7 +10,9 @@
     display: flex;
     overflow: hidden;
     justify-self: center;
+    align-self: center;
     margin: 2rem;
+    padding: 2rem;
 }
 
 

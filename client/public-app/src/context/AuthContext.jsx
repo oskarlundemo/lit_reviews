@@ -36,6 +36,13 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     }
 
+    const getToken = () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            return jwtDecode(token);
+        }
+    }
+
     return (
         <AuthContext.Provider value={{user, login, logout}}>
             {children}

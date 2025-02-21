@@ -73,7 +73,8 @@ export const Login = () => {
 
 
     return (
-        <div className="login-box">
+        <main className="login-box">
+
 
             <div className="login-box-left">
                 <h2>
@@ -84,7 +85,6 @@ export const Login = () => {
 
 
             <div className="divider"></div>
-
 
             <div className="login-box-right">
 
@@ -129,6 +129,6 @@ export const Login = () => {
 
 
             </div>
-        </div>
+        </main>
     )
 }

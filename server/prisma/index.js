@@ -4,7 +4,98 @@ const bcrypt = require('bcrypt');
 const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
+const {jwtDecode} = require("jwt-decode");
 
+
+/**
+ * BookReview.jsx
+ */
+
+exports.newBookReview = async (req, res) => {
+
+
+    const token = req.headers.authorization.split(' ')[1];
+    const {username, id} = jwtDecode(token);
+    const {bookAuthor, body, bookTitle, bookPages, quote, reviewTitle} = req.body;
+
+    try {
+        let author = await prisma.author.findFirst({
+            where: {
+                name: {
+                    equals: bookAuthor,
+                    mode: 'insensitive',
+                },
+            },
+        });
+
+        if (!author) {
+            author = await prisma.author.create({
+                data: {
+                    name: bookAuthor,
+                },
+            });
+        }
+
+
+        let book = await prisma.book.findFirst({
+            where: {
+                title: {
+                    equals: bookTitle,
+                    mode: 'insensitive',
+                }
+            }
+        })
+
+        if (!book) {
+            book = await prisma.book.create({
+                data: {
+                    title: bookTitle,
+                    pages: parseInt(bookPages),
+                    author_id: author.id
+                }
+            })
+        }
+
+        const review = await prisma.review.create({
+            data: {
+                published: true,
+                title: reviewTitle,
+                body: body,
+                favouriteQuoute: quote,
+                book_id: book.id,
+                user_id: id,
+            },
+        });
+
+        res.status(201).json(review);
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({message: err.message});
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * CreateUser.jsx
+ */
 
 
 async function uniqueUsername(username) {
@@ -41,7 +132,6 @@ async function uniqueEmail(email) {
 
 exports.createUser = async (req, res) => {
     const {username, email, password} = req.body;
-
     try {
         await uniqueUsername(username);
         await uniqueEmail(email);
@@ -65,6 +155,11 @@ exports.createUser = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
+
+/**
+ * Login.jsx
+ */
 
 
 exports.verifyToken = async (req, res, next) => {
@@ -134,6 +229,31 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }
+
+
+/**
+ * Home.jsx
+ */
+
+exports.latestBookReviews = async (req, res) => {
+    try {
+        const latestBooksReviews = await prisma.review.findMany({
+            take: 6,
+            include: {
+                Book: {
+                    include: {
+                        Author: true
+                    }
+                }
+            }
+        })
+        res.status(200).json(latestBooksReviews);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+        console.error(err);
+    }
+}
+
 
 
 

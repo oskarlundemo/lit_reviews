@@ -6,6 +6,7 @@ import CreateUser from './pages/CreateUser.jsx'
 import {Login} from "./pages/Login.jsx";
 import {Dashboard} from "./pages/Dashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import {BookReview} from "./pages/BookReview.jsx";
 
 
 
@@ -14,7 +15,6 @@ function App() {
   return (
       <div className="App">
           <Header></Header>
-          <main className="main-content">
               <Routes>
                   <Route path="/" element={<Home/>} />
                   <Route path="/login" element={<Login/>} />
@@ -27,8 +27,14 @@ function App() {
                           </ProtectedRoute>
                       }
                   />
+                  <Route
+                      path="/book-review"
+                      element={
+                          <ProtectedRoute>
+                              <BookReview/>
+                          </ProtectedRoute>
+                  }/>
               </Routes>
-          </main>
       </div>
   )
 }

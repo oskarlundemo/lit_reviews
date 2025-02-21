@@ -1,8 +1,21 @@
 
 
 import '../styles/LatestReviews.css'
+import {useEffect, useState} from "react";
+import {useLocation} from "react-router-dom";
 
 export const LatestReviews = () => {
+
+    const [reviews, setReviews] = useState([]);
+
+    const location = useLocation(); // ✅ Detects route changes
+
+    useEffect(() => {
+        fetch("/latest")
+            .then((res) => res.json())
+            .then((data) => setReviews(data))
+            .catch((err) => console.log("Error fetching reviews:", err));
+    }, [location.pathname]); // ✅ Re-fetches on navigation to "/"
 
 
     return (
@@ -11,120 +24,29 @@ export const LatestReviews = () => {
             <h2>Latest reviews</h2>
 
             <div className="latest-book-grid">
-                <article className="book-card">
-                    <div className="book-card-header">
 
-                        <div className="book-card-cover">
-                            <img src="/images/retro-book.png" alt="book" />
-                        </div>
+                {reviews.length > 0 ? (
+                    reviews.map((review) => (
+                        <article className="book-card" key={review.id}>
+                            <div className="book-card-text">
+                            <div className="book-card-header">
+                                <div className="book-card-cover">
+                                    <img src={review.image || "/images/retro-book.png"} alt={review.title} />
+                                </div>
+                                <h3>{review.Book.title}</h3>
+                                <h3>{review.Book.Author.name}</h3>
 
+                                <p className="book-description">{review.Book.about}</p>
+                            </div>
+                            </div>
 
-                        <h3>Latest review</h3>
-                        <h2>Title</h2>
-                    </div>
-                    <p className="book-descirption">
-                        Surrounded by heat in a tremulous world, India and Kallas answer an invitation from Kallas’ childhood best friend to leave summer in the city behind and visit her by the sea. Her garden house is an oasis, but in Red Sun nowhere is without a sense of unease.
-                    </p>
+                            <h3><a href="#">Read more</a></h3>
+                        </article>
+                    ))
+                ) : (
+                    <p>Loading reviews...</p>
+                )}
 
-
-                    <h3><a href="#">Read more</a></h3>
-                </article>
-
-                <article className="book-card">
-                    <div className="book-card-header">
-
-                        <div className="book-card-cover">
-                            <img src="/images/retro-book.png" alt="book" />
-                        </div>
-
-
-                        <h3>Latest review</h3>
-                        <h2>Title</h2>
-                    </div>
-                    <p className="book-descirption">
-                        Surrounded by heat in a tremulous world, India and Kallas answer an invitation from Kallas’ childhood best friend to leave summer in the city behind and visit her by the sea. Her garden house is an oasis, but in Red Sun nowhere is without a sense of unease.
-                    </p>
-
-
-                    <h3><a href="#">Read more</a></h3>
-                </article>
-
-                <article className="book-card">
-                    <div className="book-card-header">
-
-                        <div className="book-card-cover">
-                            <img src="/images/retro-book.png" alt="book" />
-                        </div>
-
-
-                        <h3>Latest review</h3>
-                        <h2>Title</h2>
-                    </div>
-                    <p className="book-descirption">
-                        Surrounded by heat in a tremulous world, India and Kallas answer an invitation from Kallas’ childhood best friend to leave summer in the city behind and visit her by the sea. Her garden house is an oasis, but in Red Sun nowhere is without a sense of unease.
-                    </p>
-
-
-                    <h3><a href="#">Read more</a></h3>
-                </article>
-
-                <article className="book-card">
-                    <div className="book-card-header">
-
-                        <div className="book-card-cover">
-                            <img src="/images/retro-book.png" alt="book" />
-                        </div>
-
-
-                        <h3>Latest review</h3>
-                        <h2>Title</h2>
-                    </div>
-                    <p className="book-descirption">
-                        Surrounded by heat in a tremulous world, India and Kallas answer an invitation from Kallas’ childhood best friend to leave summer in the city behind and visit her by the sea. Her garden house is an oasis, but in Red Sun nowhere is without a sense of unease.
-                    </p>
-
-
-                    <h3><a href="#">Read more</a></h3>
-                </article>
-
-
-                <article className="book-card">
-                    <div className="book-card-header">
-
-                        <div className="book-card-cover">
-                            <img src="/images/retro-book.png" alt="book" />
-                        </div>
-
-
-                        <h3>Latest review</h3>
-                        <h2>Title</h2>
-                    </div>
-                    <p className="book-descirption">
-                        Surrounded by heat in a tremulous world, India and Kallas answer an invitation from Kallas’ childhood best friend to leave summer in the city behind and visit her by the sea. Her garden house is an oasis, but in Red Sun nowhere is without a sense of unease.
-                    </p>
-
-
-                    <h3><a href="#">Read more</a></h3>
-                </article>
-
-
-                <article className="book-card">
-                    <div className="book-card-header">
-
-                        <div className="book-card-cover">
-                            <img src="/images/retro-book.png" alt="book" />
-                        </div>
-
-                        <h3>Latest review</h3>
-                        <h2>Title</h2>
-                    </div>
-                    <p className="book-descirption">
-                        Surrounded by heat in a tremulous world, India and Kallas answer an invitation from Kallas’ childhood best friend to leave summer in the city behind and visit her by the sea. Her garden house is an oasis, but in Red Sun nowhere is without a sense of unease.
-                    </p>
-
-
-                    <h3><a href="#">Read more</a></h3>
-                </article>
             </div>
         </div>
     )

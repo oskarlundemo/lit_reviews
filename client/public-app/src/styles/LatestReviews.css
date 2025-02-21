@@ -17,18 +17,27 @@
     display: flex;
     flex-direction: column;
     padding: 1rem 2rem;
+
+    justify-content: space-between;
 }
 
 .book-card-header {
-
-    height: fit-content; /* Set the height of the header container */
     display: flex;
     flex-direction: column;
 
+
+    h3:first-of-type {
+        font-weight: bold;
+    }
+
+    h3:last-of-type {
+        color: gray;
+    }
+
     h3 {
-        text-align: center;
         font-weight: 300;
-        color: lightblue;
+        margin: 0;
+        text-align: left;
     }
 
     h2 {
@@ -37,19 +46,17 @@
 }
 
 .book-card-cover {
-
     height: 150px;
     overflow: hidden;
     display: flex;
     justify-content: center;
-    align-items: center; /* Centers the image within the container */
+    align-items: center;
 
 
     img {
-        object-fit: cover; /* Fills the container without stretching */
+        object-fit: cover;
         width: 100%;
         height: 100%;
     }
-
 }
 
