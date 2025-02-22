@@ -5,10 +5,16 @@ const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const {jwtDecode} = require("jwt-decode");
+const { JSDOM } = require('jsdom');
+
+
+const window = new JSDOM('').window;
+const DOMPurify = require('dompurify');
+const purify = DOMPurify(window);
 
 
 /**
- * BookReview.jsx
+ * WriteBookReview.jsx
  */
 
 exports.newBookReview = async (req, res) => {
@@ -60,7 +66,7 @@ exports.newBookReview = async (req, res) => {
             data: {
                 published: true,
                 title: reviewTitle,
-                body: body,
+                body: purify.sanitize(body),
                 favouriteQuoute: quote,
                 book_id: book.id,
                 user_id: id,
@@ -75,21 +81,6 @@ exports.newBookReview = async (req, res) => {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -207,7 +198,6 @@ exports.login = async (req, res) => {
                 username: userWithAdmin.username,
                 admin: true
             }
-
             const token = jwt.sign(
                 payload,
                 process.env.JWT_SECRET,
@@ -254,7 +244,67 @@ exports.latestBookReviews = async (req, res) => {
     }
 }
 
+exports.inspectReview = async (req, res) => {
 
+    try {
+        const bookReview = await prisma.review.findUnique({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            include: {
+                Book: {include: {Author: true,}},
+                User: {select: {username: true, id: true}}
+            }
+        })
+        res.status(201).json(bookReview);
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+
+exports.getComments = async (req, res) => {
+
+    console.log(req.params.id);
+
+    try {
+        const comments = await prisma.comment.findMany({
+            where: {
+                post_id: parseInt(req.params.id),
+            }, include: {
+                user: true
+            }
+        })
+
+        console.log(comments)
+        res.status(201).json(comments);
+    } catch (err) {
+        console.error(err);
+        res.status(404).json({ error: 'Not Found' });
+    }
+}
+
+
+
+exports.createComment = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        const {username, id} = jwtDecode(token);
+
+        await prisma.comment.create({
+            data: {
+                user_id: id,
+                post_id: parseInt(req.params.id),
+                comment: req.body.comment,
+            }
+        })
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
 
 
 

@@ -126,8 +126,6 @@ export const Login = () => {
 
                     <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Sign In</button>
                 </form>
-
-
             </div>
         </main>
     )

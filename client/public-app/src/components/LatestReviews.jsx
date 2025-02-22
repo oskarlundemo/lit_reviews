@@ -2,20 +2,28 @@
 
 import '../styles/LatestReviews.css'
 import {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export const LatestReviews = () => {
 
     const [reviews, setReviews] = useState([]);
+    const location = useLocation();
+    const navigate = useNavigate(); // Create navigate function
 
-    const location = useLocation(); // ✅ Detects route changes
 
     useEffect(() => {
         fetch("/latest")
             .then((res) => res.json())
             .then((data) => setReviews(data))
             .catch((err) => console.log("Error fetching reviews:", err));
-    }, [location.pathname]); // ✅ Re-fetches on navigation to "/"
+    }, [location.pathname]);
+
+
+
+
+    const inspectReview = (bookTitle, id) => {
+        navigate(`/${bookTitle}/${id}`);
+    }
 
 
     return (
@@ -24,10 +32,9 @@ export const LatestReviews = () => {
             <h2>Latest reviews</h2>
 
             <div className="latest-book-grid">
-
                 {reviews.length > 0 ? (
                     reviews.map((review) => (
-                        <article className="book-card" key={review.id}>
+                        <article className="book-card" onClick={()=> inspectReview(review.Book.title, review.id)} key={review.id}>
                             <div className="book-card-text">
                             <div className="book-card-header">
                                 <div className="book-card-cover">

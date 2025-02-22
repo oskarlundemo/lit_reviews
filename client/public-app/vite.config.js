@@ -18,6 +18,9 @@ export default defineConfig({
       },
       '/latest': {
         target: 'http://localhost:5000',
+      },
+      'api/comments': {
+        target: 'http://localhost:5000',
       }
     },
   }

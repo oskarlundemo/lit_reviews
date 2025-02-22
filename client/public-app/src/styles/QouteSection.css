@@ -1,0 +1,22 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+
+.qoute-section {
+    h2 {
+        text-align: center;
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 2rem;
+    }
+
+    p {
+        text-align: right;
+        span {
+            font-style: italic;
+        }
+    }
+}
