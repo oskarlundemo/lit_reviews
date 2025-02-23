@@ -12,8 +12,7 @@ export const BookReview= () => {
     const {id} = useParams();
 
     useEffect(() => {
-        fetch(`/latest/${id}`)
-
+        fetch(`/api/latest/${id}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Error fetching review");
@@ -31,7 +30,7 @@ export const BookReview= () => {
             {review ? (
                 <>
                     <QouteSection favoriteQoute={review.favouriteQuoute} book={review.Book.title} author={review.Book.Author.name}/>
-                    <ReviewBody writer={review.User.username} body={review.body} title={review.title}/>
+                    <ReviewBody reviewId={review.id} date={review.created.split('T')[0]} writer={review.User.username} body={review.body} title={review.title}/>
                     <CommentSection/>
                 </>
             ) : (

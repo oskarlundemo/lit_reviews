@@ -7,19 +7,19 @@ export default defineConfig({
 
   server: {
     proxy: {
-      '/login': {
+      '/api/login': {
         target: 'http://localhost:5000',
       },
-      '/create-user': {
+      '/api/create-user': {
         target: 'http://localhost:5000',
       },
-      '/book-review': {
+      '/api/book-review': {
         target: 'http://localhost:5000',
       },
-      '/latest': {
+      '/api/latest': {
         target: 'http://localhost:5000',
       },
-      'api/comments': {
+      '/api/comments': {
         target: 'http://localhost:5000',
       }
     },

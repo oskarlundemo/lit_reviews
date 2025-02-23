@@ -21,6 +21,8 @@
 
   --button-color: hsl(0, 0%, 88%);
   --accent-color: hsl(236, 88%, 64%);
+
+  --light-grey: hsl(0, 0%, 83%);
 }
 
 a {
@@ -85,9 +87,24 @@ button:focus-visible {
   }
 }
 
-
 button.disabled:hover {
   border-color: transparent;
   cursor: default;
 }
 
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes errorShake {
+  0% { transform: translateY(0); }
+  20% { transform: translateY(-5px); }
+  40% { transform: translateY(5px); }
+  60% { transform: translateY(-5px); }
+  80% { transform: translateY(5px); }
+  100% { transform: translateY(0); }
+}

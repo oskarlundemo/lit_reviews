@@ -45,6 +45,21 @@
 }
 
 
+.book-info-area fieldset:has(textarea:focus) {
+    border: 2px solid var(--accent-color);
+}
+
+textarea {
+    font-family: inherit;
+    background-color: inherit;
+    resize: none;
+    border: none;
+    outline: none;
+    width: 100%;
+}
+
+
+
 input[type="file"]::file-selector-button {
     border-radius: 8px;
     border: 1px solid transparent;

@@ -10,6 +10,7 @@ const { JSDOM } = require('jsdom');
 
 const window = new JSDOM('').window;
 const DOMPurify = require('dompurify');
+const {asciiWhitespaceRe} = require("jsdom/lib/jsdom/living/helpers/strings");
 const purify = DOMPurify(window);
 
 
@@ -22,7 +23,12 @@ exports.newBookReview = async (req, res) => {
 
     const token = req.headers.authorization.split(' ')[1];
     const {username, id} = jwtDecode(token);
-    const {bookAuthor, body, bookTitle, bookPages, quote, reviewTitle} = req.body;
+    const {bookAuthor, body, bookTitle, bookPages, quote, reviewTitle, bookAbout, publish} = req.body;
+
+
+    console.log(req.body);
+
+
 
     try {
         let author = await prisma.author.findFirst({
@@ -42,7 +48,6 @@ exports.newBookReview = async (req, res) => {
             });
         }
 
-
         let book = await prisma.book.findFirst({
             where: {
                 title: {
@@ -57,14 +62,15 @@ exports.newBookReview = async (req, res) => {
                 data: {
                     title: bookTitle,
                     pages: parseInt(bookPages),
-                    author_id: author.id
+                    author_id: author.id,
+                    about: bookAbout
                 }
             })
         }
 
         const review = await prisma.review.create({
             data: {
-                published: true,
+                published: publish,
                 title: reviewTitle,
                 body: purify.sanitize(body),
                 favouriteQuoute: quote,
@@ -183,21 +189,20 @@ exports.login = async (req, res) => {
             return res.status(400).json({ error: 'Invalid username or password' });
         }
 
-        const userWithAdmin = await prisma.user.findUnique({
+        const userWithAdmin = await prisma.admin.findFirst({
             where: {
-                id: user.id
+                user_id: user.id
             },
-            include: {
-                Admin: true
-            }
+            include: {user: true}
         })
 
         if (userWithAdmin) {
             const payload = {
-                id: userWithAdmin.id,
-                username: userWithAdmin.username,
+                id: userWithAdmin.user.id,
+                username: userWithAdmin.user.username,
                 admin: true
             }
+
             const token = jwt.sign(
                 payload,
                 process.env.JWT_SECRET,
@@ -229,6 +234,9 @@ exports.latestBookReviews = async (req, res) => {
     try {
         const latestBooksReviews = await prisma.review.findMany({
             take: 6,
+            where: {
+                published: true
+            },
             include: {
                 Book: {
                     include: {
@@ -266,9 +274,6 @@ exports.inspectReview = async (req, res) => {
 
 
 exports.getComments = async (req, res) => {
-
-    console.log(req.params.id);
-
     try {
         const comments = await prisma.comment.findMany({
             where: {
@@ -277,8 +282,6 @@ exports.getComments = async (req, res) => {
                 user: true
             }
         })
-
-        console.log(comments)
         res.status(201).json(comments);
     } catch (err) {
         console.error(err);
@@ -306,6 +309,72 @@ exports.createComment = async (req, res) => {
     }
 }
 
+exports.deleteComment = async (req, res) => {
+    try {
+        await prisma.comment.delete({
+            where: {
+                id: parseInt(req.params.commentId),
+            }
+        })
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
+
+exports.getLikes = async (req, res) => {
+    try {
+        const likes = await prisma.like.findMany({
+            where: {
+                post_id: parseInt(req.params.postid),
+            }
+        })
+        res.status(200).json(likes);
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+
+exports.likePost = async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const {username, id} = jwtDecode(token);
+    try {
+        const alreadyLiked = await prisma.like.findUnique({
+            where: {
+                post_id_user_id: {user_id: id, post_id: parseInt(req.params.postid)}
+            }
+        })
+
+        if (!alreadyLiked) {
+            await prisma.like.create({
+                data: {
+                    user_id: id,
+                    post_id: parseInt(req.params.postid),
+                }
+            })
+            res.status(200).json({message: 'Liked post'});
+        } else {
+            await prisma.like.delete({
+                where: {
+                    post_id_user_id: {user_id: id, post_id: parseInt(req.params.postid)}
+                }
+            })
+            res.status(200).json({message: 'Unliked post'});
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+exports.unlikePost = async (req, res) => {
+
+}
 
 
 

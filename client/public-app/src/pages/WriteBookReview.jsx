@@ -16,16 +16,31 @@ export const WriteBookReview = () => {
     const [editorContent, setEditorContent] = useState('Hello, World!');
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
+    const [publish, setPublished] = useState(true);
+
 
     const [formData, setFormData] = useState({
         bookTitle: '',
         bookAuthor: '',
         bookPages: '',
+        bookAbout: '',
 
+        publish: publish,
         quote: '',
         reviewTitle: '',
         body: editorContent
     });
+
+
+    const handleRadio = (e) => {
+        const newPublishState = e.target.id === 'publish'; // If "Publish" is selected, set publish to true
+        setPublished(newPublishState);
+
+        setFormData((prevData) => ({
+            ...prevData,
+            publish: newPublishState
+        }));
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -70,9 +85,8 @@ export const WriteBookReview = () => {
         e.preventDefault();
 
         try {
-
             const token = localStorage.getItem("token");
-            const response = await fetch('/book-review', {
+            const response = await fetch('/api/book-review', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -86,9 +100,7 @@ export const WriteBookReview = () => {
             if (!result.ok) {
 
             }
-
             navigate('/dashboard');
-
         } catch (err) {
             console.err(err);
         }
@@ -102,7 +114,7 @@ export const WriteBookReview = () => {
                     <div className="book-info-container">
 
                         <div className="book-info-area">
-                            <h2>Book</h2>
+                            <h2>Book 📚</h2>
                             <InputFieldset
                                 title="Title"
                                 type="text"
@@ -123,6 +135,22 @@ export const WriteBookReview = () => {
                                 example="Oscar Wilde"
                             />
 
+
+                            <fieldset className="input-fieldset">
+                                <legend>Preview</legend>
+                                <div className="input-card author-input">
+                                      <textarea
+                                          title="Preview"
+                                          id="bookAbout"
+                                          name="bookAbout"
+                                          onChange={handleInputChange}
+                                          value={formData.bookAbout}
+                                          placeholder="Dorian Grey is a true adonis...."
+                                      />
+                                </div>
+                            </fieldset>
+
+
                             <InputFieldset
                                 title="Pages"
                                 type="text"
@@ -136,7 +164,7 @@ export const WriteBookReview = () => {
                         </div>
 
                         <div className="review-info-area">
-                            <h2>Review</h2>
+                            <h2>Review 📝</h2>
                             <InputFieldset
                                 title="Title"
                                 type="text"
@@ -162,7 +190,6 @@ export const WriteBookReview = () => {
                                 type="file"
                                 id="thumbnail"
                                 name="thumbnail"
-
                             />
 
                             <Editor
@@ -179,11 +206,29 @@ export const WriteBookReview = () => {
                                 onEditorChange={handleEditorChange}
                             />
 
+
+                            <div>
+                                <label htmlFor="archive">Archive:</label>
+                                <input
+                                    id="archive"
+                                    type="radio"
+                                    name="publish"
+                                    checked={!publish} // Archive should be checked when publish is false
+                                    onChange={handleRadio}
+                                />
+                                <label htmlFor="publish">Publish:</label>
+                                <input
+                                    id="publish"
+                                    type="radio"
+                                    name="publish"
+                                    checked={publish} // Publish should be checked when publish is true
+                                    onChange={handleRadio}
+                                />
+                            </div>
                         </div>
 
 
-
-                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Publish</button>
+                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>
                     </div>
                 </form>
         </main>

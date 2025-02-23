@@ -7,7 +7,7 @@
 .book-review {
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 70%;
     align-items: center;
     justify-self: center;
 

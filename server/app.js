@@ -10,13 +10,13 @@ const app = express();
 
 const loginRoute = require('./routes/loginRoute');
 const createRoute = require('./routes/createRoute');
-const bookRoute = require('./routes/bookReview');
+const bookReview = require('./routes/newBookReview');
 const homeRoute =   require('./routes/homeRoute');
 
 app.use(express.json());
-app.use('/create-user', createRoute);
-app.use('/login',loginRoute);
-app.use('/book-review', bookRoute);
+app.use('/api/create-user', createRoute);
+app.use('/api/login', loginRoute);
+app.use('/api/book-review', bookReview);
 app.use('/', homeRoute);
 
 app.listen(PORT, () => {

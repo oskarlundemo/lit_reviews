@@ -12,7 +12,7 @@ export const LatestReviews = () => {
 
 
     useEffect(() => {
-        fetch("/latest")
+        fetch("/api/latest/")
             .then((res) => res.json())
             .then((data) => setReviews(data))
             .catch((err) => console.log("Error fetching reviews:", err));
@@ -20,11 +20,9 @@ export const LatestReviews = () => {
 
 
 
-
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }
-
 
     return (
         <div className="latest-reviews">
