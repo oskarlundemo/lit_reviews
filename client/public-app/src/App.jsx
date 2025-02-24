@@ -8,6 +8,7 @@ import {Dashboard} from "./pages/Dashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {WriteBookReview} from "./pages/WriteBookReview.jsx";
 import {BookReview} from "./pages/BookReview.jsx";
+import {Posts} from "./pages/Posts.jsx";
 
 
 
@@ -36,6 +37,15 @@ function App() {
                               <WriteBookReview/>
                           </ProtectedRoute>
                   }/>
+
+                  <Route
+                      path="/posts"
+                      element={
+                      <ProtectedRoute>
+                          <Posts/>
+                      </ProtectedRoute>
+                      }/>
+
               </Routes>
       </div>
   )

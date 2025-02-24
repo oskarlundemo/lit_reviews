@@ -12,12 +12,14 @@ const loginRoute = require('./routes/loginRoute');
 const createRoute = require('./routes/createRoute');
 const bookReview = require('./routes/newBookReview');
 const homeRoute =   require('./routes/homeRoute');
+const postRoute =   require('./routes/postsRoute');
 
 app.use(express.json());
 app.use('/api/create-user', createRoute);
 app.use('/api/login', loginRoute);
 app.use('/api/book-review', bookReview);
 app.use('/', homeRoute);
+app.use('/api/posts', postRoute);
 
 app.listen(PORT, () => {
     console.log('Server running on port ' + PORT);

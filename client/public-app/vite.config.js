@@ -21,6 +21,9 @@ export default defineConfig({
       },
       '/api/comments': {
         target: 'http://localhost:5000',
+      },
+      '/api/posts': {
+        target: 'http://localhost:5000',
       }
     },
   }

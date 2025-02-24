@@ -3,6 +3,7 @@
 import { Editor } from '@tinymce/tinymce-react';
 import {useContext, useEffect, useState} from "react";
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 
 
@@ -13,23 +14,45 @@ import {InputFieldset} from "../components/InputFieldset.jsx";
 
 export const WriteBookReview = () => {
 
-    const [editorContent, setEditorContent] = useState('Hello, World!');
+    const initialBodyData = '';
+    const [editorContent, setEditorContent] = useState(initialBodyData);
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
     const [publish, setPublished] = useState(true);
 
 
+    const location = useLocation();
+    const {post} = location.state || {}
+
     const [formData, setFormData] = useState({
-        bookTitle: '',
-        bookAuthor: '',
-        bookPages: '',
-        bookAbout: '',
+        bookTitle: post?.Book.title || '',
+        bookAuthor: post?.Book.Author.name || '',
+        bookPages: post?.Book.pages || '',
+        bookAbout: post?.Book.about || '',
 
         publish: publish,
-        quote: '',
-        reviewTitle: '',
-        body: editorContent
+        quote: post?.favouriteQuoute || '',
+        reviewTitle: post?.title || '',
+        body: post?.body || editorContent,
+
+        reviewId: post?.id || null,
+        bookId: post?.Book.id || null,
+        authorId: post?.Book.Author.id || null,
     });
+
+
+
+    useEffect(() => {
+        setEditorContent(formData.body);
+    }, [formData.body]);
+
+    const handleEditorChange = (content) => {
+        setEditorContent(content);
+        setFormData((prevData) => ({
+            ...prevData,
+            body: content
+        }));
+    };
 
 
     const handleRadio = (e) => {
@@ -53,18 +76,6 @@ export const WriteBookReview = () => {
             setIsDisabled(!(updatedData.bookTitle && updatedData.bookAuthor && updatedData.bookPages && updatedData.reviewTitle))
             return updatedData;
         });
-    };
-
-
-    const handleEditorChange = (content) => {
-        setEditorContent(content);
-        setFormData((prevData) => {
-            const updatedData = {
-                ...prevData,
-                body: content
-            };
-            return updatedData;
-        })
     };
 
     const validateForm = () => {
@@ -175,15 +186,21 @@ export const WriteBookReview = () => {
                                 example="My review of Oscar Wilde´s Dorian Grey"
                             />
 
-                            <InputFieldset
-                                title="Quoute"
-                                type="text"
-                                id="quote"
-                                name="quote"
-                                onChange={handleInputChange}
-                                value={formData.quote}
-                                example="I don't want to be at the mercy of my emotions. I want to use them, to enjoy them, and to dominate them."
-                            />
+
+                            <fieldset className="input-fieldset">
+                                <legend>Favorite quote</legend>
+                                <div className="input-card author-input">
+                                      <textarea
+                                          title="Quote"
+                                          id="quote"
+                                          name="quote"
+                                          onChange={handleInputChange}
+                                          value={formData.quote}
+                                          placeholder="I don't want to be at the mercy of my emotions. I want to use them, to enjoy them, and to dominate them"
+                                      />
+                                </div>
+                            </fieldset>
+
 
                             <InputFieldset
                                 title="Thumbnail"
@@ -213,7 +230,7 @@ export const WriteBookReview = () => {
                                     id="archive"
                                     type="radio"
                                     name="publish"
-                                    checked={!publish} // Archive should be checked when publish is false
+                                    checked={!publish}
                                     onChange={handleRadio}
                                 />
                                 <label htmlFor="publish">Publish:</label>
@@ -221,7 +238,7 @@ export const WriteBookReview = () => {
                                     id="publish"
                                     type="radio"
                                     name="publish"
-                                    checked={publish} // Publish should be checked when publish is true
+                                    checked={publish}
                                     onChange={handleRadio}
                                 />
                             </div>
