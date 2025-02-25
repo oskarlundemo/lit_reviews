@@ -46,7 +46,6 @@ model Book {
 model Author {
   id   Int    @id @default(autoincrement())
   name String
-
   Book Book[]
 }
 
@@ -87,7 +86,7 @@ model Image_Post {
 model Comment {
   id Int @id @default(autoincrement())
 
-  post Review @relation(fields: [post_id], references: [id])
+  post Review @relation(fields: [post_id], references: [id], onDelete: Cascade)
   user User   @relation(fields: [user_id], references: [id])
 
   post_id Int
@@ -98,13 +97,12 @@ model Comment {
 }
 
 model Like {
-  post Review @relation(fields: [post_id], references: [id])
+  id   Int    @id @default(autoincrement())
+  post Review @relation(fields: [post_id], references: [id], onDelete: Cascade)
   user User   @relation(fields: [user_id], references: [id])
 
   post_id Int
   user_id Int
 
-  like Boolean @default(false)
-
-  @@id([post_id, user_id])
+  created DateTime @default(now())
 }

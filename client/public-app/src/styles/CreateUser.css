@@ -1,13 +1,21 @@
 
 
 
+
+.create-user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
 .create-user-form {
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 1rem 2rem;
     width: fit-content;
     justify-self: center;
-    margin: 2rem;
 
     h2 {
         margin-bottom: 0;

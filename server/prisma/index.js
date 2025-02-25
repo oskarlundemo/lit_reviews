@@ -18,6 +18,73 @@ const purify = DOMPurify(window);
  * Posts.jsx
  */
 
+
+exports.searchReviews = async (req, res) => {
+    try {
+        if (req.query.query.trim() === '') {
+            try {
+                const reviews = await prisma.review.findMany({
+                    include: {
+                        Book: {
+                            include: {
+                                Author: true,
+                            }
+                        }
+                    }
+                })
+                res.status(201).json(reviews)
+            } catch (err) {
+                console.error(err);
+                res.status(400).json({message: 'Error getting reviews'});
+            }
+        } else {
+            const result = await prisma.review.findMany({
+                include: {
+                    Book: {
+                        include: {
+                            Author: true,
+                        },
+                    },
+                },
+                where: {
+                    OR: [
+                        {
+                            title: {
+                                contains: req.query.query,
+                                mode: "insensitive",
+                            },
+                        },
+                        {
+                            Book: {
+                                title: {
+                                    contains: req.query.query,
+                                    mode: "insensitive",
+                                }
+                            }
+                        },
+                        {
+                            Book: {
+                                Author: {
+                                    name: {
+                                        contains: req.query.query,
+                                        mode: "insensitive",
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                },
+            });
+            res.status(201).json(result)
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({error: err});
+    }
+}
+
+
+
 exports.getReviews = async (req, res) => {
     try {
         const reviews = await prisma.review.findMany({
@@ -38,13 +105,46 @@ exports.getReviews = async (req, res) => {
 
 
 exports.deleteReview = async (req, res) => {
-
-    console.log(req.params.id)
-
     try {
-        await prisma.review.delete({
-            where: {
-                id: parseInt(req.params.id)
+        await prisma.$transaction(async (prisma) => {
+            const review = await prisma.review.findUnique(({
+                where: {
+                    id: parseInt(req.params.id),
+                }, include: {
+                    Book: {
+                        include: {
+                            Author: true,
+                        }
+                    }
+                }
+            }))
+
+            await prisma.review.delete(({
+                where: {
+                    id: parseInt(req.params.id)
+                }
+            }))
+
+            await prisma.Book.delete({
+                where: {
+                    id: review.Book.id
+                }
+            })
+
+            const books = await prisma.Book.findMany({
+                where: {
+                    Author: {
+                        id: review.Book.Author.id
+                    }
+                }
+            })
+
+            if (!books) {
+                await prisma.Author.delete({
+                    where: {
+                        id: review.Author.id
+                    }
+                })
             }
         })
 
@@ -176,7 +276,6 @@ async function uniqueUsername(username) {
             where: {username: username,}
         })
         if (existingUsername) {
-            console.log(`User already exists`)
             throw new Error(`Username already registered`)
         }
         return true;
@@ -232,6 +331,7 @@ exports.createUser = async (req, res) => {
 /**
  * Login.jsx
  */
+
 
 
 exports.verifyToken = async (req, res, next) => {
@@ -447,9 +547,50 @@ exports.likePost = async (req, res) => {
     }
 }
 
-exports.unlikePost = async (req, res) => {
 
+/**
+ * Activity.jsx
+ */
+
+exports.getAllComments = async (req, res) => {
+    try {
+        const comments = await prisma.comment.findMany({
+            include: {
+                user: true
+            }
+        })
+        res.status(200).json(comments);
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
 }
 
 
+exports.searchForComments = async (req, res) => {
+    try {
+        const query = req.query.query;
+        console.log("Search Query:", query);
 
+        const results = await prisma.comment.findMany({
+            where: {
+                OR: [
+                    {comment: {contains: query, mode: 'insensitive'}},
+                    {user: {username: {contains: query, mode: 'insensitive'}}},
+                ]
+            },
+            include: {
+                user: true
+            }
+        });
+
+        console.log(results);
+
+        res.status(200).json(results);
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({error: err.message});
+    }
+}

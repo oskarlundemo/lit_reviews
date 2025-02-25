@@ -9,6 +9,11 @@ import {useAuth} from "../context/AuthContext.jsx";
 export const Header = () => {
     const {user, logout} = useAuth();
 
+    const navigate = useNavigate();
+    const redirect = () => {
+        navigate("/");
+    }
+
     if (user) {
         return (
             <header className="App-header">
@@ -20,7 +25,7 @@ export const Header = () => {
                             <Link to="/dashboard">Admin Dashboard</Link>
                         </div>
                     )}
-                    <button onClick={logout}>Sign out</button>
+                    <button onClick={() => { logout(); redirect();}}>Sign out</button>
                 </nav>
             </header>
         );

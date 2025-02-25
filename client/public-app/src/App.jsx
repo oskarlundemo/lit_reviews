@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {WriteBookReview} from "./pages/WriteBookReview.jsx";
 import {BookReview} from "./pages/BookReview.jsx";
 import {Posts} from "./pages/Posts.jsx";
+import {Activity} from "./pages/Activity.jsx";
 
 
 
@@ -22,6 +23,7 @@ function App() {
                   <Route path="/login" element={<Login/>} />
                   <Route path="/create-user" element={<CreateUser/>}/>
                   <Route path="/:title/:id" element={<BookReview />} />
+
                   <Route
                       path="/dashboard"
                       element={
@@ -30,6 +32,7 @@ function App() {
                           </ProtectedRoute>
                       }
                   />
+
                   <Route
                       path="/book-review"
                       element={
@@ -39,13 +42,21 @@ function App() {
                   }/>
 
                   <Route
+                      path="/activity"
+                      element={
+                          <ProtectedRoute>
+                              <Activity/>
+                          </ProtectedRoute>
+                      }/>
+
+
+                  <Route
                       path="/posts"
                       element={
                       <ProtectedRoute>
                           <Posts/>
                       </ProtectedRoute>
                       }/>
-
               </Routes>
       </div>
   )

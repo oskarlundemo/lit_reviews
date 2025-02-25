@@ -58,7 +58,6 @@ export const WriteBookReview = () => {
     const handleRadio = (e) => {
         const newPublishState = e.target.id === 'publish'; // If "Publish" is selected, set publish to true
         setPublished(newPublishState);
-
         setFormData((prevData) => ({
             ...prevData,
             publish: newPublishState
@@ -120,7 +119,13 @@ export const WriteBookReview = () => {
 
     return (
         <main className="book-review">
-            <h2>New book review</h2>
+
+            {post ? (
+                <h2>Update review</h2>
+            ) : (
+                <h2>New book review</h2>
+            )}
+
                 <form onSubmit={handleSubmit} className="book-review-form">
                     <div className="book-info-container">
 

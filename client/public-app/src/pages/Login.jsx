@@ -10,8 +10,28 @@ import { useNavigate } from 'react-router-dom';
 export const Login = () => {
 
     const [isDisabled, setIsDisabled] = useState(true);
-    const [quotes, setQuotes] = useState([])
-    const navigate = useNavigate(); // Create navigate function
+    const [quotes, setQuotes] = useState({})
+    const navigate = useNavigate();
+    const [randomQuote, setRandomQuote] = useState(0);
+
+
+
+    useEffect(() => {
+        fetch("/api/login", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setQuotes(data);
+                setRandomQuote(Math.floor(Math.random() * data.length));
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+
 
 
     const { login } = useAuth();
@@ -77,10 +97,18 @@ export const Login = () => {
 
 
             <div className="login-box-left">
-                <h2>
-                    “The books that the world calls immoral are books that show the world its own shame.”
-                </h2>
-                <h3>- Oscar Wilde, <span>The Picture of Dorian Grey</span></h3>
+
+                {quotes && quotes.length > 0 ? (
+                    <>
+                    <h2>"{quotes[randomQuote].favouriteQuoute}"</h2>
+                    <h3>- <span>{quotes[randomQuote].Book.title}</span>, {quotes[randomQuote].Book.Author.name}</h3>
+                    </>
+                ) : (
+                    <>
+                        <p>Error loading quote...</p>
+                    </>
+                )}
+
             </div>
 
 

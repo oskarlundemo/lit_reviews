@@ -19,18 +19,30 @@
         align-items: center;
         justify-content: center;
         flex-direction: column-reverse;
-        padding: 1rem 2rem;
         border-radius: 1rem;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        aspect-ratio: 1 / 1;
+
 
         h2 {
             text-wrap: nowrap;
         }
 
         svg {
-            width: 6rem;
+            width: 5rem;
             height: 6rem;
         }
+    }
+
+    a {
+        width: 100%;
+        color: inherit;
+    }
+
+
+    a:hover {
+        text-decoration: none;
+        color: var(--accent-color);
     }
 
     div:hover {

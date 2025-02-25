@@ -13,6 +13,20 @@ export const Posts = () => {
     const [showPopup, setShowPopup] = useState(false)
     const [showOverlay, setShowOverlay] = useState(false)
 
+    const [formData, setFormData] = useState({
+        search: "",
+    });
+
+    const handleInputChange = (e) => {
+        const {value, name} = e.target;
+        setFormData((prev) => {
+            const updatedData = {
+                ...prev,
+                [name]: value
+            }
+            return updatedData
+        })
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -25,7 +39,7 @@ export const Posts = () => {
             .then(res => res.json())
             .then(data => {setPosts(data)})
             .catch(err => console.log(err));
-    }, [posts])
+    }, [])
 
     const parseTitle = (title) => {
         if (title && title.length > 40) {
@@ -57,6 +71,22 @@ export const Posts = () => {
     }
 
 
+    const handleSubmitSearch = (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('token')
+        fetch(`/api/posts/search?query=${encodeURIComponent(formData.search)}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        })
+            .then((res) => res.json())
+            .then((data => {
+                setPosts(data)
+            }))
+            .catch(err => console.log(err));
+    }
+
 
     const deleteClick = (postId) => {
         const token  = localStorage.getItem("token");
@@ -80,31 +110,74 @@ export const Posts = () => {
         }
     }
 
+    const sortById = (e) => {
+        setPosts((prev) => {
+            return [...prev].sort((a, b) => a.id - b.id)
+        })
+    }
+
+    const sortByTitle = () => {
+        setPosts((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.title.localeCompare(b.title);
+            })
+        })
+    }
+
+    const sortByAuthor = () => {
+        setPosts((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.Book.Author.name.localeCompare(b.Book.Author.name);
+            })
+        })
+    }
+
+    const sortByDate = () => {
+        setPosts((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.created.localeCompare(b.created);
+            })
+        })
+    }
+
+    const sortByBook = () => {
+        setPosts((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.Book.title.localeCompare(b.Book.title);
+            })
+        })
+    }
+
+
     return (
         <main className="posts">
 
             <div className="posts-search-form">
-                <form>
+                <form onSubmit={handleSubmitSearch}>
                     <InputFieldset
                         title="Search for Posts"
+                        type="text"
                         name="search"
                         example="Search for Posts"
                         id="search"
+                        onChange={handleInputChange}
+                        value={formData.search}
                         />
                 </form>
             </div>
 
             <section className="search-result">
 
-                {posts.length > 0 ? (
+                {posts.length > 0 && posts ? (
                     <table>
                         <thead>
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Book</th>
+                            <th onClick={()=> sortById()} scope="col">ID</th>
+                            <th onClick={()=> sortByTitle()} scope="col">Title</th>
+                            <th onClick={()=> sortByBook()}scope="col">Book</th>
+                            <th onClick={()=> sortByAuthor()}scope="col">Author</th>
                             <th scope="col">Published</th>
-                            <th scope="col">Date</th>
+                            <th onClick={()=> sortByDate()} scope="col">Date</th>
                             <th scope="col">Configure</th>
                         </tr>
                         </thead>
@@ -116,6 +189,7 @@ export const Posts = () => {
                                 <td>{post.id}</td>
                                 <td>{parseTitle(post.title)}</td>
                                 <td>{post.Book.title}</td>
+                                <td>{post.Book.Author.name}</td>
                                 {post.published ? (
                                     <td>
                                         <svg className="published" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
@@ -142,7 +216,7 @@ export const Posts = () => {
 
                     </table>
                 ) : (
-                    <p>Loading...</p>
+                    <p>No results matched...</p>
                 )}
 
             </section>
