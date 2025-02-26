@@ -6,10 +6,23 @@ import {useParams} from "react-router-dom";
 
 import '../styles/BookReview.css'
 
+/**
+ * BookReview Component
+ *
+ * @returns {JSX.Element}
+ */
+
+
+
 export const BookReview= () => {
 
-    const [review, setReview] = useState(null);
-    const {id} = useParams();
+    const [review, setReview] = useState(null); // Store and set book reviews
+    const {id} = useParams(); // Get the id of the book review through the params
+
+
+    /**
+     * Fetch the book review from the backend
+     */
 
     useEffect(() => {
         fetch(`/api/latest/${id}`)

@@ -1,15 +1,33 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-
-
 import '../styles/Activity.css'
 import {InputFieldset} from "../components/InputFieldset.jsx";
 
 
+/**
+ * Activity page
+ *
+ * This is a part of the admin dashboard. On this page, the admin can review
+ * all the comments and also delete inappropriate ones and even block users
+ *
+ */
+
+
 export const Activity = () => {
+
+    /**
+     * comments: Store comments from the server
+     * searchQuery: The search string entered by the user
+     */
+
 
     const [comments, setComments] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState(null);
+
+
+    /**
+     * Fetch all the comments when the components mounts
+     */
 
     useEffect(() => {
         fetch("/api/comments", {
@@ -23,13 +41,20 @@ export const Activity = () => {
             .catch(err => console.log(err))
     }, [])
 
-
+    /**
+     * Handle input change of the searchQuery field
+     * @param e
+     */
 
     const handleChange = (e) => {
         const value = e.target.value;
         setSearchQuery(prev => value);
     }
 
+    /**
+     * Handle the submit from the searchform and send it to the backend
+     * @param e
+     */
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,14 +68,35 @@ export const Activity = () => {
             }
         })
             .then(res => res.json())
-            .then(data => setComments(data))
+            .then(data => setSearchResults(data))
             .catch(err => console.log(err))
+    }
+
+
+    const deleteComment = async (commentId) => {
+        try {
+            const res = await fetch(`/api/comments/${commentId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (res.ok) {
+                const updatedComments = await fetch("/api/comments");
+                const data = await updatedComments.json();
+                setComments(data);
+            } else {
+                console.error("Failed to delete comment");
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
 
     return (
         <main className="activity-container">
-
 
             <section className="comments-section-container">
                 <h2>Comments</h2>
@@ -72,6 +118,8 @@ export const Activity = () => {
 
                 </div>
 
+
+                {/* Comments Table */}
                 {comments.length > 0 || comments ? (
                     <table>
                         <thead>
@@ -94,7 +142,8 @@ export const Activity = () => {
                                 <td>{comment.created}</td>
                                 <td>
                                     <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M791-55 686-160H160v-112q0-34 17.5-62.5T224-378q45-23 91.5-37t94.5-21L55-791l57-57 736 736-57 57ZM240-240h366L486-360h-6q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm496-138q29 14 46 42.5t18 61.5L666-408q18 7 35.5 14t34.5 16ZM568-506l-59-59q23-9 37-29.5t14-45.5q0-33-23.5-56.5T480-720q-25 0-45.5 14T405-669l-59-59q23-34 58-53t76-19q66 0 113 47t47 113q0 41-19 76t-53 58Zm38 266H240h366ZM457-617Z"/></svg>                                        <svg onClick={() => inspectClick(post.id)} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M791-55 686-160H160v-112q0-34 17.5-62.5T224-378q45-23 91.5-37t94.5-21L55-791l57-57 736 736-57 57ZM240-240h366L486-360h-6q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm496-138q29 14 46 42.5t18 61.5L666-408q18 7 35.5 14t34.5 16ZM568-506l-59-59q23-9 37-29.5t14-45.5q0-33-23.5-56.5T480-720q-25 0-45.5 14T405-669l-59-59q23-34 58-53t76-19q66 0 113 47t47 113q0 41-19 76t-53 58Zm38 266H240h366ZM457-617Z"/></svg>
+                                        <svg onClick={() => deleteComment(comment.id)} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                                     </div>
                                 </td>
                             </tr>
@@ -103,14 +152,9 @@ export const Activity = () => {
 
                     </table>
                 ) : (
-                    <p>Loading comments...</p>
+                    <p>"No comments found"</p>
                 )}
-
-
             </section>
-
-
-
         </main>
     )
 }

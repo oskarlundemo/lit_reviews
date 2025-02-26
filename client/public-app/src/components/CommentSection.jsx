@@ -61,10 +61,12 @@ export const CommentSection = () => {
                 setComments(data);
             })
             .catch(err => console.log(err));
-    }, [comments]);
+    }, []);
 
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
         setFormData((prevData) => {
             return {
@@ -74,32 +76,53 @@ export const CommentSection = () => {
         })
 
         setIsDisabled(false);
-        const token = localStorage.getItem("token");
 
-        fetch(`/api/latest/${id}`, {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token ? `Bearer ${token}` : ''
-            },
-        })
-            .then(res => res.json())
-            .catch(err => console.log(err));
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await fetch(`/api/latest/${id}`, {
+                method: "POST",
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+            })
+
+            const responseData = await res.json();
+
+            if (res.ok) {
+                const updatedComments = await fetch(`/api/latest/${id}/comments`);
+                const data = await updatedComments.json();
+                setComments(data);
+            } else {
+                console.error("Failed to create comment:", responseData);
+            }
+        } catch (err) {
+            console.error(err)
+        }
     }
 
 
-    const handleDelete = (commentId, userid) => {
-        const token = localStorage.getItem("token");
-        fetch(`/api/latest/${id}/comments/${commentId}/${userid}`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token ? `Bearer ${token}` : ''
-            },
-        })
-            .then(res => res.json())
-            .catch(err => console.log(err));
+    const handleDelete = async (commentId) => {
+        try {
+            const res = await fetch(`/api/comments/${commentId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (res.ok) {
+                const updatedComments = await fetch("/api/comments");
+                const data = await updatedComments.json();
+                console.log(data)
+                setComments(data);
+            } else {
+                console.error("Failed to delete comment");
+            }
+        } catch (err) {
+            console.error(err)
+        }
     }
 
 

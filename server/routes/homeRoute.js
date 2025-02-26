@@ -28,12 +28,14 @@ homeRouter.post('/api/latest/:id', async (req, res) => {
 
 homeRouter.delete('/api/latest/:id/comments/:commentId/:userid', async (req, res) => {
     await deleteComment(req,res);
-    await getComments(req, res);
 })
 
 homeRouter.get('/api/latest/like/:postid', async (req, res) => {
     await getLikes(req, res);
+    console.log('Loop')
 })
+
+
 
 homeRouter.post('/api/latest/like/:postid', async (req, res) => {
     await likePost(req,res);

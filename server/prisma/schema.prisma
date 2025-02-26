@@ -97,7 +97,6 @@ model Comment {
 }
 
 model Like {
-  id   Int    @id @default(autoincrement())
   post Review @relation(fields: [post_id], references: [id], onDelete: Cascade)
   user User   @relation(fields: [user_id], references: [id])
 
@@ -105,4 +104,6 @@ model Like {
   user_id Int
 
   created DateTime @default(now())
+
+  @@id([post_id, user_id])
 }

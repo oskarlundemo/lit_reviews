@@ -6,24 +6,34 @@ import { useNavigate } from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.jsx";
 
 
+/**
+ *
+ * CreateUser component is the page where users can sign up for this service
+ *
+ * @returns {JSX.Element}
+ */
+
+
+
 
 export default function CreateUser() {
 
 
-    const [isPasswordFocused, setPasswordFocused] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(true);
-    const navigate = useNavigate();
+    const [isPasswordFocused, setPasswordFocused] = useState(false); // Toggles requirements beneath the input field
+    const [isDisabled, setIsDisabled] = useState(true); // Toggle the button based on input
+    const navigate = useNavigate(); // Sent user to homepage when created account
 
-    const [isPasswordLenght, setIsPasswordLength] = useState(false);
-    const [isNumber, setIsNumber] = useState(false);
-    const [isSymbol, setIsSymbol] = useState(false);
+    const [isPasswordLenght, setIsPasswordLength] = useState(false); //Check if the length of password is correct
+    const [isNumber, setIsNumber] = useState(false); // Boolean if the password contains number
+    const [isSymbol, setIsSymbol] = useState(false); // Boolean if the password contains a symbol
 
 
-    const { login } = useAuth();
+    const { login } = useAuth(); // Login context
     const [usernameError, setUsernameError] = useState(null);
     const [emailError, setEmailError] = useState(null);
 
 
+    // Update state of the inputfields in the createuser form 
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -85,7 +95,6 @@ export default function CreateUser() {
                 }
                 return;
             }
-
             login(result.token);
             navigate('/');
         } catch (err) {

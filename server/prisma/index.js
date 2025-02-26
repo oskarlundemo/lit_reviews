@@ -469,8 +469,7 @@ exports.getComments = async (req, res) => {
 exports.createComment = async (req, res) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
-        const {username, id} = jwtDecode(token);
-
+        const {id} = jwtDecode(token);
         await prisma.comment.create({
             data: {
                 user_id: id,
@@ -478,6 +477,8 @@ exports.createComment = async (req, res) => {
                 comment: req.body.comment,
             }
         })
+
+        res.status(201).json({ message: "Comment created"});
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err.message });
@@ -491,11 +492,12 @@ exports.deleteComment = async (req, res) => {
                 id: parseInt(req.params.commentId),
             }
         })
+        res.status(201).json({message: 'Comment deleted'});
     } catch (err) {
         console.error(err);
+        res.status(400).json({ error: err.message });
     }
 }
-
 
 
 exports.getLikes = async (req, res) => {
@@ -504,7 +506,7 @@ exports.getLikes = async (req, res) => {
             where: {
                 post_id: parseInt(req.params.postid),
             }
-        })
+        });
         res.status(200).json(likes);
     } catch (err) {
         console.error(err);
@@ -516,7 +518,7 @@ exports.getLikes = async (req, res) => {
 
 exports.likePost = async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
-    const {username, id} = jwtDecode(token);
+    const {id} = jwtDecode(token);
     try {
         const alreadyLiked = await prisma.like.findUnique({
             where: {
@@ -584,8 +586,6 @@ exports.searchForComments = async (req, res) => {
                 user: true
             }
         });
-
-        console.log(results);
 
         res.status(200).json(results);
 
