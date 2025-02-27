@@ -21,8 +21,40 @@
         border-bottom: 2px solid var(--accent-color);
     }
 
-
     form {
         width: 100%;
+    }
+}
+
+table tbody tr {
+    div {
+
+        svg {
+            transition: 200ms ease-in-out;
+        }
+
+        svg:first-of-type:hover {
+            fill: var(--accent-color);
+            cursor: pointer;
+            animation: 600ms bounce alternate;
+        }
+    }
+}
+
+.popup-module {
+    > div {
+        h2 > span {
+            text-decoration: underline;
+        }
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.button-container {
+    width: 50%;
+
+    button {
+        width: 100% !important;
     }
 }

@@ -22,8 +22,30 @@ export const Activity = () => {
 
     const [comments, setComments] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState(null);
 
+    const [showPopup, setShowPopup] = useState(false);
+    const [showOverlay, setShowOverlay] = useState(false);
+
+    const [inspectUserComment, setInspectUserComment] = useState(null);
+    const [bannedUsers, setBannedUsers] = useState([]);
+
+    const closePopup = () => {
+        setShowPopup(false);
+        setShowOverlay(false)
+    }
+
+    const openPopup = (user) => {
+        setShowPopup(true);
+        setShowOverlay(true);
+        setInspectUserComment(user)
+    }
+
+    const toggleOverlay = (e) => {
+        if (e.target.classList.contains('overlay')) {
+            setShowOverlay(false);
+            setShowPopup(false);
+        }
+    }
 
     /**
      * Fetch all the comments when the components mounts
@@ -40,6 +62,21 @@ export const Activity = () => {
             .then(data => setComments(data))
             .catch(err => console.log(err))
     }, [])
+
+
+
+    useEffect(() => {
+        fetch("/api/activity/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(res => res.json())
+            .then(data => setBannedUsers(data))
+            .catch(err => console.log(err))
+    }, [])
+
 
     /**
      * Handle input change of the searchQuery field
@@ -68,7 +105,7 @@ export const Activity = () => {
             }
         })
             .then(res => res.json())
-            .then(data => setSearchResults(data))
+            .then(data => setComments(data))
             .catch(err => console.log(err))
     }
 
@@ -81,7 +118,6 @@ export const Activity = () => {
                     "Content-Type": "application/json",
                 },
             });
-
             if (res.ok) {
                 const updatedComments = await fetch("/api/comments");
                 const data = await updatedComments.json();
@@ -93,6 +129,32 @@ export const Activity = () => {
             console.log(err);
         }
     }
+
+
+    const banUser = (user) => {
+        try {
+            fetch(`/api/activity/unban`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ user }),
+            })
+                .then(res => res.json())
+                .catch(err => console.log(err))
+        } catch (err) {
+            console.err(err)
+        }
+    }
+
+    const unBanUser = (user) => {
+
+
+
+
+
+    }
+
 
 
     return (
@@ -142,19 +204,57 @@ export const Activity = () => {
                                 <td>{comment.created}</td>
                                 <td>
                                     <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M791-55 686-160H160v-112q0-34 17.5-62.5T224-378q45-23 91.5-37t94.5-21L55-791l57-57 736 736-57 57ZM240-240h366L486-360h-6q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm496-138q29 14 46 42.5t18 61.5L666-408q18 7 35.5 14t34.5 16ZM568-506l-59-59q23-9 37-29.5t14-45.5q0-33-23.5-56.5T480-720q-25 0-45.5 14T405-669l-59-59q23-34 58-53t76-19q66 0 113 47t47 113q0 41-19 76t-53 58Zm38 266H240h366ZM457-617Z"/></svg>
+                                        {bannedUsers && bannedUsers.some(user => comment.user.id === user.id ) ? (
+                                            <svg onClick={() => openPopup(comment.user)} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M791-55 686-160H160v-112q0-34 17.5-62.5T224-378q45-23 91.5-37t94.5-21L55-791l57-57 736 736-57 57ZM240-240h366L486-360h-6q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm496-138q29 14 46 42.5t18 61.5L666-408q18 7 35.5 14t34.5 16ZM568-506l-59-59q23-9 37-29.5t14-45.5q0-33-23.5-56.5T480-720q-25 0-45.5 14T405-669l-59-59q23-34 58-53t76-19q66 0 113 47t47 113q0 41-19 76t-53 58Zm38 266H240h366ZM457-617Z"/></svg>
+                                        ) : (
+                                            <svg onClick={() => openPopup(comment.user)} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                                        )}
                                         <svg onClick={() => deleteComment(comment.id)} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                         </tbody>
-
                     </table>
                 ) : (
                     <p>"No comments found"</p>
                 )}
             </section>
-        </main>
-    )
+
+            <div className={`popup-module ${showPopup ? 'show' : ''}`}>
+                <svg onClick={() => closePopup()} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                </svg>
+
+                {inspectUserComment ? (
+                    <div>
+                        <div className="button-container">
+                            <button onClick={closePopup}>Cancel</button>
+                            {bannedUsers && bannedUsers.some(user => inspectUserComment.id === user.id) ? (
+                                <div>
+                                    <h2>Are you sure you want to unban <span>{inspectUserComment.username}</span>?</h2>
+                                    <div className="button-container">
+                                        <button onClick={closePopup}>Cancel</button>
+                                        <button onClick={() => {unBanUser(inspectUserComment); closePopup();}}>Unban</button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <h2>Are you sure you want to ban <span>{inspectUserComment.username}</span>?</h2>
+                                    <div className="button-container">
+                                        <button onClick={closePopup}>Cancel</button>
+                                        <button onClick={() => {banUser(inspectUserComment); closePopup();}}>Ban</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <p>Loading user info...</p>
+                )}
+
+                <div onClick={toggleOverlay} className={`overlay ${showOverlay ? 'active' : ''}`}></div>
+            </div>
+
+        </main>)
 }

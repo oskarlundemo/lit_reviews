@@ -222,7 +222,6 @@ export const Posts = () => {
             </section>
 
             <div className={`popup-module ${showPopup ? 'show' : ''}`}>
-
                 <svg onClick={() => closePopup()} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
 
                 <h2>Are you sure you want to delete?</h2>
@@ -249,7 +248,6 @@ export const Posts = () => {
                 ) : (
                     <p>Loading...</p>
                 )}
-
             </div>
 
             <div onClick={toggleOverlay} className={`overlay ${showOverlay ? 'active' : ''}`}></div>

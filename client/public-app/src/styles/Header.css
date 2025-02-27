@@ -34,7 +34,26 @@ header {
 }
 
 .admin-container {
-    display: flex;
     align-items: center;
     gap: 1rem;
+
+    > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+    }
+
+    a:hover {
+        color: var(--accent-color);
+        svg {
+            fill: var(--accent-color);
+        }
+    }
 }

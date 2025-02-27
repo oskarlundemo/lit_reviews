@@ -24,6 +24,9 @@ export default defineConfig({
       },
       '/api/posts': {
         target: 'http://localhost:5000',
+      },
+      '/api/activity': {
+        target: 'http://localhost:5000',
       }
     },
   }

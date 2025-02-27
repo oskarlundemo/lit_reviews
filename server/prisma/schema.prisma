@@ -24,6 +24,8 @@ model User {
 
   Admin  Admin[]
   Review Review[]
+
+  Banned Banned[]
 }
 
 model Admin {
@@ -106,4 +108,13 @@ model Like {
   created DateTime @default(now())
 
   @@id([post_id, user_id])
+}
+
+model Banned {
+  id      Int @default(autoincrement())
+  user_id Int @unique
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@id([id, user_id])
 }

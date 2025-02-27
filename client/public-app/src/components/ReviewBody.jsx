@@ -76,7 +76,6 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
                     },
                 })
 
-
                 if (res.ok) {
                     const updatedComments = await fetch(`/api/latest/like/${reviewId}`);
                     const data = await updatedComments.json();

@@ -32,9 +32,7 @@ homeRouter.delete('/api/latest/:id/comments/:commentId/:userid', async (req, res
 
 homeRouter.get('/api/latest/like/:postid', async (req, res) => {
     await getLikes(req, res);
-    console.log('Loop')
 })
-
 
 
 homeRouter.post('/api/latest/like/:postid', async (req, res) => {
