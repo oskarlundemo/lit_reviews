@@ -6,10 +6,11 @@
     justify-content: center;
     flex-direction: column;
     margin: 4rem;
+    padding: 1rem;
     gap: 2rem;
-    width: 80%;
     align-self: center;
     justify-self: center;
+    width: 80%;
 }
 
 body {
@@ -23,6 +24,7 @@ body {
     width: 100%;
     padding: 1rem;
 
+
     form {
         width: 100%;
     }
@@ -30,7 +32,6 @@ body {
     fieldset {
         margin: 2rem;
     }
-
 }
 
 
@@ -53,7 +54,6 @@ table thead tr {
         text-align: left;
         padding: 1rem 1rem 0 1rem;
     }
-
 
 
     th:hover {
@@ -110,7 +110,7 @@ tbody tr {
 }
 
 tbody tr:nth-child(odd) {
-    background-color: var(--light-grey);
+    background-color: var(--secondary-color);
 }
 
 table thead {

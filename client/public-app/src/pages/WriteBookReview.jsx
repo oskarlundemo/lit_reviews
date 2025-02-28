@@ -224,6 +224,7 @@ export const WriteBookReview = () => {
                                     menubar: false,
                                     plugins: 'link image code',
                                     toolbar: 'undo redo | formatselect | bold italic | link image | code',
+                                    content_style: 'body { background-color: hsl(240, 15%, 15%); color: hsl(0, 0%, 88%); }',
                                 }}
                                 onEditorChange={handleEditorChange}
                             />

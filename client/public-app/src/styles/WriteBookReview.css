@@ -26,7 +26,7 @@
 
 
 .book-info-container {
-    margin: 0 2rem 2rem 2rem;
+
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -34,7 +34,7 @@
 
 
 .book-info-area, .review-info-area {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     border-radius: 10px;
     padding: 2rem;
 

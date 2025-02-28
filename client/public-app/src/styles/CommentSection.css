@@ -30,7 +30,7 @@
     input {
         border-radius: 5px;
         resize: none;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--box-shadow);
         border: none;
         font-family: inherit;
         font-size: inherit;
@@ -43,7 +43,7 @@
 }
 
 .comment-section-comments {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     margin: 1rem 0;
     border-radius: 5px;
 
@@ -97,4 +97,8 @@
 
 .error {
     color: var(--error-color);
+}
+
+.banned-form {
+    text-align: center;
 }

@@ -14,6 +14,8 @@ export const CommentSection = () => {
     const {id} = useParams();
     const {user} = useAuth();
     const [comments, setComments] = useState([]);
+    const [bannedUsers, setBannedUsers] = useState([]);
+
     const [isDisabled, setIsDisabled] = useState(true);
     const [chars, setChars] = useState(0);
 
@@ -57,11 +59,23 @@ export const CommentSection = () => {
             },
         })
             .then(res => res.json())
-            .then(data => {
-                setComments(data);
-            })
+            .then(data => {setComments(data);})
             .catch(err => console.log(err));
+
+
+        fetch("/api/activity/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(res => res.json())
+            .then(data => setBannedUsers(data))
+            .catch(err => console.log(err))
+
     }, []);
+
+
 
 
 
@@ -137,7 +151,7 @@ export const CommentSection = () => {
 
             <div className="comment-section-comments">
                 {comments.length > 0 ? (
-                    comments.map((comment, index) => (
+                    comments.map((comment) => (
                         <div key={comment.id} className="comment-card">
                             <div className="comment-card-header">
                                 <p>@{comment.user.username}</p>
@@ -159,18 +173,31 @@ export const CommentSection = () => {
             </div>
 
             {user ? (
-                <form onSubmit={handleSubmit}>
-                    <input
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
-                        value={formData.comment}
-                        name="comment"
-                        id="comment-input"
-                        className={errorShake ? 'shake' : ''}
-                    />
-                    <p className={errorShake ? 'error' : ''}>  {chars} / 50</p>
-                    <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>
-                </form>
+                bannedUsers && bannedUsers.some((user) => user.id === user.id) ? (
+                    <div className="banned-input">
+                        <form className="banned-form">
+                            <input
+                                disabled="disabled"
+                                placeholder="Your account is suspended from commenting"
+                            />
+                            <p> 0 / 50</p>
+                            <button className="disabled" disabled="disabled">Submit</button>
+                        </form>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                            value={formData.comment}
+                            name="comment"
+                            id="comment-input"
+                            className={errorShake ? 'shake' : ''}
+                        />
+                        <p className={errorShake ? 'error' : ''}>  {chars} / 50</p>
+                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>
+                    </form>
+                )
             ) : (
 
 

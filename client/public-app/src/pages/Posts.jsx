@@ -155,10 +155,10 @@ export const Posts = () => {
             <div className="posts-search-form">
                 <form onSubmit={handleSubmitSearch}>
                     <InputFieldset
-                        title="Search for Posts"
+                        title="Search for posts"
                         type="text"
                         name="search"
-                        example="Search for Posts"
+                        example="Search for posts"
                         id="search"
                         onChange={handleInputChange}
                         value={formData.search}

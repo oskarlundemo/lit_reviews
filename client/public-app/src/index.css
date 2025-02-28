@@ -13,12 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 
   color-scheme: light dark;
-  color: hsl(0, 0%, 100%);
-  background-color: #242424;
+  color: hsl(0, 0%, 0%);
 
   --error-color: hsl(0, 98%, 50%);
   --approved-color: hsl(120, 100%, 50%);
-
 
   --background-color: hsl(0, 0%, 98%);
   --secondary-color: hsl(0, 0%, 88%);
@@ -29,6 +27,35 @@
   --light-grey: hsl(0, 0%, 83%);
   --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
+  --svg-color: hsl(0, 0%, 83%);
+}
+
+
+.App {
+  background-color: var(--background-color);
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: hsl(240, 15%, 15%);
+    --secondary-color: hsl(0, 0%, 30%);
+    --button-color: hsl(236, 88%, 64%);
+    --accent-color: hsl(236, 88%, 64%);
+    --light-grey: hsl(0, 0%, 60%);
+    --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+    --svg-color: hsl(0, 0%, 100%);
+    color: hsl(0, 0%, 100%);
+  }
+}
+
+svg {
+  fill: var(--svg-color)
+}
+
+
+.text-editor iframe {
+  border: none;
 }
 
 a {
@@ -36,8 +63,6 @@ a {
   color: var(--accent-color);
   text-decoration: inherit;
 }
-
-
 
 html, body, #root, #root > div {
   min-height: 100vh; /* Ensures the container takes at least the full viewport height */
@@ -78,15 +103,8 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: var(--background-color);
-  }
-  a:hover {
-    color: var(--accent-color);
-  }
-}
+
+
 
 button.disabled:hover {
   border-color: transparent;
@@ -118,4 +136,8 @@ button.disabled:hover {
   60% { transform: translateY(-5px); }
   80% { transform: translateY(5px); }
   100% { transform: translateY(0); }
+}
+
+main {
+  background-color: var(--background-color);
 }
