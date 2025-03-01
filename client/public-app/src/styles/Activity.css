@@ -4,18 +4,24 @@
 
 
 .activity-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    width: 80%;
+    justify-self: center;
+    align-self: center;
+    padding: 1rem;
+    gap: 1rem;
 }
 
 
 .comments-section-container {
-    margin: 2rem;
     box-shadow: var(--box-shadow);
     border-radius: 10px;
-    padding: 2rem;
-    width: 60%;
+    width: 100%;
+    grid-area: 1 / 1 / 1 / 1;
+    overflow: hidden;
 
     h2 {
         border-bottom: 2px solid var(--accent-color);
@@ -57,4 +63,8 @@ table tbody tr {
     button {
         width: 100% !important;
     }
+}
+
+.comments-filter-section {
+    margin: 1rem;
 }

@@ -56,3 +56,10 @@ header {
         }
     }
 }
+
+.dark-mode-toggle {
+    svg:hover {
+        fill: var(--accent-color);
+        cursor: pointer;
+    }
+}

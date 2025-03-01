@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import '../styles/Activity.css'
 import {InputFieldset} from "../components/InputFieldset.jsx";
+import {BannedList} from "../components/BannedList.jsx";
 
 
 /**
@@ -29,6 +30,7 @@ export const Activity = () => {
     const [inspectUserComment, setInspectUserComment] = useState(null);
     const [bannedUsers, setBannedUsers] = useState([]);
 
+
     const closePopup = () => {
         setShowPopup(false);
         setShowOverlay(false)
@@ -52,17 +54,18 @@ export const Activity = () => {
      */
 
     useEffect(() => {
-        fetch("/api/comments", {
+        fetch("/api/comments/all", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             }
         })
             .then(res => res.json())
-            .then(data => setComments(data))
-            .catch(err => console.log(err))
+            .then(data => {
+                setComments(data);
+            })
+            .catch(err => console.log(err));
     }, [])
-
 
 
     useEffect(() => {
@@ -119,7 +122,7 @@ export const Activity = () => {
                 },
             });
             if (res.ok) {
-                const updatedComments = await fetch("/api/comments");
+                const updatedComments = await fetch("/api/comments/all");
                 const data = await updatedComments.json();
                 setComments(data);
             } else {
@@ -152,7 +155,6 @@ export const Activity = () => {
                     .then(data => setBannedUsers(data))
                     .catch(err => console.log(err))
             }
-
         } catch (err) {
             console.error(err)
         }
@@ -187,8 +189,42 @@ export const Activity = () => {
 
 
 
+    const sortById = (e) => {
+        setComments((prev) => {
+            return [...prev].sort((a, b) => a.id - b.id)
+        })
+    }
+
+    const sortByTitle = () => {
+        setComments((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.title.localeCompare(b.title);
+            })
+        })
+    }
+
+    const sortByDate = () => {
+        setComments((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.created.localeCompare(b.created);
+            })
+        })
+    }
+
+    const sortByBook = () => {
+        setPosts((prev) => {
+            return [...prev].sort((a,b) => {
+                return a.Book.title.localeCompare(b.Book.title);
+            })
+        })
+    }
+
+
     return (
         <main className="activity-container">
+
+
+            <BannedList/>
 
             <section className="comments-section-container">
                 <h2>Comments</h2>
@@ -212,13 +248,14 @@ export const Activity = () => {
 
                 {/* Comments Table */}
                 {comments.length > 0 || comments ? (
+                    <>
                     <table>
                         <thead>
                         <tr>
-                            <th onClick={()=> sortById()} scope="col">ID</th>
-                            <th onClick={()=> sortByTitle()} scope="col">Username</th>
-                            <th onClick={()=> sortByBook()}scope="col">Comment</th>
-                            <th onClick={()=> sortByAuthor()}scope="col">Date</th>
+                            <th onClick={()=> sortById(comments)} scope="col">ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Comment</th>
+                            <th onClick={()=> sortByDate()}scope="col">Date</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -245,9 +282,11 @@ export const Activity = () => {
                         ))}
                         </tbody>
                     </table>
+                    </>
                 ) : (
                     <p>"No comments found"</p>
                 )}
+
             </section>
 
             <div className={`popup-module ${showPopup ? 'show' : ''}`}>

@@ -16,7 +16,6 @@ homeRouter.get('/api/latest/:id', async (req, res) => {
     await inspectReview(req, res);
 })
 
-
 homeRouter.get('/api/latest/:id/comments', async (req, res) => {
     await getComments(req, res);
 })
@@ -38,6 +37,7 @@ homeRouter.get('/api/latest/like/:postid', async (req, res) => {
 homeRouter.post('/api/latest/like/:postid', async (req, res) => {
     await likePost(req,res);
 })
+
 
 
 

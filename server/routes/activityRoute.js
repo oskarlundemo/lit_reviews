@@ -11,6 +11,11 @@ activityRouter.get('/', async (req, res) => {
     await getBannedUsers(req, res);
 })
 
+
+activityRouter.get('/banned', async (req, res) => {
+    await getBannedUsers(req, res);
+})
+
 activityRouter.post('/ban', async (req, res) => {
     await banUserCommenting(req, res)
 })

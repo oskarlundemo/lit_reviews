@@ -27,24 +27,81 @@
   --light-grey: hsl(0, 0%, 83%);
   --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
-  --svg-color: hsl(0, 0%, 83%);
+  --svg-color: hsl(0, 0%, 0%);
+  --text-color: hsl(0, 0%, 0%);
 }
 
+input {
+  color: var(--text-color)
+}
 
 .App {
   background-color: var(--background-color);
+}
+
+main {
+  background-color: var(--background-color);
+}
+
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  color: hsl(0, 0%, 0%);
+  background-color: var(--background-color) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--background-color) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill:hover,
+.dark textarea:-webkit-autofill:focus,
+.dark select:-webkit-autofill,
+.dark select:-webkit-autofill:hover,
+.dark select:-webkit-autofill:focus {
+  background-color: hsl(240, 15%, 15%) !important;
+  color: hsl(0, 0%, 100%) !important;
+  -webkit-text-fill-color: hsl(0, 0%, 100%) !important;
+  -webkit-box-shadow: 0 0 0px 1000px hsl(240, 15%, 15%) inset !important;
+}
+
+
+
+.dark {
+  --background-color: hsl(240, 15%, 15%);
+  --secondary-color: hsl(240, 15%, 20%);
+  --button-color: hsl(236, 88%, 64%);
+  --accent-color: hsl(236, 88%, 64%);
+  --light-grey: hsl(0, 0%, 60%);
+  --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+  --svg-color: hsl(0, 0%, 100%);
+  --text-color: hsl(0, 0%, 100%);
+
+
+  color: hsl(0, 0%, 100%);
 }
 
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: hsl(240, 15%, 15%);
-    --secondary-color: hsl(0, 0%, 30%);
+    --secondary-color: hsl(240, 15%, 20%);
     --button-color: hsl(236, 88%, 64%);
     --accent-color: hsl(236, 88%, 64%);
     --light-grey: hsl(0, 0%, 60%);
     --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
     --svg-color: hsl(0, 0%, 100%);
+    --text-color: hsl(0, 0%, 100%);
     color: hsl(0, 0%, 100%);
   }
 }
@@ -103,9 +160,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-
-
-
 button.disabled:hover {
   border-color: transparent;
   cursor: default;
@@ -119,7 +173,6 @@ button.disabled:hover {
   100% { transform: rotate(0deg); }
 }
 
-
 @keyframes bounce {
   0% { transform: translateY(0); }
   25% { transform: translateY(2px); }
@@ -127,7 +180,6 @@ button.disabled:hover {
   75% { transform: translateY(2px); }
   100% { transform: translateY(0); }
 }
-
 
 @keyframes errorShake {
   0% { transform: translateY(0); }
@@ -138,6 +190,7 @@ button.disabled:hover {
   100% { transform: translateY(0); }
 }
 
-main {
-  background-color: var(--background-color);
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }

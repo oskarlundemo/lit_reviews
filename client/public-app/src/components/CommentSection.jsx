@@ -102,7 +102,6 @@ export const CommentSection = () => {
                     'Authorization': token ? `Bearer ${token}` : ''
                 },
             })
-
             const responseData = await res.json();
 
             if (res.ok) {
@@ -127,9 +126,8 @@ export const CommentSection = () => {
                 },
             });
             if (res.ok) {
-                const updatedComments = await fetch("/api/comments");
+                const updatedComments = await fetch(`/api/comments/${id}`);
                 const data = await updatedComments.json();
-                console.log(data)
                 setComments(data);
             } else {
                 console.error("Failed to delete comment");
@@ -199,15 +197,13 @@ export const CommentSection = () => {
                     </form>
                 )
             ) : (
-
-
                 <form onSubmit={handleSubmit}>
                     <input
                         name="comment"
                         id="comment-input"
                         disabled={true}
                     />
-                    <p className={errorShake ? 'error' : ''}>  {chars} / 50</p>
+                    <p> {chars} / 50</p>
                     <button className="disabled" type="submit" disabled={true}>Submit</button>
                     <p className="login-message"><Link to ="/login" >Login</Link> to share your thoughts! 💭</p>
                 </form>

@@ -11,6 +11,8 @@
     align-self: center;
     justify-self: center;
     width: 60%;
+    animation: fadeIn 2s;
+    background-color: transparent;
 }
 
 

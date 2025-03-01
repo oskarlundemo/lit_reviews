@@ -402,6 +402,27 @@ exports.login = async (req, res) => {
 
 
 /**
+ * Favorites.jsx
+ */
+
+
+exports.getFavorites = async (req, res) => {
+
+    try {
+
+
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(404).json({message: 'Not Found'});
+    }
+}
+
+
+
+
+/**
  * Home.jsx
  */
 
@@ -552,6 +573,7 @@ exports.likePost = async (req, res) => {
 
 
 
+
 exports.banUserCommenting = async (req, res) => {
     try {
         await prisma.banned.create({
@@ -581,12 +603,13 @@ exports.unBanUserComments = async (req, res) => {
     }
 }
 
-
-
-
 exports.getBannedUsers = async (req, res) => {
     try {
-        const bannedUsers = await prisma.banned.findMany()
+        const bannedUsers = await prisma.banned.findMany({
+            include: {
+                user: true
+            }
+        })
         res.status(201).json(bannedUsers);
     } catch (err) {
         console.error(err);
@@ -618,8 +641,6 @@ exports.getAllComments = async (req, res) => {
 exports.searchForComments = async (req, res) => {
     try {
         const query = req.query.query;
-        console.log("Search Query:", query);
-
         const results = await prisma.comment.findMany({
             where: {
                 OR: [
@@ -631,11 +652,7 @@ exports.searchForComments = async (req, res) => {
                 user: true
             }
         });
-
-        console.log(results)
-
         res.status(200).json(results);
-
     } catch (err) {
         console.error(err);
         res.status(400).json({error: err.message});

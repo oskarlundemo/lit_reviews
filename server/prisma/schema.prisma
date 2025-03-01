@@ -94,6 +94,8 @@ model Comment {
   post_id Int
   user_id Int
 
+  checked Boolean @default(false)
+
   comment String
   created DateTime @default(now())
 }

@@ -33,7 +33,6 @@ export const LatestReviews = () => {
                 {reviews.length > 0 ? (
                     reviews.map((review) => (
                         <article className="book-card" onClick={()=> inspectReview(review.Book.title, review.id)} key={review.id}>
-                            <div className="book-card-text">
                             <div className="book-card-header">
                                 <div className="book-card-cover">
                                     <img src={review.image || "/images/retro-book.png"} alt={review.title} />
@@ -42,7 +41,6 @@ export const LatestReviews = () => {
                                 <h3>{review.Book.Author.name}</h3>
 
                                 <p className="book-description">{review.Book.about}</p>
-                            </div>
                             </div>
 
                             <h3><a href="#">Read more</a></h3>

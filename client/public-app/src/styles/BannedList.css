@@ -1,0 +1,39 @@
+
+
+
+
+
+.banned-list {
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+    width: 100%;
+
+    h2 {
+        border-bottom: 2px solid var(--accent-color);
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+
+        li {
+            display: flex;
+            flex-direction: row;
+            padding: 0.5rem 1rem;
+        }
+    }
+}
+
+
+.banned-card {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    padding: 0.5rem 1rem;
+}
