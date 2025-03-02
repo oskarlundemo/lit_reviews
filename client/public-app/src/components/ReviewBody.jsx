@@ -30,7 +30,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
     }
 
     useEffect (() => {
-        fetch(`/api/latest/like/${reviewId}`, {
+        fetch(`/api/home/like/${reviewId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
             const token = localStorage.getItem('token');
 
             try {
-                const res = await fetch(`/api/latest/like/${reviewId}`, {
+                const res = await fetch(`/api/home/like/${reviewId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -76,8 +76,9 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
                     },
                 })
 
+
                 if (res.ok) {
-                    const updatedComments = await fetch(`/api/latest/like/${reviewId}`);
+                    const updatedComments = await fetch(`/api/home/like/${reviewId}`);
                     const data = await updatedComments.json();
                     setLikes(data);
                 }

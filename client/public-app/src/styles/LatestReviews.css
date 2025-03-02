@@ -8,7 +8,7 @@
 
 .latest-book-grid {
     display: grid;
-    grid-template: repeat(2, minmax(300px, 1fr)) / repeat(3, minmax(200px, 1fr));
+    grid-template: repeat(1, minmax(300px, 1fr)) / repeat(3, minmax(200px, 1fr));
     gap: 1rem;
 }
 
@@ -16,12 +16,26 @@
 .book-card {
     display: flex;
     flex-direction: column;
-    padding: 1rem 2rem;
     justify-content: space-between;
+    transition: 200ms ease-in-out;
+
+
+}
+
+
+.read-more-link {
+    padding: 0 1rem;
 }
 
 .book-card:hover {
     cursor: pointer;
+    scale: 1.01;
+    box-shadow: var(--box-shadow);
+}
+
+
+.book-card-body {
+    padding: 1rem;
 }
 
 .book-card-header {

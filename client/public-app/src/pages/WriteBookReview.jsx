@@ -19,7 +19,7 @@ export const WriteBookReview = () => {
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
     const [publish, setPublished] = useState(true);
-
+    const [thumbnail, setThumbnail] = useState(null);
 
     const location = useLocation();
     const {post} = location.state || {}
@@ -35,12 +35,12 @@ export const WriteBookReview = () => {
         reviewTitle: post?.title || '',
         body: post?.body || editorContent,
 
+
+        thumbnail: thumbnail,
         reviewId: post?.id || null,
         bookId: post?.Book.id || null,
         authorId: post?.Book.Author.id || null,
     });
-
-
 
     useEffect(() => {
         setEditorContent(formData.body);
@@ -54,9 +54,12 @@ export const WriteBookReview = () => {
         }));
     };
 
+    const handleFileChange = (e) => {
+        setThumbnail(e.target.files[0]);
+    }
 
     const handleRadio = (e) => {
-        const newPublishState = e.target.id === 'publish'; // If "Publish" is selected, set publish to true
+        const newPublishState = e.target.id === 'publish';
         setPublished(newPublishState);
         setFormData((prevData) => ({
             ...prevData,
@@ -72,7 +75,7 @@ export const WriteBookReview = () => {
                 ...prevData,
                 [name]: value
             };
-            setIsDisabled(!(updatedData.bookTitle && updatedData.bookAuthor && updatedData.bookPages && updatedData.reviewTitle))
+           setIsDisabled(!(updatedData.bookTitle && updatedData.bookAuthor && updatedData.bookPages && updatedData.reviewTitle))
             return updatedData;
         });
     };
@@ -94,27 +97,36 @@ export const WriteBookReview = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formPayload = new FormData();
+        formPayload.append('bookTitle', formData.bookTitle);
+        formPayload.append('bookAuthor', formData.bookAuthor);
+        formPayload.append('bookPages', formData.bookPages);
+        formPayload.append('bookAbout', formData.bookAbout);
+        formPayload.append('publish', formData.publish);
+        formPayload.append('quote', formData.quote);
+        formPayload.append('reviewTitle', formData.reviewTitle);
+        formPayload.append('body', formData.body);
+        formPayload.append('thumbnail', thumbnail);
+
         try {
             const token = localStorage.getItem("token");
             const response = await fetch('/api/book-review', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': token ? `Bearer ${token}` : ''
                 },
-                body: JSON.stringify(formData)
-            })
+                body: formPayload
+            });
 
-            const result = await response.json();
-
-            if (!result.ok) {
-
+            if (response.ok) {
+                navigate('/dashboard');
+            } else {
+                console.error('Server responded with an error:', response.statusText);
             }
-            navigate('/dashboard');
         } catch (err) {
-            console.err(err);
+            console.error('Fetch error:', err);
         }
-    }
+    };
 
 
     return (
@@ -126,7 +138,7 @@ export const WriteBookReview = () => {
                 <h2>New book review</h2>
             )}
 
-                <form onSubmit={handleSubmit} className="book-review-form">
+                <form enctype="multipart/form-data" onSubmit={handleSubmit} className="book-review-form">
                     <div className="book-info-container">
 
                         <div className="book-info-area">
@@ -212,6 +224,8 @@ export const WriteBookReview = () => {
                                 type="file"
                                 id="thumbnail"
                                 name="thumbnail"
+                                onChange={handleFileChange}
+                                value={formData.thumbnail}
                             />
 
                             <Editor
@@ -239,6 +253,7 @@ export const WriteBookReview = () => {
                                     checked={!publish}
                                     onChange={handleRadio}
                                 />
+
                                 <label htmlFor="publish">Publish:</label>
                                 <input
                                     id="publish"

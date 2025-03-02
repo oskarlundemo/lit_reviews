@@ -52,7 +52,7 @@ export const CommentSection = () => {
     };
 
     useEffect(() => {
-        fetch(`/api/latest/${id}/comments`, {
+        fetch(`/api/home/${id}/comments`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -93,8 +93,7 @@ export const CommentSection = () => {
 
         try {
             const token = localStorage.getItem("token");
-
-            const res = await fetch(`/api/latest/${id}`, {
+            const res = await fetch(`/api/home/review/create/comment/${id}`, {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
@@ -105,7 +104,7 @@ export const CommentSection = () => {
             const responseData = await res.json();
 
             if (res.ok) {
-                const updatedComments = await fetch(`/api/latest/${id}/comments`);
+                const updatedComments = await fetch(`/api/home/${id}/comments`);
                 const data = await updatedComments.json();
                 setComments(data);
             } else {
@@ -119,14 +118,14 @@ export const CommentSection = () => {
 
     const handleDelete = async (commentId) => {
         try {
-            const res = await fetch(`/api/comments/${commentId}`, {
+            const res = await fetch(`/api/home/review/delete/${commentId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
             if (res.ok) {
-                const updatedComments = await fetch(`/api/comments/${id}`);
+                const updatedComments = await fetch(`/api/home/${id}/comments`);
                 const data = await updatedComments.json();
                 setComments(data);
             } else {

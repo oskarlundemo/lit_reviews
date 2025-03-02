@@ -3,21 +3,20 @@
 import '../styles/LatestReviews.css'
 import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
+import {ImageComponent} from "./ImageComponent.jsx";
 
 export const LatestReviews = () => {
 
     const [reviews, setReviews] = useState([]);
     const location = useLocation();
-    const navigate = useNavigate(); // Create navigate function
-
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("/api/latest/")
+        fetch("/api/home/latest")
             .then((res) => res.json())
             .then((data) => setReviews(data))
             .catch((err) => console.log("Error fetching reviews:", err));
     }, [location.pathname]);
-
 
 
     const inspectReview = (bookTitle, id) => {
@@ -34,16 +33,16 @@ export const LatestReviews = () => {
                     reviews.map((review) => (
                         <article className="book-card" onClick={()=> inspectReview(review.Book.title, review.id)} key={review.id}>
                             <div className="book-card-header">
-                                <div className="book-card-cover">
-                                    <img src={review.image || "/images/retro-book.png"} alt={review.title} />
+                                <ImageComponent review={review} />
+                                <div className="book-card-body">
+                                    <h3>{review.Book.title}</h3>
+                                    <h3>{review.Book.Author.name}</h3>
+                                    <p className="book-description">{review.Book.about}</p>
                                 </div>
-                                <h3>{review.Book.title}</h3>
-                                <h3>{review.Book.Author.name}</h3>
 
-                                <p className="book-description">{review.Book.about}</p>
                             </div>
 
-                            <h3><a href="#">Read more</a></h3>
+                            <h3 className="read-more-link"><a href="#">Read more</a></h3>
                         </article>
                     ))
                 ) : (

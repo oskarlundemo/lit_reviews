@@ -10,8 +10,18 @@ const { JSDOM } = require('jsdom');
 
 const window = new JSDOM('').window;
 const DOMPurify = require('dompurify');
-const {asciiWhitespaceRe} = require("jsdom/lib/jsdom/living/helpers/strings");
 const purify = DOMPurify(window);
+
+
+
+const mime = require('mime-types');
+const { createClient } = require('@supabase/supabase-js');
+
+const fs = require('fs').promises;
+const supabaseUrl = 'https://szbfcswimsizxxcbtbyx.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
+
 
 
 /**
@@ -107,6 +117,7 @@ exports.getReviews = async (req, res) => {
 exports.deleteReview = async (req, res) => {
     try {
         await prisma.$transaction(async (prisma) => {
+
             const review = await prisma.review.findUnique(({
                 where: {
                     id: parseInt(req.params.id),
@@ -159,19 +170,23 @@ exports.deleteReview = async (req, res) => {
  * WriteBookReview.jsx
  */
 
+
 exports.newBookReview = async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
-    const {username, id} = jwtDecode(token);
+    const {id} = jwtDecode(token);
+
+
+    const published = req.body.publish === 'true';
+
     const {bookAuthor, body,
         bookTitle, bookPages,
         quote, reviewTitle,
-        bookAbout, publish,
+        bookAbout,
         reviewId, bookId, authorId
     } = req.body;
 
 
     try {
-
         if (reviewId) {
             await prisma.author.update({
                 where: {
@@ -201,7 +216,7 @@ exports.newBookReview = async (req, res) => {
                     favouriteQuoute: quote,
                     body: body,
                     title: reviewTitle,
-                    published: publish
+                    published: published
                 }
             })
             res.status(201).json({message: 'Review updated'});
@@ -245,7 +260,7 @@ exports.newBookReview = async (req, res) => {
 
             const review = await prisma.review.create({
                 data: {
-                    published: publish,
+                    published: published,
                     title: reviewTitle,
                     body: purify.sanitize(body),
                     favouriteQuoute: quote,
@@ -255,7 +270,6 @@ exports.newBookReview = async (req, res) => {
             });
             res.status(201).json(review);
         }
-
     } catch (err) {
         console.error(err);
         res.status(400).json({message: err.message});
@@ -426,12 +440,34 @@ exports.getFavorites = async (req, res) => {
  * Home.jsx
  */
 
+
+
+exports.getAllBookReviews = async (req, res) => {
+    try {
+        const reviews = await prisma.review.findMany({
+            include: {
+                Book: true
+            }
+        })
+         res.status(200).json(reviews);
+
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({message: 'Not Found'});
+    }
+
+}
+
+
 exports.latestBookReviews = async (req, res) => {
     try {
         const latestBooksReviews = await prisma.review.findMany({
-            take: 6,
+            take: 3,
             where: {
                 published: true
+            },
+            orderBy: {
+                created: 'desc'
             },
             include: {
                 Book: {
@@ -449,7 +485,6 @@ exports.latestBookReviews = async (req, res) => {
 }
 
 exports.inspectReview = async (req, res) => {
-
     try {
         const bookReview = await prisma.review.findUnique({
             where: {
@@ -462,7 +497,6 @@ exports.inspectReview = async (req, res) => {
         })
         res.status(201).json(bookReview);
     } catch (err) {
-        console.error(err);
         res.status(400).json({ error: err.message });
     }
 }
@@ -510,6 +544,16 @@ exports.deleteComment = async (req, res) => {
             }
         })
         res.status(201).json({message: 'Comment deleted'});
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+exports.getAllLikes = async (req, res) => {
+    try {
+        const likes = await prisma.like.findMany({});
+        res.status(200).json(likes);
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err.message });
@@ -656,5 +700,79 @@ exports.searchForComments = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(400).json({error: err.message});
+    }
+}
+
+
+
+
+
+
+/**
+ * Supabase
+ */
+
+
+exports.saveFile = async (req, res) => {
+
+    console.log(req.file);
+    console.log(req.body);
+    const { foldername, id } = req.params;
+
+    const filePath = `books/${req.file.originalname}`;
+    const fileMimeType = req.file.mimetype;
+
+    try {
+        const fileBlob = new Blob([req.file.buffer], { type: fileMimeType });
+
+        const {data, error} = await supabase
+            .storage
+            .from('library')
+            .upload(filePath, fileBlob, {
+                contentType: fileMimeType,
+                cacheControl: '3600',
+                upsert: true,
+            })
+
+        if (error) {
+            console.error("❌ Supabase Error:", error.message);
+        }
+
+    } catch (err) {
+        console.error('Error uploading file:', err.message);
+    }
+
+    if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+    }
+}
+
+
+exports.downloadFileFromDB = async (req, res) => {
+
+    try {
+        const filePath = `books/test.jpg`;
+        const { data, error } = await supabase
+            .storage
+            .from('library')
+            .download(filePath);
+
+        if (error) {
+            console.error('Error downloading file:', error.message);
+            return res.status(500).json({ error: error.message });
+        }
+
+        if (!data) {
+            return res.status(404).json({ error: 'File not found' });
+        }
+
+        const fileExtension = filePath.split('.').pop();
+        const contentType = mime.lookup(fileExtension) || 'application/octet-stream';
+
+        res.setHeader('Content-Type', contentType);
+        data.body.pipe(res);
+    } catch (e) {
+        console.error('Server error:', e);
+        res.status(500).json({ error: e.message });
     }
 }

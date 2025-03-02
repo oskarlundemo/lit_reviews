@@ -21,7 +21,6 @@ export const BannedList = () => {
 
     }, []);
 
-
     return (
         <section className="banned-list">
             <h2>Banned users</h2>

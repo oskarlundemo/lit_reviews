@@ -1,7 +1,6 @@
 
 require('dotenv').config();
 const express = require('express')
-const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000;
 
 
@@ -20,7 +19,7 @@ app.use(express.json());
 app.use('/api/create-user', createRoute);
 app.use('/api/login', loginRoute);
 app.use('/api/book-review', bookReview);
-app.use('/', homeRoute);
+app.use('/api/home', homeRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/comments', commentsRoute)
 app.use('/api/activity', activityRouter);

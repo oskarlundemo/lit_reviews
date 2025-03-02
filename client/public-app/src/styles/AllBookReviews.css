@@ -1,0 +1,41 @@
+
+
+h2 {
+    margin: 1rem 2rem;
+}
+
+
+.reviews-container {
+    display: grid;
+    grid-template: repeat(2, 1fr) /repeat(2, 1fr);
+    margin: 1rem 2rem;
+    gap: 1rem;
+}
+
+.book-review-card {
+    transition: 200ms ease-in-out;
+}
+
+.book-review-card:hover {
+    cursor: pointer;
+    scale: 1.01;
+    box-shadow: var(--box-shadow);
+}
+
+.content {
+    padding: 1rem;
+}
+
+.interactions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    p {
+        margin: 0 5px 0 0;
+    }
+
+    svg:first-of-type {
+        margin-right: 1rem;
+    }
+}

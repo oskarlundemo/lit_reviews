@@ -24,8 +24,9 @@ export const BookReview= () => {
      * Fetch the book review from the backend
      */
 
+
     useEffect(() => {
-        fetch(`/api/latest/${id}`)
+        fetch(`/api/home/inspect/${id}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Error fetching review");
