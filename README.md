@@ -9,7 +9,7 @@ This project is a React and Node.js-based web application that hosts a bunch of 
 🛠 Tech Stack
 Frontend: React, React Router
 
-Backend: Node.js, Express
+Backend: Node.js, Express, PostgreSQL
 
 Styling: CSS
 
