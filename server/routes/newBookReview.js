@@ -1,16 +1,12 @@
 
 
-
-
-
-
-const {Router} = require('express');
+import {Router} from 'express';
 const createBookReview = new Router();
-const {newBookReview, saveFile} = require("../prisma");
+import {saveFile} from '../controllers/supabaseController.js'
+import { newBookReview } from '../controllers/writeBookReviewController.js';
 
-const multer  = require('multer')
+import multer from "multer";
 const upload = multer()
-
 
 createBookReview.post('/' , upload.single('thumbnail'), async (req, res) => {
     console.log('Body:', req.body);
@@ -19,4 +15,4 @@ createBookReview.post('/' , upload.single('thumbnail'), async (req, res) => {
     await saveFile(req, res);
 })
 
-module.exports = createBookReview;
+export default createBookReview;

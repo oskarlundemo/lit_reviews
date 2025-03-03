@@ -1,30 +1,21 @@
 
 
 
-const {Router} = require("express");
-const {getComments, getAllComments, searchForComments, deleteComment} = require("../prisma");
+import {Router} from "express";
+
+import {getAllComments, searchForComments} from '../controllers/activityController.js'
+import {getComments, deleteComment} from "../controllers/homeController.js";
 
 
 const commentsRouter = Router();
 
-commentsRouter.get("/all", async (req, res) => {
-    await getAllComments(req, res);
-})
+commentsRouter.get("/all", getAllComments)
 
-commentsRouter.get("/search", async (req, res) => {
-    await searchForComments(req, res);
-})
+commentsRouter.get("/search", searchForComments)
 
-commentsRouter.get("/:id", async (req, res) => {
-    await getComments(req, res);
-})
+commentsRouter.get("/:id", getComments)
 
-commentsRouter.delete('/:commentId', async (req, res) => {
-    await deleteComment(req, res);
-})
+commentsRouter.delete('/:commentId', deleteComment)
 
 
-
-
-
-module.exports = commentsRouter;
+export default commentsRouter;

@@ -1,35 +1,22 @@
 
 
 
+import {Router} from 'express';
 
-
-
-const {Router} = require('express')
-const {getReviews, inspectReview, deleteReview, searchReviews} = require("../prisma");
+import {inspectReview} from '../controllers/homeController.js'
+import {getReviews, deleteReview, searchReviews} from "../controllers/postController.js";
 
 
 const postRoute = new Router();
 
+postRoute.get('/search', searchReviews)
 
-postRoute.get('/search', async (req, res) => {
-    await searchReviews(req,res)
-})
+postRoute.get('/', getReviews)
 
-postRoute.get('/', async (req, res) => {
-    await getReviews(req, res);
-})
+postRoute.get('/:id', inspectReview)
 
-
-postRoute.get('/:id', async (req, res) => {
-    await inspectReview(req, res);
-})
-
-
-postRoute.delete('/:id', async (req, res) => {
-    await deleteReview(req, res);
-    await getReviews(req, res);
-})
+postRoute.delete('/:id', deleteReview, getReviews)
 
 
 
-module.exports = postRoute
+export default postRoute;

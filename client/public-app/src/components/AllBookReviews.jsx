@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 
 import '../styles/AllBookReviews.css'
 import {useNavigate} from "react-router-dom";
+import {ImageComponent} from "./ImageComponent.jsx";
 
 export const AllBookReviews = () => {
 
@@ -70,7 +71,7 @@ export const AllBookReviews = () => {
                     bookReviews.map(review => (
                         <article className="book-review-card" key={review.id} onClick={()=> inspectReview(review.Book.title, review.id)}>
                             <div className="book-card-cover">
-                                <img src={review.image || "/images/retro-book.png"} alt={review.title} />
+                                <ImageComponent fileName={review.thumbnail} />
                             </div>
                             <div className="content">
                                 <div className="interactions">

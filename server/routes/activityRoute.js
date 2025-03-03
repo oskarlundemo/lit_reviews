@@ -1,29 +1,16 @@
 
 
-
-const {Router} = require("express");
-const {banUserCommenting, getBannedUsers, unBanUserComments} = require("../prisma");
-
+import { Router } from "express";
+import { banUserCommenting, getBannedUsers, unBanUserComments } from "../controllers/activityController.js";
 
 const activityRouter = Router();
 
-activityRouter.get('/', async (req, res) => {
-    await getBannedUsers(req, res);
-})
+activityRouter.get('/', getBannedUsers)
 
+activityRouter.get('/banned', getBannedUsers)
 
-activityRouter.get('/banned', async (req, res) => {
-    await getBannedUsers(req, res);
-})
+activityRouter.post('/ban', banUserCommenting)
 
-activityRouter.post('/ban', async (req, res) => {
-    await banUserCommenting(req, res)
-})
+activityRouter.post('/unban', unBanUserComments)
 
-activityRouter.post('/unban', async (req, res) => {
-    await unBanUserComments(req, res)
-})
-
-
-
-module.exports = activityRouter
+export default activityRouter;

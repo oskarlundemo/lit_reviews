@@ -12,7 +12,7 @@ export const LatestReviews = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("/api/home/latest")
+        fetch("api/home/latest")
             .then((res) => res.json())
             .then((data) => setReviews(data))
             .catch((err) => console.log("Error fetching reviews:", err));
@@ -22,6 +22,7 @@ export const LatestReviews = () => {
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }
+
 
     return (
         <div className="latest-reviews">
@@ -33,7 +34,9 @@ export const LatestReviews = () => {
                     reviews.map((review) => (
                         <article className="book-card" onClick={()=> inspectReview(review.Book.title, review.id)} key={review.id}>
                             <div className="book-card-header">
-                                <ImageComponent review={review} />
+                                <div className="book-card-cover">
+                                    <ImageComponent fileName={review.thumbnail} />
+                                </div>
                                 <div className="book-card-body">
                                     <h3>{review.Book.title}</h3>
                                     <h3>{review.Book.Author.name}</h3>

@@ -60,29 +60,12 @@ model Review {
   created         DateTime @default(now())
   book_id         Int
   user_id         Int
+  thumbnail       String?
 
-  Book       Book         @relation(fields: [book_id], references: [id])
-  User       User         @relation(fields: [user_id], references: [id])
-  Image_Post Image_Post[]
-  Comment    Comment[]
-  Like       Like[]
-}
-
-model Image {
-  id   Int    @id @default(autoincrement())
-  path String
-
-  Image_Post Image_Post[]
-}
-
-model Image_Post {
-  img    Image @relation(fields: [img_id], references: [id])
-  img_id Int
-
-  post    Review @relation(fields: [post_id], references: [id])
-  post_id Int
-
-  @@id([img_id, post_id]) // Composite primary key
+  Book    Book      @relation(fields: [book_id], references: [id])
+  User    User      @relation(fields: [user_id], references: [id])
+  Comment Comment[]
+  Like    Like[]
 }
 
 model Comment {

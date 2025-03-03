@@ -77,8 +77,6 @@ export const CommentSection = () => {
 
 
 
-
-
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -135,7 +133,6 @@ export const CommentSection = () => {
             console.error(err)
         }
     }
-
 
 
     return (

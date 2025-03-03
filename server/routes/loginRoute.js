@@ -1,20 +1,17 @@
 
 
 
-const {Router} = require("express");
-const {login, getQuotes, getReviews} = require("../prisma");
+import {Router} from "express";
+
+
+import {getReviews} from "../controllers/postController.js";
+import {login} from "../controllers/loginController.js";
 const loginRoute = new Router();
 
+loginRoute.get('/',getReviews)
 
-loginRoute.get('/', async (req, res) => {
-    await getReviews(req, res);
-})
-
-
-loginRoute.post('/', async (req, res) => {
-    await login(req, res);
-})
+loginRoute.post('/', login)
 
 
 
-module.exports = loginRoute;
+export default loginRoute;

@@ -1,32 +1,35 @@
+import 'dotenv/config';
+import express from 'express';
 
-require('dotenv').config();
-const express = require('express')
+import loginRoute from './routes/loginRoute.js';
+import createUserRoute from './routes/createUserRoute.js';
+import bookReview from './routes/newBookReview.js';
+import homeRoute from './routes/homeRoute.js';
+import postRoute from './routes/postsRoute.js';
+import commentsRoute from './routes/commentsRoute.js';
+import activityRouter from './routes/activityRoute.js';
+import cors from 'cors';
+
+
+
 const PORT = process.env.PORT || 5000;
-
 
 const app = express();
 
-
-const loginRoute = require('./routes/loginRoute');
-const createRoute = require('./routes/createRoute');
-const bookReview = require('./routes/newBookReview');
-const homeRoute =   require('./routes/homeRoute');
-const postRoute =   require('./routes/postsRoute');
-const commentsRoute = require('./routes/commentsRoute');
-const activityRouter = require("./routes/activityRoute");
-
 app.use(express.json());
-app.use('/api/create-user', createRoute);
-app.use('/api/login', loginRoute);
-app.use('/api/book-review', bookReview);
-app.use('/api/home', homeRoute);
-app.use('/api/posts', postRoute);
-app.use('/api/comments', commentsRoute)
-app.use('/api/activity', activityRouter);
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
+app.use('/login', loginRoute);
+app.use('/create', createUserRoute);
+app.use('/book-review', bookReview);
+app.use('/home', homeRoute);
+app.use('/posts', postRoute);
+app.use('/comments', commentsRoute);
+app.use('/activity', activityRouter);
 
 app.listen(PORT, () => {
-    console.log('Server running on port ' + PORT);
-})
-
+    console.log(`Server running on http://localhost:${PORT}`);
+});
 
 
