@@ -62,7 +62,7 @@ model Review {
   user_id         Int
   thumbnail       String?
 
-  Book    Book      @relation(fields: [book_id], references: [id])
+  Book    Book      @relation(fields: [book_id], references: [id], onDelete: Cascade)
   User    User      @relation(fields: [user_id], references: [id])
   Comment Comment[]
   Like    Like[]

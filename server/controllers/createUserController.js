@@ -3,8 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 
-
-async function uniqueUsername(username) {
+export async function uniqueUsername(username) {
     try {
         const existingUsername = await prisma.user.findUnique({
             where: {username: username,}
@@ -20,7 +19,7 @@ async function uniqueUsername(username) {
     }
 }
 
-async function uniqueEmail(email) {
+export async function uniqueEmail(email) {
     try {
         const existingEmail = await prisma.user.findUnique({
             where: {email: email,}
@@ -38,9 +37,6 @@ async function uniqueEmail(email) {
 export const createUser = async (req, res) => {
     const {username, email, password} = req.body;
     try {
-        await uniqueUsername(username);
-        await uniqueEmail(email);
-
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await prisma.user.create({
             data: {email: email,

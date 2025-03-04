@@ -15,7 +15,6 @@ export const Login = () => {
     const [randomQuote, setRandomQuote] = useState(0);
 
 
-
     useEffect(() => {
         fetch("/api/login", {
             method: "GET",
@@ -30,8 +29,6 @@ export const Login = () => {
             })
             .catch(err => console.log(err));
     }, []);
-
-
 
 
     const { login } = useAuth();

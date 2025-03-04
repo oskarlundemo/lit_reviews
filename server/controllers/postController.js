@@ -1,4 +1,5 @@
 import {prisma} from '../prisma/index.js';
+import {deleteImageFromDb} from "./supabaseController.js";
 
 
 
@@ -90,7 +91,6 @@ export const getReviews = async (req, res) => {
 export const deleteReview = async (req, res) => {
     try {
         await prisma.$transaction(async (prisma) => {
-
             const review = await prisma.review.findUnique(({
                 where: {
                     id: parseInt(req.params.id),
@@ -131,7 +131,6 @@ export const deleteReview = async (req, res) => {
                 })
             }
         })
-
     } catch (err) {
         console.error(err);
         res.status(400).json({message: 'Error deleting review'});

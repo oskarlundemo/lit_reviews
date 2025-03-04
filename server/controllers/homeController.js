@@ -11,7 +11,11 @@ export const getAllBookReviews = async (req, res) => {
     try {
         const reviews = await prisma.review.findMany({
             include: {
-                Book: true
+                Book: {
+                    include: {
+                        Author: true
+                    }
+                }
             }
         })
         res.status(200).json(reviews);

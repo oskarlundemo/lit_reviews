@@ -42,6 +42,7 @@ export const WriteBookReview = () => {
         authorId: post?.Book.Author.id || null,
     });
 
+
     useEffect(() => {
         setEditorContent(formData.body);
     }, [formData.body]);
@@ -55,8 +56,13 @@ export const WriteBookReview = () => {
     };
 
     const handleFileChange = (e) => {
-        setThumbnail(e.target.files[0]);
-    }
+        const selectedFile = e.target.files[0];
+        setThumbnail(selectedFile);
+        setFormData((prevData) => ({
+            ...prevData,
+            thumbnail: selectedFile
+        }));
+    };
 
     const handleRadio = (e) => {
         const newPublishState = e.target.id === 'publish';
@@ -69,30 +75,28 @@ export const WriteBookReview = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
-        setFormData((prevData) => {
-            const updatedData = {
-                ...prevData,
-                [name]: value
-            };
-           setIsDisabled(!(updatedData.bookTitle && updatedData.bookAuthor && updatedData.bookPages && updatedData.reviewTitle))
-            return updatedData;
-        });
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
     };
 
     const validateForm = () => {
-        const { bookTitle, bookAuthor, bookPages, body, reviewTitle } = formData;
-        return bookTitle && bookAuthor && reviewTitle && bookPages > 0 && body;
-    };
-
-    const isFormValid = validateForm();
-    const handleButtonState = () => {
-        setIsDisabled(!isFormValid);
+        const { bookTitle, bookAuthor, bookPages, body, thumbnail, reviewTitle } = formData;
+        return (
+            bookTitle &&
+            bookAuthor &&
+            reviewTitle &&
+            bookPages > 0 &&
+            thumbnail &&
+            thumbnail.size > 0 &&
+            body
+        );
     };
 
     useEffect(() => {
-        handleButtonState();
-    }, [formData])
+        setIsDisabled(!validateForm());
+    }, [formData, thumbnail]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -131,14 +135,12 @@ export const WriteBookReview = () => {
 
     return (
         <main className="book-review">
-
             {post ? (
                 <h2>Update review</h2>
             ) : (
                 <h2>New book review</h2>
             )}
-
-                <form enctype="multipart/form-data" onSubmit={handleSubmit} className="book-review-form">
+                <form onSubmit={handleSubmit} className="book-review-form">
                     <div className="book-info-container">
 
                         <div className="book-info-area">
@@ -177,7 +179,6 @@ export const WriteBookReview = () => {
                                       />
                                 </div>
                             </fieldset>
-
 
                             <InputFieldset
                                 title="Pages"
@@ -225,7 +226,7 @@ export const WriteBookReview = () => {
                                 id="thumbnail"
                                 name="thumbnail"
                                 onChange={handleFileChange}
-                                value={formData.thumbnail}
+                                accept='image/*'
                             />
 
                             <Editor
@@ -238,7 +239,10 @@ export const WriteBookReview = () => {
                                     menubar: false,
                                     plugins: 'link image code',
                                     toolbar: 'undo redo | formatselect | bold italic | link image | code',
-                                    content_style: 'body { background-color: hsl(240, 15%, 15%); color: hsl(0, 0%, 88%); }',
+                                    content_style: `
+                                     body {    background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--background-color')};
+                                               color: ${getComputedStyle(document.documentElement).getPropertyValue('--text-color')};
+            }`
                                 }}
                                 onEditorChange={handleEditorChange}
                             />
@@ -264,8 +268,6 @@ export const WriteBookReview = () => {
                                 />
                             </div>
                         </div>
-
-
                         <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>
                     </div>
                 </form>

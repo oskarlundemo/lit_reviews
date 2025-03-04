@@ -3,6 +3,10 @@
 
 .latest-reviews {
     margin: 1rem 2rem;
+
+    h2 {
+        margin-left: 0;
+    }
 }
 
 
@@ -18,8 +22,6 @@
     flex-direction: column;
     justify-content: space-between;
     transition: 200ms ease-in-out;
-
-
 }
 
 
@@ -41,7 +43,9 @@
 .book-card-header {
     display: flex;
     flex-direction: column;
+}
 
+.book-card-body {
 
     h3:first-of-type {
         font-weight: bold;
@@ -56,11 +60,9 @@
         margin: 0;
         text-align: left;
     }
-
-    h2 {
-        font-style: italic;
-    }
 }
+
+
 
 .book-card-cover {
     height: 150px;
@@ -68,7 +70,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 
     img {
         object-fit: cover;

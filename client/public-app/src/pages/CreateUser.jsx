@@ -2,8 +2,10 @@
 
 import '../styles/CreateUser.css';
 import {useState} from "react";
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.jsx";
+
+
 
 
 /**
@@ -19,13 +21,15 @@ import {useAuth} from "../context/AuthContext.jsx";
 export default function CreateUser() {
 
 
-    const [isPasswordFocused, setPasswordFocused] = useState(false); // Toggles requirements beneath the input field
-    const [isDisabled, setIsDisabled] = useState(true); // Toggle the button based on input
-    const navigate = useNavigate(); // Sent user to homepage when created account
+    const [isPasswordFocused, setPasswordFocused] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
+    const navigate = useNavigate();
 
-    const [isPasswordLenght, setIsPasswordLength] = useState(false); //Check if the length of password is correct
-    const [isNumber, setIsNumber] = useState(false); // Boolean if the password contains number
-    const [isSymbol, setIsSymbol] = useState(false); // Boolean if the password contains a symbol
+    const [isPasswordLenght, setIsPasswordLength] = useState(false);
+    const [isNumber, setIsNumber] = useState(false);
+    const [isSymbol, setIsSymbol] = useState(false);
+
+    const [errorMessage, setErrorMessage] = useState([]);
 
 
     const { login } = useAuth(); // Login context
@@ -33,7 +37,6 @@ export default function CreateUser() {
     const [emailError, setEmailError] = useState(null);
 
 
-    // Update state of the inputfields in the createuser form 
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -68,6 +71,13 @@ export default function CreateUser() {
     };
 
 
+
+    const errorSetter = {
+        username: setUsernameError,
+        email: setEmailError,
+    }
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -86,22 +96,23 @@ export default function CreateUser() {
             const result = await response.json();
 
             if (!response.ok) {
-                if (result.error.includes('Username')) {
-                    setUsernameError(result.error)
-                } else if (result.error.includes('Email')) {
-                    setEmailError(result.error)
-                } else {
-                    throw new Error(result.error || 'Something went wrong');
+                if (result.errors.length > 0 && result.errors) {
+                    result.errors.forEach(error => {
+                        const setter = errorSetter[error.path];
+                        if (setter) {
+                            setter(error.msg)
+                        }
+                    })
                 }
                 return;
             }
+
             login(result.token);
             navigate('/');
         } catch (err) {
             console.error('Error creating user', err);
         }
     }
-
 
     return (
         <main className="create-user">
@@ -182,7 +193,7 @@ export default function CreateUser() {
 
                 </div>
                 <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Sign Up</button>
-                <p>Already have an account? <a>Log in</a></p>
+                <p>Already have an account? <Link to="/login">Log in</Link></p>
             </form>
         </main>
     )

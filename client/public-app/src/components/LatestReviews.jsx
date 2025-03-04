@@ -18,11 +18,9 @@ export const LatestReviews = () => {
             .catch((err) => console.log("Error fetching reviews:", err));
     }, [location.pathname]);
 
-
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }
-
 
     return (
         <div className="latest-reviews">
@@ -37,6 +35,7 @@ export const LatestReviews = () => {
                                 <div className="book-card-cover">
                                     <ImageComponent fileName={review.thumbnail} />
                                 </div>
+
                                 <div className="book-card-body">
                                     <h3>{review.Book.title}</h3>
                                     <h3>{review.Book.Author.name}</h3>

@@ -1,10 +1,55 @@
 import {prisma} from '../prisma/index.js';
 import {jwtDecode} from "jwt-decode";
 
+import { JSDOM } from "jsdom";
+import createDOMPurify from "dompurify";
+
+const window = new JSDOM("").window;
+const DOMPurify = createDOMPurify(window);
+
+
+
+
+import { body, validationResult } from 'express-validator';
+
+export const validateBookReview = [
+    body('bookTitle')
+        .trim()
+        .isLength({ min: 1, max: 50})
+        .withMessage('Please enter a book title'),
+    body('bookAuthor')
+        .trim()
+        .isLength({ min: 1, max: 50})
+        .withMessage('Please enter a book author'),
+    body('bookPages')
+        .trim()
+        .isInt()
+        .withMessage('Please enter the number of book pages'),
+    body('quote')
+        .trim()
+        .isLength({ min: 1, max: 150})
+        .withMessage('Please enter a quote'),
+    body('reviewTitle')
+        .trim()
+        .isLength({ min: 1, max: 150})
+        .withMessage('Please enter a review title'),
+    body('thumbnail').custom((value, { req }) => {
+        if (!req.file) {
+            throw new Error('Thumbnail is required');
+        }
+        return true;
+    })
+];
+
+
+
+
+
+
+
 export const newBookReview = async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const {id} = jwtDecode(token);
-
 
     const published = req.body.publish === 'true';
 
@@ -14,7 +59,6 @@ export const newBookReview = async (req, res) => {
         bookAbout,
         reviewId, bookId, authorId
     } = req.body;
-
 
     try {
         if (reviewId) {
@@ -46,7 +90,8 @@ export const newBookReview = async (req, res) => {
                     favouriteQuoute: quote,
                     body: body,
                     title: reviewTitle,
-                    published: published
+                    published: published,
+                    thumbnail: req.file.originalname
                 }
             })
             res.status(201).json({message: 'Review updated'});
@@ -92,10 +137,11 @@ export const newBookReview = async (req, res) => {
                 data: {
                     published: published,
                     title: reviewTitle,
-                    body: purify.sanitize(body),
+                    body: DOMPurify.sanitize(body),
                     favouriteQuoute: quote,
                     book_id: book.id,
                     user_id: id,
+                    thumbnail: req.file.originalname
                 },
             });
             res.status(201).json(review);

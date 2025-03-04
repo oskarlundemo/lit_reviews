@@ -26,6 +26,7 @@
     p {
         margin: 0;
         color: var(--light-grey);
+        text-wrap: nowrap;
     }
 
     div:first-of-type {

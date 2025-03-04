@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 app.use('/login', loginRoute);
-app.use('/create', createUserRoute);
+app.use('/create-user', createUserRoute);
 app.use('/book-review', bookReview);
 app.use('/home', homeRoute);
 app.use('/posts', postRoute);
