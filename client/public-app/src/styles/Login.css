@@ -3,15 +3,15 @@
 
 .login-box {
     width: 60%;
-    height: 80%;
+    height: 50%;
 
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: var(--box-shadow);
     border-radius: 15px;
     display: flex;
     overflow: hidden;
     justify-self: center;
     align-self: center;
-    margin: 2rem;
+    margin: 4rem 2rem;
     padding: 2rem;
 }
 
@@ -70,4 +70,22 @@ form {
     text-align: left !important;
     padding: 0 0 0 0.5rem;
     font-size: clamp(1rem, 1vw, 1rem);
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .divider {
+        display: none;
+    }
+
+    .login-box-left {
+        display: none;
+        background: red; /* Keep the background red, if you want */
+    }
+
+    .login-box-right {
+        width: 100%;
+        padding: 0;
+    }
 }

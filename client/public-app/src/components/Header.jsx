@@ -36,7 +36,7 @@ export const Header = () => {
             <nav>
                 {user ? (
                     <>
-                        <p>Welcome {user.username}</p>
+                        <p className="welcome-user">Welcome {user.username}</p>
                         {user.admin ? (
                             <>
                             <div className="admin-container">

@@ -43,21 +43,33 @@
     };
 }
 
-.comment-section-comments {
-    box-shadow: var(--box-shadow);
-    margin: 1rem 0;
-    border-radius: 5px;
-
-
-    > div {
-        border-bottom: 1px solid var(--light-grey);
-    }
-
-    > div:last-of-type {
-        border-bottom: none;
-    }
+.comment-card {
+    border-bottom: 1px solid var(--light-grey);
 }
 
+.comment-card:last-of-type {
+    border-bottom: none;
+}
+
+.comments-container {
+    display: flex;
+    box-shadow: var(--box-shadow);
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.load-more-comments {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 200ms ease-in-out;
+}
+
+.load-more-comments:hover {
+    color: var(--accent-color);
+    scale: 1.1;
+    cursor: pointer;
+}
 
 .comment-card-header {
     display: flex;

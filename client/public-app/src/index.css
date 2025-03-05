@@ -29,6 +29,7 @@
 
   --svg-color: hsl(0, 0%, 0%);
   --text-color: hsl(0, 0%, 0%);
+  --gradient-color: linear-gradient(135deg, hsl(240, 60%, 30%) 0%, hsl(236, 88%, 40%) 50%, hsl(210, 100%, 35%) 100%);;
 }
 
 input {
@@ -42,6 +43,17 @@ input {
 main {
   background-color: var(--background-color);
 }
+
+
+
+@media screen and (max-width: 400px) {
+  .App {
+    min-width: 400px;
+  }
+}
+
+
+
 
 
 
@@ -86,7 +98,7 @@ select:-webkit-autofill:focus {
   --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
   --svg-color: hsl(0, 0%, 100%);
   --text-color: hsl(0, 0%, 100%);
-
+  --gradient-color: linear-gradient(135deg, hsl(236, 88%, 64%) 0%, hsl(212, 90%, 70%) 50%, hsl(180, 100%, 85%) 100%);
 
   color: hsl(0, 0%, 100%);
 }
@@ -165,6 +177,12 @@ button.disabled:hover {
   cursor: default;
 }
 
+.loading {
+  border-radius: 10px;
+  background-color: var(--secondary-color);
+  animation: loadingPulse 3s infinite linear;
+}
+
 @keyframes shake {
   0% { transform: rotate(0deg); }
   25% { transform: rotate(-5deg); }
@@ -188,6 +206,12 @@ button.disabled:hover {
   60% { transform: translateY(-5px); }
   80% { transform: translateY(5px); }
   100% { transform: translateY(0); }
+}
+
+@keyframes loadingPulse {
+  0% {opacity: 0}
+  50% {opacity: 1}
+  100% {opacity: 0}
 }
 
 @keyframes fadeIn {

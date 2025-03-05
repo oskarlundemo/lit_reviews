@@ -16,6 +16,9 @@ export const getAllBookReviews = async (req, res) => {
                         Author: true
                     }
                 }
+            },
+            orderBy: {
+                created: 'asc'
             }
         })
         res.status(200).json(reviews);
@@ -69,8 +72,6 @@ export const inspectReview = async (req, res) => {
 
 
 export const getComments = async (req, res) => {
-
-
     try {
         const comments = await prisma.comment.findMany({
             where: {
@@ -87,9 +88,6 @@ export const getComments = async (req, res) => {
 }
 
 export const createComment = async (req, res) => {
-
-    console.log(req.params)
-
     try {
         const token = req.headers.authorization.split(' ')[1];
         const {id} = jwtDecode(token);

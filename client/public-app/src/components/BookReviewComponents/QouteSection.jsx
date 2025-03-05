@@ -1,7 +1,7 @@
 
 
 
-import '../styles/QouteSection.css'
+import '../../styles/QouteSection.css'
 
 
 

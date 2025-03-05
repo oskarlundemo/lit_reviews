@@ -2,11 +2,12 @@
 
 
 
-import '../styles/CommentSection.css'
+import '../../styles/CommentSection.css'
 import {useEffect, useState} from "react";
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 import {Link, useParams} from "react-router-dom";
 import DOMPurify from "dompurify";
+import {CommentCard} from "./CommentCard.jsx";
 
 
 export const CommentSection = () => {
@@ -18,6 +19,9 @@ export const CommentSection = () => {
 
     const [isDisabled, setIsDisabled] = useState(true);
     const [chars, setChars] = useState(0);
+
+    const [loadedComments, setLoadedComments] = useState(5);
+
 
     const [errorShake, setErrorShake] = useState(false);
     const [formData, setFormData] = useState({
@@ -74,7 +78,6 @@ export const CommentSection = () => {
             .catch(err => console.log(err))
 
     }, []);
-
 
 
     const handleSubmit = async (e) => {
@@ -145,26 +148,28 @@ export const CommentSection = () => {
 
             <div className="comment-section-comments">
                 {comments.length > 0 ? (
-                    comments.map((comment) => (
-                        <div key={comment.id} className="comment-card">
-                            <div className="comment-card-header">
-                                <p>@{comment.user.username}</p>
-                                <div>
-                                    <p>{comment.created.split('T')[0]}</p>
+                    <>
 
-                                    {user && (user.id === comment.user_id || user.admin)  ? (
-                                        <svg onClick={() => handleDelete(comment.id, comment.user.id)} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                    ) : null}
-                                </div>
-                            </div>
-
-                            <div className="comment-card-body">
-                                <p>{comment.comment}</p>
-                            </div>
+                        <div className="comments-container">
+                        {comments.length < 5 ? (
+                            comments.map((comment) => (
+                                <CommentCard comment={comment} handleDelete={handleDelete} user={user} />
+                            ))
+                        ) : (
+                            comments.slice(0, loadedComments).map((comment) => (
+                                <CommentCard comment={comment} handleDelete={handleDelete} user={user} />
+                            ))
+                        )}
                         </div>
-                    ))
+
+                        {loadedComments < comments.length && (
+                            <p className="load-more-comments" onClick={() => setLoadedComments(loadedComments + 2)}>Load more</p>
+                        )}
+                    </>
                 ) : null}
             </div>
+
+
 
             {user ? (
                 bannedUsers && bannedUsers.some((user) => user.id === user.id) ? (
@@ -203,7 +208,6 @@ export const CommentSection = () => {
                     <button className="disabled" type="submit" disabled={true}>Submit</button>
                     <p className="login-message"><Link to ="/login" >Login</Link> to share your thoughts! 💭</p>
                 </form>
-
             )}
 
         </section>

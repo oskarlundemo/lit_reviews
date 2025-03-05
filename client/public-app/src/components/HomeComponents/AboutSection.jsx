@@ -1,6 +1,6 @@
 
 
-import '../styles/AboutSection.css';
+import '../../styles/AboutSection.css';
 
 export const AboutSection = () => {
 

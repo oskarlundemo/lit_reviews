@@ -12,15 +12,20 @@
         font-optical-sizing: auto;
         font-weight: 400;
         font-style: normal;
+        font-size: clamp(1.2rem, 4vw, 2rem);
+        margin: 0;
     }
 
     p {
         text-align: right;
+        font-size: clamp(0.6rem, 1vw, 1.5rem) !important;
         span {
             font-style: italic;
         }
     }
 }
+
+
 
 
 .login-box-left {
@@ -34,6 +39,5 @@
     h3 {
         font-weight: 400;
         font-size: clamp(1rem, 1vw, 1rem);
-
     }
 }

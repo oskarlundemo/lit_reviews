@@ -1,6 +1,6 @@
-import {QouteSection} from "../components/QouteSection.jsx";
-import {ReviewBody} from "../components/ReviewBody.jsx";
-import {CommentSection} from "../components/CommentSection.jsx";
+import {QouteSection} from "../components/BookReviewComponents/QouteSection.jsx";
+import {ReviewBody} from "../components/BookReviewComponents/ReviewBody.jsx";
+import {CommentSection} from "../components/BookReviewComponents/CommentSection.jsx";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 

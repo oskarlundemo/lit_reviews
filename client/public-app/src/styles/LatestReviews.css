@@ -62,8 +62,6 @@
     }
 }
 
-
-
 .book-card-cover {
     height: 150px;
     overflow: hidden;
@@ -78,3 +76,17 @@
     }
 }
 
+
+.latest-book-gird .loading {
+    background-color: red;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .latest-book-grid {
+        display: grid;
+        grid-template: repeat(3, 1fr) / repeat(1, 1fr);
+        gap: 1rem;
+    }
+}

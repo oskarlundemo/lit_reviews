@@ -3,10 +3,10 @@
 import DOMPurify from "dompurify";
 
 
-import '../styles/ReviewBody.css'
+import '../../styles/ReviewBody.css'
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
-import {useAuth} from "../context/AuthContext.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 export const ReviewBody = ({date, writer, body, title, reviewId}) => {
 

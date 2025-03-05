@@ -19,7 +19,6 @@
         display: flex;
         flex-direction: column;
 
-
         li {
             display: flex;
             flex-direction: row;
@@ -29,11 +28,38 @@
 }
 
 
+.no-comments {
+    background-color: var(--background-color) !important;
+
+    p {
+        opacity: 0.3;
+        margin: 0;
+    }
+}
+
+
 .banned-card {
     display: flex;
     justify-content: space-between;
     width: 100%;
     border-radius: 10px;
-    box-shadow: var(--box-shadow);
     padding: 0.5rem 1rem;
+    transition: 200ms ease-in-out;
+    border: 0.5px solid var(--text-color);
+
+    span {
+        text-decoration: underline;
+    }
+}
+
+.banned-card:hover {
+    cursor: pointer;
+    scale: 1.01;
+}
+
+.no-banned {
+    color: var(--text-color);
+    opacity: 0.3;
+    text-align: center;
+    align-self: center;
 }
