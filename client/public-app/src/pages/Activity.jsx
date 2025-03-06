@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import '../styles/Activity.css'
-import {InputFieldset} from "../components/InputFieldset.jsx";
+import {InputComponent} from "../components/InputComponent.jsx";
 import {BannedList} from "../components/ActivityComponents/BannedList.jsx";
 import {ActivityPopUp} from "../components/ActivityComponents/ActivityPopUp.jsx";
 import {UserTable} from "../components/ActivityComponents/TableOfUsers.jsx";
@@ -32,6 +32,8 @@ export const Activity = () => {
 
     const [inspectUserComment, setInspectUserComment] = useState(null);
     const [bannedUsers, setBannedUsers] = useState([]);
+
+    const [errors, setErrors] = useState([]);
 
 
     const closePopup = () => {
@@ -217,7 +219,7 @@ export const Activity = () => {
                 <h2>Comments</h2>
                 <div className="comments-filter-section">
                     <form onSubmit={handleSubmit}>
-                        <InputFieldset
+                        <InputComponent
                             type="text"
                             id="search"
                             placeholder="Search"

@@ -1,4 +1,4 @@
-import {InputFieldset} from "../components/InputFieldset.jsx";
+import {InputComponent} from "../components/InputComponent.jsx";
 import {useEffect, useState} from "react";
 
 
@@ -154,7 +154,7 @@ export const Posts = () => {
 
             <div className="posts-search-form">
                 <form onSubmit={handleSubmitSearch}>
-                    <InputFieldset
+                    <InputComponent
                         title="Search for posts"
                         type="text"
                         name="search"

@@ -1,14 +1,17 @@
 
 
-import { Editor } from '@tinymce/tinymce-react';
-import {useContext, useEffect, useState} from "react";
+
+import { useEffect, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 
 
 
 import '../styles/WriteBookReview.css'
-import {InputFieldset} from "../components/InputFieldset.jsx";
+import {InputComponent} from "../components/InputComponent.jsx";
+import {FancyTextArea} from "../components/BookReviewComponents/FancyTextArea.jsx";
+import {TextAreaComponent} from "../components/BookReviewComponents/TextAreaComponent.jsx";
+import {PublishedComponent} from "../components/BookReviewComponents/PublishedComponent.jsx";
 
 
 
@@ -20,6 +23,8 @@ export const WriteBookReview = () => {
     const navigate = useNavigate();
     const [publish, setPublished] = useState(true);
     const [thumbnail, setThumbnail] = useState(null);
+
+    const [errors, setErrors] = useState([]);
 
     const location = useLocation();
     const {post} = location.state || {}
@@ -122,11 +127,13 @@ export const WriteBookReview = () => {
                 body: formPayload
             });
 
+            const result = await response.json()
             if (response.ok) {
                 navigate('/dashboard');
-            } else {
-                console.error('Server responded with an error:', response.statusText);
+            } else if (result.errors.length > 0) {
+                setErrors(result.errors);
             }
+
         } catch (err) {
             console.error('Fetch error:', err);
         }
@@ -145,7 +152,7 @@ export const WriteBookReview = () => {
 
                         <div className="book-info-area">
                             <h2>Book 📚</h2>
-                            <InputFieldset
+                            <InputComponent
                                 title="Title"
                                 type="text"
                                 id="bookTitle"
@@ -153,9 +160,10 @@ export const WriteBookReview = () => {
                                 onChange={handleInputChange}
                                 value={formData.bookTitle}
                                 example="Dorian Grey"
+                                errors={errors}
                             />
 
-                            <InputFieldset
+                            <InputComponent
                                 title="Author"
                                 type="text"
                                 id="bookAuthor"
@@ -163,24 +171,18 @@ export const WriteBookReview = () => {
                                 onChange={handleInputChange}
                                 value={formData.bookAuthor}
                                 example="Oscar Wilde"
+                                errors={errors}
                             />
 
+                            <TextAreaComponent
+                                handleInputChange={handleInputChange}
+                                bookTitle={formData.bookAbout}
+                                name={"bookDescription"}
+                                errors={errors}
+                                placeholder={'Dorian Gray is a man who trades his soul for eternal youth—but at a terrible cost.'}
+                            />
 
-                            <fieldset className="input-fieldset">
-                                <legend>Preview</legend>
-                                <div className="input-card author-input">
-                                      <textarea
-                                          title="Preview"
-                                          id="bookAbout"
-                                          name="bookAbout"
-                                          onChange={handleInputChange}
-                                          value={formData.bookAbout}
-                                          placeholder="Dorian Grey is a true adonis...."
-                                      />
-                                </div>
-                            </fieldset>
-
-                            <InputFieldset
+                            <InputComponent
                                 title="Pages"
                                 type="text"
                                 id="pages"
@@ -188,13 +190,14 @@ export const WriteBookReview = () => {
                                 onChange={handleInputChange}
                                 value={formData.bookPages}
                                 example="250"
+                                errors={errors}
                             />
 
                         </div>
 
                         <div className="review-info-area">
                             <h2>Review 📝</h2>
-                            <InputFieldset
+                            <InputComponent
                                 title="Title"
                                 type="text"
                                 id="reviewTitle"
@@ -202,74 +205,45 @@ export const WriteBookReview = () => {
                                 onChange={handleInputChange}
                                 value={formData.reviewTitle}
                                 example="My review of Oscar Wilde´s Dorian Grey"
+                                errors={errors}
                             />
 
 
-                            <fieldset className="input-fieldset">
-                                <legend>Favorite quote</legend>
-                                <div className="input-card author-input">
-                                      <textarea
-                                          title="Quote"
-                                          id="quote"
-                                          name="quote"
-                                          onChange={handleInputChange}
-                                          value={formData.quote}
-                                          placeholder="I don't want to be at the mercy of my emotions. I want to use them, to enjoy them, and to dominate them"
-                                      />
-                                </div>
-                            </fieldset>
 
 
-                            <InputFieldset
+                            <TextAreaComponent
+                                handleInputChange={handleInputChange}
+                                bookTitle={formData.quote}
+                                name={"quote"}
+                                errors={errors}
+                                placeholder={"I don't want to be at the mercy of my emotions. I want to use them, to enjoy them, and to dominate them"}
+                            />
+
+
+                            <InputComponent
                                 title="Thumbnail"
                                 type="file"
                                 id="thumbnail"
                                 name="thumbnail"
                                 onChange={handleFileChange}
                                 accept='image/*'
-                            />
-
-                            <Editor
-                                apiKey="tum57p1u5yo358iiwkpwhvq4cnhq24j0k7pfx4vs7jdt23wo"
-                                className="text-editor"
-                                value={editorContent}
-                                init={{
-                                    height: 600,
-                                    width: '100%',
-                                    menubar: false,
-                                    plugins: 'link image code',
-                                    toolbar: 'undo redo | formatselect | bold italic | link image | code',
-                                    content_style: `
-                                     body {    background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--background-color')};
-                                               color: ${getComputedStyle(document.documentElement).getPropertyValue('--text-color')};
-            }`
-                                }}
-                                onEditorChange={handleEditorChange}
+                                errors={errors}
                             />
 
 
-                            <div>
-                                <label htmlFor="archive">Archive:</label>
-                                <input
-                                    id="archive"
-                                    type="radio"
-                                    name="publish"
-                                    checked={!publish}
-                                    onChange={handleRadio}
+                            <FancyTextArea
+                                editorContent={editorContent} errors={errors}
+                                handleEditorChange={handleEditorChange} name={'body'}
+                            />
+
+                            <PublishedComponent
+                                publish={publish}
+                                handleRadio={handleRadio}
                                 />
 
-                                <label htmlFor="publish">Publish:</label>
-                                <input
-                                    id="publish"
-                                    type="radio"
-                                    name="publish"
-                                    checked={publish}
-                                    onChange={handleRadio}
-                                />
-                            </div>
                         </div>
-                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>
-                    </div>
+
+                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>                    </div>
                 </form>
         </main>
     )

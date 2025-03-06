@@ -10,6 +10,7 @@ import multer from "multer";
 import {validationResult} from "express-validator";
 const upload = multer()
 
+
 createBookReview.post('/' , upload.single('thumbnail'), validateBookReview, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

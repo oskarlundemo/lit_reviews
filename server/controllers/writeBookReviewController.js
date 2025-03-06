@@ -16,11 +16,15 @@ export const validateBookReview = [
     body('bookTitle')
         .trim()
         .isLength({ min: 1, max: 50})
-        .withMessage('Please enter a book title'),
+        .withMessage('Please enter a title for the book'),
     body('bookAuthor')
         .trim()
         .isLength({ min: 1, max: 50})
-        .withMessage('Please enter a book author'),
+        .withMessage('Please enter an author'),
+    body('bookDescription')
+        .trim()
+        .isLength({ min: 1, max: 50})
+        .withMessage('Please enter a preview of the book'),
     body('bookPages')
         .trim()
         .isInt()
@@ -33,6 +37,10 @@ export const validateBookReview = [
         .trim()
         .isLength({ min: 1, max: 150})
         .withMessage('Please enter a review title'),
+    body('body')
+        .trim()
+        .isLength({min: 1, max: 150})
+        .withMessage('You must write something in your review'),
     body('thumbnail').custom((value, { req }) => {
         if (!req.file) {
             throw new Error('Thumbnail is required');
@@ -40,11 +48,6 @@ export const validateBookReview = [
         return true;
     })
 ];
-
-
-
-
-
 
 
 export const newBookReview = async (req, res) => {
@@ -74,7 +77,6 @@ export const newBookReview = async (req, res) => {
                 where: {
                     id: bookId
                 },
-
                 data: {
                     title: bookTitle,
                     pages: bookPages,
