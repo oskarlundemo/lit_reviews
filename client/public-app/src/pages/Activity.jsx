@@ -248,6 +248,7 @@ export const Activity = () => {
                             name="commentsQuery"
                             onChange={handleChange}
                             value={searchQuery}
+
                         />
                     </form>
                 </div>
