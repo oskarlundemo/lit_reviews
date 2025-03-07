@@ -22,6 +22,7 @@ export const UserTable = ({openPopup, sortDate, onClick: sortId, comments, banne
             ))
         ) : (
             <tr>
+
                 <td className="no-comments" colSpan="5"><p>No comments</p></td>
             </tr>
         )}
