@@ -34,6 +34,9 @@ export const Activity = () => {
     const [bannedUsers, setBannedUsers] = useState([]);
 
     const [errors, setErrors] = useState([]);
+    const [numberOfPages, setNumberOfPages] = useState(0);
+
+    const [pageComments, setPageComments] = useState([[]]);
 
 
     const closePopup = () => {
@@ -67,7 +70,8 @@ export const Activity = () => {
         })
             .then(res => res.json())
             .then(data => {
-                setComments(data);
+                setNumberOfPages(Math.ceil(data.length / 10));
+                setPageComments(commentsIntoPages(data, 10));
             })
             .catch(err => console.log(err));
     }, [])
@@ -84,6 +88,17 @@ export const Activity = () => {
             .then(data => setBannedUsers(data))
             .catch(err => console.log(err))
     }, [])
+
+
+    const commentsIntoPages = (comments, commentsPerPage = 10) => {
+
+        const pages = [];
+        for (let i = 0; i < comments.length; i += commentsPerPage) {
+            const page = comments.slice(i, i + commentsPerPage);
+            pages.push(page);
+        }
+        return pages;
+    }
 
 
     /**
@@ -210,6 +225,11 @@ export const Activity = () => {
     }
 
 
+    const changePage = (page) => {
+        setComments(pageComments[page]);
+    }
+
+
     return (
         <main className="activity-container">
 
@@ -244,6 +264,15 @@ export const Activity = () => {
                     </>
                 ) : (
                     <p>"No comments found"</p>
+                )}
+
+
+                {numberOfPages > 0 && (
+                    <ul className="page-selector">
+                        {Array.from({ length: numberOfPages }, (_, index) => (
+                            <li onClick={() => changePage(index)} key={index}>{index + 1}</li>
+                        ))}
+                    </ul>
                 )}
 
             </section>

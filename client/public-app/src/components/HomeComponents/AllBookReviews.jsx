@@ -4,14 +4,12 @@ import {useEffect, useState} from "react";
 import '../../styles/AllBookReviews.css'
 import {useNavigate} from "react-router-dom";
 import {ImageComponent} from "../ImageComponent.jsx";
-import {BookCard} from "../BookCard.jsx";
+import {BookCard} from "./BookCard.jsx";
 
-export const AllBookReviews = () => {
+export const AllBookReviews = ({likes, comments}) => {
 
 
     const [bookReviews, setBookReviews] = useState([]);
-    const [likes, setLikes] = useState([]);
-    const [comments, setComments] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [loadingError, setLoadingError] = useState('');
@@ -35,32 +33,6 @@ export const AllBookReviews = () => {
                 setLoadingError(err.message);
                 console.log(err);
             })
-
-        fetch('/api/home/likes/all', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(res => res.json())
-            .then((data) => setLikes(data))
-            .catch((err) => {
-                console.log(err)
-            })
-
-
-        fetch('/api/home/comments/all', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(res => res.json())
-            .then((data) => setComments(data))
-            .catch((err) => {
-                console.log(err)
-            })
-
     }, [])
 
 
@@ -83,7 +55,6 @@ export const AllBookReviews = () => {
                                 inspectReview={inspectReview}
                             />
                         ))}
-
                         {bookReviews.length > displayedReviews && (
                             <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
                                 Load More

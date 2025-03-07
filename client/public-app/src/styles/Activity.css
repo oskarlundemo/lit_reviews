@@ -1,8 +1,5 @@
 
 
-
-
-
 .activity-container {
     display: grid;
     grid-template-columns: 3fr 1fr;
@@ -22,6 +19,8 @@
     width: 100%;
     grid-area: 1 / 1 / 1 / 1;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     h2 {
         border-bottom: 2px solid var(--accent-color);
@@ -32,7 +31,11 @@
     }
 }
 
+
+
+
 table tbody tr {
+
     div {
 
         svg {
@@ -67,4 +70,14 @@ table tbody tr {
 
 .comments-filter-section {
     margin: 1rem;
+}
+
+
+.page-selector {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
 }

@@ -38,7 +38,6 @@ export const getBannedUsers = async (req, res) => {
                 user: true
             }
         })
-        console.log(bannedUsers)
         res.status(201).json(bannedUsers);
     } catch (err) {
         console.error(err);

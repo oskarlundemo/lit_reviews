@@ -20,7 +20,7 @@ export const validateLoginInfo = [
         .withMessage('Invalid username or password'),
     body('password')
         .trim()
-        .isLength({ min: 3, max: 100})
+        .isLength({ min: 1, max: 100})
         .withMessage('Invalid username or password'),
 ];
 

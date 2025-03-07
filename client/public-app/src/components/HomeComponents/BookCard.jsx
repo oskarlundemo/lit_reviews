@@ -1,4 +1,4 @@
-import {ImageComponent} from "./ImageComponent.jsx";
+import {ImageComponent} from "../ImageComponent.jsx";
 
 
 export const BookCard = ({review, comments, likes, inspectReview}) => {
