@@ -15,6 +15,10 @@ import {Activity} from "./pages/Activity.jsx";
 
 
 function App() {
+
+
+
+
   return (
       <div className="App">
           <Header></Header>

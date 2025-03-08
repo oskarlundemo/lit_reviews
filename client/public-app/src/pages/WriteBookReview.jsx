@@ -29,6 +29,8 @@ export const WriteBookReview = () => {
     const location = useLocation();
     const {post} = location.state || {}
 
+    console.log(post);
+
     const [formData, setFormData] = useState({
         bookTitle: post?.Book.title || '',
         bookAuthor: post?.Book.Author.name || '',
@@ -117,6 +119,12 @@ export const WriteBookReview = () => {
         formPayload.append('body', formData.body);
         formPayload.append('thumbnail', thumbnail);
 
+        if (formData.reviewId) {
+            formPayload.append('reviewId', formData.reviewId);
+            formPayload.append('authorId', formData.authorId);
+            formPayload.append('bookId', formData.bookId);
+        }
+
         try {
             const token = localStorage.getItem("token");
             const response = await fetch('/api/book-review', {
@@ -177,9 +185,11 @@ export const WriteBookReview = () => {
                             <TextAreaComponent
                                 handleInputChange={handleInputChange}
                                 bookTitle={formData.bookAbout}
-                                name={"bookDescription"}
+                                value={formData.bookAbout}
+                                name={"bookAbout"}
                                 errors={errors}
                                 placeholder={'Dorian Gray is a man who trades his soul for eternal youth—but at a terrible cost.'}
+                                fieldsetName={"Preview"}
                             />
 
                             <InputComponent
@@ -214,9 +224,11 @@ export const WriteBookReview = () => {
                             <TextAreaComponent
                                 handleInputChange={handleInputChange}
                                 bookTitle={formData.quote}
+                                value={formData.quote}
                                 name={"quote"}
                                 errors={errors}
                                 placeholder={"I don't want to be at the mercy of my emotions. I want to use them, to enjoy them, and to dominate them"}
+                                fieldsetName={"Favorite quote"}
                             />
 
 

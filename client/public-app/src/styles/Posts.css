@@ -8,6 +8,8 @@
     align-self: center;
     justify-self: center;
     width: 80%;
+    margin: 4rem 0;
+
 }
 
 body {
@@ -19,8 +21,6 @@ body {
     box-shadow: var(--box-shadow);
     border-radius: 10px;
     width: 100%;
-    padding: 1rem;
-
 
     form {
         width: 100%;
@@ -36,54 +36,79 @@ body {
     box-shadow: var(--box-shadow);
     border-radius: 10px;
     width: 100%;
-    padding: 1rem;
+    overflow-y: auto;
 }
 
 
 
-
-
-
-table {
+.posts-table {
     border-collapse: collapse;
-    display: block;
-    width: 100%;
-    height: 100%;
+}
 
+.posts-table thead th:first-child {
+    text-align: center;
 }
 
 
-table thead tr {
-    th {
-        text-align: left;
-        padding: 1rem 1rem 0 1rem;
-    }
-
-
-    th:hover {
-        color: var(--accent-color);
-        cursor: pointer;
-    }
-
-    th:nth-child(5), th:nth-child(6), th:first-of-type, th:last-of-type {
-        text-align: center;
-    }
+.posts-table thead th:nth-child(6) {
+    text-align: center;
 }
 
-table tbody {
-    display: table;
-    width: 100%;
+
+.posts-table th, .posts-table td {
+    padding: 12px 15px;
+    text-align: left;
 }
 
-table thead {
-    display: table;
-    width: 100%;
+.posts-table th {
+    cursor: pointer;
 }
+
+.posts-table td {
+    vertical-align: middle;
+}
+
+
+.posts-table th:nth-child(1),
+.posts-table td:nth-child(1) {
+    width: 10%;
+}
+
+.posts-table th:nth-child(2),
+.posts-table td:nth-child(2) {
+    width: 25%;
+}
+
+.posts-table th:nth-child(3),
+.posts-table td:nth-child(3) {
+    width: 25%;
+}
+
+.posts-table th:nth-child(4),
+.posts-table td:nth-child(4) {
+    width: 20%;
+}
+
+.posts-table th:nth-child(5),
+.posts-table td:nth-child(5) {
+    width: 10%;
+}
+
+.posts-table th:nth-child(6),
+.posts-table td:nth-child(6) {
+    width: 10%;
+}
+
+.posts-table th:nth-child(7),
+.posts-table td:nth-child(7) {
+    width: 10%;
+}
+
+
 
 
 
 tbody tr {
-
     td {
         padding: 1rem;
     }
@@ -235,4 +260,9 @@ table thead {
 }
 
 
+@media screen and (max-width: 850px) {
 
+    .posts {
+        overflow: hidden;
+    }
+}

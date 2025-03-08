@@ -18,7 +18,7 @@
 
     p {
         text-align: right;
-        font-size: clamp(0.6rem, 1vw, 1.5rem) !important;
+        font-size: clamp(0.8rem, 1vw, 1.5rem) !important;
         span {
             font-style: italic;
         }

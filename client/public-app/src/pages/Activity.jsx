@@ -5,6 +5,7 @@ import {BannedList} from "../components/ActivityComponents/BannedList.jsx";
 import {ActivityPopUp} from "../components/ActivityComponents/ActivityPopUp.jsx";
 import {UserTable} from "../components/ActivityComponents/TableOfUsers.jsx";
 import {Overlay} from "../components/ActivityComponents/Overlay.jsx";
+import {PageSelector} from "../components/ActivityComponents/PageSelector.jsx";
 
 
 /**
@@ -33,9 +34,7 @@ export const Activity = () => {
     const [inspectUserComment, setInspectUserComment] = useState(null);
     const [bannedUsers, setBannedUsers] = useState([]);
 
-    const [errors, setErrors] = useState([]);
     const [numberOfPages, setNumberOfPages] = useState(0);
-
     const [pageComments, setPageComments] = useState([[]]);
 
 
@@ -70,11 +69,19 @@ export const Activity = () => {
         })
             .then(res => res.json())
             .then(data => {
-                setNumberOfPages(Math.ceil(data.length / 10));
-                setPageComments(commentsIntoPages(data, 10));
+                const pages = commentsIntoPages(data, 10);
+                setNumberOfPages(pages.length);
+                setPageComments(pages);
             })
             .catch(err => console.log(err));
-    }, [])
+    }, []);
+
+
+    useEffect(() => {
+        if (pageComments.length > 0) {
+            setComments(pageComments[0]);
+        }
+    }, [pageComments]);
 
 
     useEffect(() => {
@@ -91,7 +98,6 @@ export const Activity = () => {
 
 
     const commentsIntoPages = (comments, commentsPerPage = 10) => {
-
         const pages = [];
         for (let i = 0; i < comments.length; i += commentsPerPage) {
             const page = comments.slice(i, i + commentsPerPage);
@@ -128,7 +134,12 @@ export const Activity = () => {
             }
         })
             .then(res => res.json())
-            .then(data => setComments(data))
+            .then(data => {
+                const pages = commentsIntoPages(data, 10);
+                setNumberOfPages(pages.length);
+                setPageComments(pages);
+                setComments(pages.length > 0 ? pages[0] : []);
+            })
             .catch(err => console.log(err))
     }
 
@@ -144,7 +155,11 @@ export const Activity = () => {
             if (res.ok) {
                 const updatedComments = await fetch("/api/comments/all");
                 const data = await updatedComments.json();
-                setComments(data);
+
+                const pages = commentsIntoPages(data, 10);
+                setNumberOfPages(pages.length);
+                setPageComments(pages);
+                setComments(pages.length > 0 ? pages[0] : []);
             } else {
                 console.error("Failed to delete comment");
             }
@@ -152,7 +167,6 @@ export const Activity = () => {
             console.log(err);
         }
     }
-
 
     const banUser = async (user) => {
         try {
@@ -225,11 +239,6 @@ export const Activity = () => {
     }
 
 
-    const changePage = (page) => {
-        setComments(pageComments[page]);
-    }
-
-
     return (
         <main className="activity-container">
 
@@ -253,28 +262,16 @@ export const Activity = () => {
                     </form>
                 </div>
 
-                {/* Comments Table */}
-                {comments.length > 0 || comments ? (
-                    <>
-                        <UserTable deleteComment={deleteComment}
-                                   openPopup={openPopup}
-                                   bannedUsers={bannedUsers}
-                                   onClick={() => sortById(comments)}
-                                   sortDate={() => sortByDate()}
-                                   comments={comments}/>
-                    </>
-                ) : (
-                    <p>"No comments found"</p>
-                )}
-
-
-                {numberOfPages > 0 && (
-                    <ul className="page-selector">
-                        {Array.from({ length: numberOfPages }, (_, index) => (
-                            <li onClick={() => changePage(index)} key={index}>{index + 1}</li>
-                        ))}
-                    </ul>
-                )}
+                <UserTable deleteComment={deleteComment}
+                           openPopup={openPopup}
+                           bannedUsers={bannedUsers}
+                           onClick={() => sortById(comments)}
+                           sortDate={() => sortByDate()}
+                           comments={comments}
+                           numberOfPages={numberOfPages}
+                           pageComments={pageComments}
+                           setComments={setComments}
+                />
 
             </section>
 
@@ -284,7 +281,7 @@ export const Activity = () => {
                            bannedUsers={bannedUsers}
                            predicate={(user) => inspectUserComment.id === user.user_id}
                            onClick1={() => {closePopup(); unBanUser(inspectUserComment);}}
-                           onClick2={() => {closePopup();banUser(inspectUserComment);
+                           onClick2={() => {closePopup(); banUser(inspectUserComment);
             }}/>
 
             <Overlay showOverlay={showOverlay} toggleOverlay={toggleOverlay}></Overlay>

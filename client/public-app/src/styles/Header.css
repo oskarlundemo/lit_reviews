@@ -2,6 +2,7 @@
 
 
 header {
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -78,9 +79,7 @@ header {
         font-size: clamp(1.4rem, 4vw, 2rem) !important
     }
 
-
     .welcome-user {
         display: none;
     }
-
 }

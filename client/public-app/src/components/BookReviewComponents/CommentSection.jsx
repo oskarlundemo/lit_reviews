@@ -46,10 +46,11 @@ export const CommentSection = () => {
     }, [formData.comment]);
 
     const handleKeyDown = (e) => {
+        setErrorShake(false);
         if (e.key === 'Backspace') {return;}
         if (chars >= 50 && e.key !== 'Backspace') {
             e.preventDefault();
-            setErrorShake(prev => !prev);
+            setErrorShake(true);
         } else {
             setErrorShake(false);
         }
@@ -63,7 +64,10 @@ export const CommentSection = () => {
             },
         })
             .then(res => res.json())
-            .then(data => {setComments(data);})
+            .then(data => {
+                setComments(data);
+                setErrorShake(false);
+            })
             .catch(err => console.log(err));
 
 

@@ -1,9 +1,16 @@
 import {useEffect} from "react";
 import {TableRowComponent} from "./TableRowComponent.jsx";
+import {PageSelector} from "./PageSelector.jsx";
 
 
-export const UserTable = ({openPopup, sortDate, onClick: sortId, comments, bannedUsers, deleteComment}) => {
-    return <table>
+export const UserTable = ({openPopup, sortDate, onClick: sortId, comments, bannedUsers, deleteComment, numberOfPages, pageComments, setComments}) => {
+
+
+    return (
+
+        <div className="table-container">
+
+        <table className="activity-table">
         <thead>
         <tr>
             <th onClick={sortId} scope="col">ID</th>
@@ -17,16 +24,25 @@ export const UserTable = ({openPopup, sortDate, onClick: sortId, comments, banne
         <tbody>
         {comments.length > 0 ? (
             comments.map((comment) => (
-                <TableRowComponent comment={comment} bannedUsers={bannedUsers}
-                                   openPopup={openPopup} deleteComment={deleteComment}/>
+                <TableRowComponent
+                    key={comment.id}
+                    comment={comment}
+                    bannedUsers={bannedUsers}
+                    openPopup={openPopup}
+                    deleteComment={deleteComment}
+                />
             ))
         ) : (
             <tr>
-
                 <td className="no-comments" colSpan="5"><p>No comments</p></td>
             </tr>
         )}
 
         </tbody>
-    </table>;
+        </table>
+
+            <PageSelector numberOfPages={numberOfPages} pageComments={pageComments} setComments={setComments}/>
+
+        </div>
+            )
 }
