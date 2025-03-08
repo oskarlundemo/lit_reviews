@@ -1,27 +1,26 @@
 import {useEffect, useState} from "react";
 
 
-export const TextAreaComponent = ({handleInputChange, bookAbout, errors, name, placeholder}) => {
+export const TextAreaComponent = ({handleInputChange, errors, name, placeholder, fieldsetName, value}) => {
 
     const [errorMessage, setErrorMessage] = useState("");
 
-
     useEffect(() => {
-        console.log(errors)
         const error = errors.find(error => error.path === name);
         setErrorMessage(error ? error.msg : '');
     })
 
-
     return (
         <>
             <fieldset className="input-fieldset">
-                <legend>Preview</legend>
+                <legend>{fieldsetName}</legend>
                 <div className="input-card author-input">
                     <textarea
-                        title="Preview" id="bookAbout" name="bookAbout"
-                        onChange={handleInputChange} value={bookAbout}
+                        id={name}
+                        name={name}
+                        onChange={handleInputChange}
                         placeholder={placeholder}
+                        value={value}
                     />
                 </div>
             </fieldset>

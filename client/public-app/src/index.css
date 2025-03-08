@@ -21,7 +21,7 @@
   --background-color: hsl(0, 0%, 98%);
   --secondary-color: hsl(0, 0%, 88%);
 
-  --button-color: hsl(0, 0%, 88%);
+  --button-color: hsl(236, 88%, 64%);
   --accent-color: hsl(236, 88%, 64%);
 
   --light-grey: hsl(0, 0%, 83%);
@@ -51,11 +51,6 @@ main {
     min-width: 400px;
   }
 }
-
-
-
-
-
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -87,12 +82,28 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px hsl(240, 15%, 15%) inset !important;
 }
 
+.light {
+  color: hsl(0, 0%, 0%);
+  --background-color: hsl(0, 0%, 98%);
+  --secondary-color: hsl(0, 0%, 88%);
+
+  --button-color: hsl(236, 88%, 50%);
+  --accent-color: hsl(236, 88%, 64%);
+
+  --light-grey: hsl(0, 0%, 83%);
+  --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+  --svg-color: hsl(0, 0%, 0%);
+  --text-color: hsl(0, 0%, 0%);
+  --gradient-color: linear-gradient(135deg, hsl(240, 60%, 30%) 0%, hsl(236, 88%, 40%) 50%, hsl(210, 100%, 35%) 100%);;
+
+}
 
 
 .dark {
   --background-color: hsl(240, 15%, 15%);
   --secondary-color: hsl(240, 15%, 20%);
-  --button-color: hsl(236, 88%, 64%);
+  --button-color: hsl(270, 40%, 30%) ;
   --accent-color: hsl(236, 88%, 64%);
   --light-grey: hsl(0, 0%, 60%);
   --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
@@ -103,6 +114,24 @@ select:-webkit-autofill:focus {
   color: hsl(0, 0%, 100%);
 }
 
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: hsl(0, 0%, 0%);
+    --background-color: hsl(0, 0%, 98%);
+    --secondary-color: hsl(0, 0%, 88%);
+
+    --button-color: hsl(0, 0%, 88%);
+    --accent-color: hsl(236, 88%, 64%);
+
+    --light-grey: hsl(0, 0%, 83%);
+    --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+    --svg-color: hsl(0, 0%, 0%);
+    --text-color: hsl(0, 0%, 0%);
+    --gradient-color: linear-gradient(135deg, hsl(240, 60%, 30%) 0%, hsl(236, 88%, 40%) 50%, hsl(210, 100%, 35%) 100%);;
+  }
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -115,6 +144,8 @@ select:-webkit-autofill:focus {
     --svg-color: hsl(0, 0%, 100%);
     --text-color: hsl(0, 0%, 100%);
     color: hsl(0, 0%, 100%);
+    --gradient-color: linear-gradient(135deg, hsl(236, 88%, 64%) 0%, hsl(212, 90%, 70%) 50%, hsl(180, 100%, 85%) 100%);
+
   }
 }
 

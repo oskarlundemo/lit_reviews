@@ -16,23 +16,33 @@ export const Header = () => {
     };
 
     useEffect(() => {
+        const themeFromLocalStorage = localStorage.getItem("theme");
+        const isDarkMode = themeFromLocalStorage === "dark";
+        setDarkMode(isDarkMode);
+
+        if (isDarkMode) {
+            document.querySelector('.App').classList.add("dark");
+        } else {
+            document.querySelector('.App').classList.remove("dark");
+            document.querySelector('.App').classList.add("light");
+        }
+    }, []);
+
+    useEffect(() => {
         if (darkMode) {
-            document.documentElement.classList.add("dark");
+            document.querySelector('.App').classList.add("dark");
             localStorage.setItem("theme", "dark");
         } else {
-            document.documentElement.classList.remove("dark");
+            document.querySelector('.App').classList.remove("dark");
+            document.querySelector('.App').classList.add("light");
             localStorage.setItem("theme", "light");
         }
     }, [darkMode]);
 
-    const redirect = () => {
-        navigate("/");
-    };
 
     return (
         <header className="App-header">
-            <Link to="/"><h1>Lundemo's Library</h1></Link>
-
+            <Link to="/"><h1>Lit reviews 🔥</h1></Link>
             <nav>
                 {user ? (
                     <>
@@ -50,11 +60,10 @@ export const Header = () => {
                                 </Link>
                             </div>
                                 <button onClick={() => { logout(); redirect(); }}>Sign out</button>
-
                             </>
                             ) : (
                                 <>
-                                    <button onClick={() => { logout(); redirect(); }}>Sign out</button>
+                                    <button onClick={() => { logout(); navigate('/'); }}>Sign out</button>
                                 </>
                         )}
                     </>
