@@ -13,7 +13,6 @@ export const BannedList = ({banned, openPopup}) => {
                        <li onClick={()=> openPopup(user.user)} key={user.user.user_id}>
                            <div className="banned-card">
                                <p>Username: <span>{user.user.username}</span></p>
-                               <p>ID: {user.user_id}</p>
                            </div>
                        </li>
                    ))

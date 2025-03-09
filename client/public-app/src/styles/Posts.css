@@ -9,7 +9,6 @@
     justify-self: center;
     width: 80%;
     margin: 4rem 0;
-
 }
 
 body {
@@ -40,6 +39,10 @@ body {
 }
 
 
+.error-row {
+    opacity: 0.5;
+    text-align: center;
+}
 
 .posts-table {
     border-collapse: collapse;

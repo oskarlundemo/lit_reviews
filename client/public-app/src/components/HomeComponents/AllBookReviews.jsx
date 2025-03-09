@@ -3,7 +3,6 @@ import {useEffect, useState} from "react";
 
 import '../../styles/AllBookReviews.css'
 import {useNavigate} from "react-router-dom";
-import {ImageComponent} from "../ImageComponent.jsx";
 import {BookCard} from "./BookCard.jsx";
 
 export const AllBookReviews = ({likes, comments}) => {
@@ -11,9 +10,10 @@ export const AllBookReviews = ({likes, comments}) => {
 
     const [bookReviews, setBookReviews] = useState([]);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
     const [loadingError, setLoadingError] = useState('');
     const [displayedReviews, setDisplayedReviews] = useState(4);
+    const [loading, setLoading] = useState(true);
+
 
 
     useEffect(() => {
@@ -42,29 +42,34 @@ export const AllBookReviews = ({likes, comments}) => {
 
     return (
         <>
-            <h2>All reviews</h2>
-            <section className={`reviews-container ${loading ? "loading" : ""}`}>
-                {bookReviews.length > 0 ? (
-                    <>
-                        {bookReviews.slice(0, displayedReviews).map((review) => (
-                            <BookCard
-                                key={review.id}
-                                review={review}
-                                comments={comments}
-                                likes={likes}
-                                inspectReview={inspectReview}
-                            />
-                        ))}
-                        {bookReviews.length > displayedReviews && (
-                            <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
-                                Load More
-                            </button>
-                        )}
-                    </>
-                ) : (
-                    <p>No reviews available</p>
-                )}
+
+            <section className={`reviews-grid`}>
+                <h2>All reviews</h2>
+
+                <div className={`reviews-container ${loading ? "loading" : ""}`}>
+                    {bookReviews.length > 0 ? (
+                        <>
+                            {bookReviews.slice(0, displayedReviews).map((review) => (
+                                <BookCard
+                                    key={review.id}
+                                    review={review}
+                                    comments={comments}
+                                    likes={likes}
+                                    inspectReview={inspectReview}
+                                />
+                            ))}
+                            {bookReviews.length > displayedReviews && (
+                                <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
+                                    Load More
+                                </button>
+                            )}
+                        </>
+                    ) : (
+                        <div className="loading-reviews"></div>
+                    )}
+                </div>
             </section>
+
         </>
     )
 

@@ -62,9 +62,23 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
 
                     <tbody>
 
-                    {posts.map((post) => (
-                        <PostRowComponent key={post.id} post={post} parseTitle={parseTitle} inspectClick={inspectClick} />
-                    ))}
+                    {posts.length > 0 ? (
+                        posts.map((post) => (
+                            <PostRowComponent
+                                key={post.id}
+                                post={post}
+                                parseTitle={parseTitle}
+                                inspectClick={inspectClick}
+                            />
+                        ))
+                    ) : (
+                        <tr className="error-row">
+                            <td colSpan="7">No posts could be found</td>
+                        </tr>
+                    )}
+
+
+
                     </tbody>
         </table>
             <PageSelector numberOfPages={numberOfPages} pageComments={pagePosts} setComments={setPosts}/>

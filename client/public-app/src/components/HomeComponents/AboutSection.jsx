@@ -1,8 +1,15 @@
 
 
 import '../../styles/AboutSection.css';
+import {QuoteSlider} from "./QuoteSlider.jsx";
 
 export const AboutSection = () => {
+
+
+    const slides = [
+        { url: '/images/books.jpg' }
+    ];
+
 
     return (
         <section className="about-section">
@@ -12,10 +19,17 @@ export const AboutSection = () => {
                 <p>Lite Reviews is your go-to destination for quick, insightful book reviews. We explore literature from around the world, offering concise critiques and recommendations to help you discover your next great read. From new releases to timeless classics, Lite Reviews provides thoughtful analysis to guide your reading journey.</p>
             </div>
 
+
             <div className="right-container">
-                <img src="/images/books.jpg" alt="Books" />
+                <QuoteSlider slides={slides} />
             </div>
 
         </section>
     )
 }
+
+
+/**
+ *                 <img src="/images/books.jpg" alt="Books" />
+ *
+ */

@@ -1,0 +1,125 @@
+
+
+
+
+.right-container {
+
+    position: relative;
+    flex-direction: column;
+
+
+    background: rgba(255, 255, 255, 0.24);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.24);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.7px);
+}
+
+
+
+
+
+.quote-slider {
+    padding: 1rem;
+    margin: 0;
+    align-self: center !important;
+    grid-area: 1 / 1 / 1 / 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quote-slider-button {
+    position: absolute;
+    grid-area: 2 / 1 / 2 / 1;
+    align-self: center;
+    justify-self: center;
+    bottom: 4px;
+
+    ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;:
+    }
+
+    li {
+        margin: 0;
+    }
+}
+
+.active-circle {
+    fill: var(--accent-color) !important;
+    transition: 200ms ease-in-out;
+}
+
+.circle-selector {
+    transition: 200ms ease-in-out;
+}
+
+.circle-selector:hover {
+    fill: var(--accent-color) !important;
+}
+
+.active-quote-error {
+    h2 {
+        text-align: center;
+        opacity: 0.2;
+    }
+}
+
+
+.active-quote-container {
+    h2 {
+        text-align: center;
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: clamp(1.2rem, 3vw, 1.5rem);
+        margin: 0;
+    }
+
+    p {
+        text-align: right;
+        font-size: clamp(0.8rem, 1vw, 1.5rem) !important;
+        margin-right: 2rem;
+        span {
+            font-style: italic;
+        }
+    }
+
+}
+
+.animate {
+    animation: fade-in 2s ease-in-out, fade-out 2s ease-in-out 4s;
+}
+
+.active-quote-container:hover {
+    cursor: pointer;
+    color: var(--accent-color);
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
