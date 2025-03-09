@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 export const PostRowComponent = ({post, parseTitle, inspectClick}) => {
 
 
-
     return (
         <tr>
             <td>{post.id}</td>

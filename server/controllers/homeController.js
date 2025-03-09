@@ -146,6 +146,53 @@ export const getLikes = async (req, res) => {
 
 
 
+export const getTopThreeQuotes = async (req, res) => {
+    try {
+
+        const postLikes = await prisma.like.groupBy({
+            by: ['post_id'],
+            _count: {
+                user_id: true
+            },
+            orderBy: {
+                _count: {
+                    user_id: 'desc'
+
+                }
+            },
+            take: 3,
+        });
+
+        const topPostsId = postLikes.map(postLike => postLike.post_id);
+        const topFiveQuotes = await prisma.review.findMany({
+            where: {
+                id: { in: topPostsId }
+            },
+            select: {
+                favouriteQuoute: true,
+                id: true,
+                Book: {
+                    select: {
+                        title: true,
+                        Author: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    }
+                },
+            },
+        })
+
+        res.status(200).json(topFiveQuotes);
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
 export const likePost = async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const {id} = jwtDecode(token);

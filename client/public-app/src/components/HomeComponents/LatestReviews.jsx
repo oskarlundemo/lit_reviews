@@ -29,8 +29,7 @@ export const LatestReviews = ({comments, likes}) => {
     }
 
     return (
-        <div className={`latest-reviews`}>
-
+        <section className={`latest-reviews`}>
             <h2>Latest reviews</h2>
             <div className={`latest-book-grid ${loading ? 'loading' : ''}`}>
                 {reviews.length > 0 ? (
@@ -44,6 +43,6 @@ export const LatestReviews = ({comments, likes}) => {
                     ))
                 ) : null}
             </div>
-        </div>
+        </section>
     )
 }

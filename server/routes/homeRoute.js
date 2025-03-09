@@ -5,7 +5,7 @@ import {Router}  from 'express';
 
 import {getAllComments} from '../controllers/activityController.js'
 import {latestBookReviews, inspectReview, createComment, getComments, deleteComment, likePost, getLikes,
-    getAllBookReviews, getAllLikes} from "../controllers/homeController.js";
+    getAllBookReviews, getAllLikes, getTopThreeQuotes} from "../controllers/homeController.js";
 
 const homeRouter = new Router();
 
@@ -28,6 +28,8 @@ homeRouter.get('/reviews/all', getAllBookReviews)
 homeRouter.get('/likes/all', getAllLikes)
 
 homeRouter.get('/comments/all', getAllComments)
+
+homeRouter.get('/top-five-quotes', getTopThreeQuotes)
 
 
 

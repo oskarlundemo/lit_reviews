@@ -2,7 +2,7 @@
 
 .about-section {
     background-color: var(--secondary-color);
-    padding: 1rem 4rem;
+    padding: 3rem 4rem;
 
     display: flex;
     gap: 1rem;
@@ -11,6 +11,12 @@
 
     > div {
         width: 50%;
+    }
+
+    color: hsl(0, 0%, 100%) !important;
+
+    svg {
+        fill: hsl(0, 0%, 100%) !important;
     }
 }
 
@@ -24,7 +30,7 @@
     background-image: url('../../public/images/books.jpg');
     background-size: cover;
     background-position: center;
-    filter: blur(2px);
+    filter: blur(3px);
     z-index: 1;
 }
 
@@ -56,7 +62,7 @@
 .divider-stretch {
     width: 100%;
     height: 1px;
-    background-color: var(--text-color);
+    background-color: hsl(0, 0%, 100%);
     margin: 10px 0;
 }
 
@@ -66,6 +72,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1;
+    position: relative;
 }
 
 .right-container img {
@@ -76,9 +83,8 @@
 
 
 @media screen and (max-width: 800px) {
-
     .right-container {
-        display: none;
+        display: none !important;
     }
 
     .left-container {
@@ -103,3 +109,6 @@
         }
     }
 }
+
+
+
