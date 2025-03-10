@@ -43,6 +43,8 @@ model Book {
 
   Author Author   @relation(fields: [author_id], references: [id])
   Review Review[]
+
+  BookCategory BookCategory[]
 }
 
 model Author {
@@ -93,6 +95,23 @@ model Like {
   created DateTime @default(now())
 
   @@id([post_id, user_id])
+}
+
+model BookCategory {
+  category_id Int
+  category    Category @relation(fields: [category_id], references: [id])
+
+  book_id Int
+  book    Book @relation(fields: [book_id], references: [id])
+
+  @@id([category_id, book_id])
+}
+
+model Category {
+  id       Int    @id @default(autoincrement())
+  category String
+
+  BookCategory BookCategory[]
 }
 
 model Banned {

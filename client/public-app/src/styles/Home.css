@@ -11,8 +11,8 @@
     section:not(:first-child) {
         max-width: 1200px;
         align-self: center;
-
         margin: 2rem;
+        width: 80%;
     }
 }
 
