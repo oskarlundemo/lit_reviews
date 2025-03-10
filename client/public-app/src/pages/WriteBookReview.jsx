@@ -12,6 +12,8 @@ import {InputComponent} from "../components/InputComponent.jsx";
 import {FancyTextArea} from "../components/BookReviewComponents/FancyTextArea.jsx";
 import {TextAreaComponent} from "../components/BookReviewComponents/TextAreaComponent.jsx";
 import {PublishedComponent} from "../components/BookReviewComponents/PublishedComponent.jsx";
+import {CategoryContainer} from "../components/BookReviewComponents/CategoryContainer.jsx";
+import {CategoryInput} from "../components/BookReviewComponents/CategoryInput.jsx";
 
 
 
@@ -118,6 +120,8 @@ export const WriteBookReview = () => {
         formPayload.append('reviewTitle', formData.reviewTitle);
         formPayload.append('body', formData.body);
         formPayload.append('thumbnail', thumbnail);
+        formPayload.append('categories', JSON.stringify(categories));
+
 
         if (formData.reviewId) {
             formPayload.append('reviewId', formData.reviewId);
@@ -146,6 +150,26 @@ export const WriteBookReview = () => {
             console.error('Fetch error:', err);
         }
     };
+
+
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState('');
+
+    const handleTextChange = (e) => {
+        setCategory(e.target.value);
+    }
+
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (category.trim() !== "" && categories.length < 5) {
+                setCategories(prev => [...prev, category.trim()]);
+                setCategory("");
+            }
+        }
+    };
+
 
 
     return (
@@ -201,6 +225,16 @@ export const WriteBookReview = () => {
                                 value={formData.bookPages}
                                 example="250"
                                 errors={errors}
+                            />
+
+
+                            <CategoryInput category={category} handleTextChange={handleTextChange} handleKeyDown={handleKeyDown} />
+
+                            
+
+                            <CategoryContainer
+                                categories={categories}
+                                setCategories={setCategories}
                             />
 
                         </div>

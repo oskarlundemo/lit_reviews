@@ -32,7 +32,7 @@ export const validateBookReview = [
         .withMessage('Please enter the number of book pages'),
     body('quote')
         .trim()
-        .isLength({ min: 1, max: 150})
+        .isLength({ min: 1, max: 350})
         .withMessage('Please enter a quote'),
     body('reviewTitle')
         .trim()
@@ -153,6 +153,10 @@ export const createNewBookReview = async (user_id, req, res) => {
         quote, reviewTitle,
         bookAbout,
     } = req.body;
+
+
+    const categories = JSON.parse(req.body.categories);
+    console.log(categories);
 
     let author = await prisma.author.findFirst({
         where: {
