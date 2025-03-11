@@ -19,7 +19,7 @@ export const QuoteSlider = ({slides}) => {
 
 
     useEffect(() => {
-        fetch('/api/home/top-five-quotes', {
+        fetch('/api/home/top-three-quotes', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
