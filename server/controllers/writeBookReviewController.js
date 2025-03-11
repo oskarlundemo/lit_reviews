@@ -144,70 +144,123 @@ export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 
 
 
-export const createNewBookReview = async (user_id, req, res) => {
+export const addCategories = async (book,req, res) => {
 
-    const published = req.body.publish === 'true';
+    try {
 
-    const {bookAuthor, body,
-        bookTitle, bookPages,
-        quote, reviewTitle,
-        bookAbout,
-    } = req.body;
+        const categories = JSON.parse(req.body.categories);
+        for (const category of categories) {
 
+            let newCategory;
 
-    const categories = JSON.parse(req.body.categories);
-    console.log(categories);
+            const categoryExists = await prisma.category.findFirst({
+                where: {
+                    category: category,
+                }
+            })
 
-    let author = await prisma.author.findFirst({
-        where: {
-            name: {
-                equals: bookAuthor,
-                mode: 'insensitive',
-            },
-        },
-    });
+            if (!categoryExists) {
+                newCategory = await prisma.category.create({
+                    data: {
+                        category: category,
+                    }
+                })
 
-    if (!author) {
-        author = await prisma.author.create({
-            data: {
-                name: bookAuthor,
-            },
-        });
-    }
+                await prisma.bookCategory.create({
+                    data: {
+                        category_id: newCategory.id,
+                        book_id: book.id
+                    }
+                })
 
-    let book = await prisma.book.findFirst({
-        where: {
-            title: {
-                equals: bookTitle,
-                mode: 'insensitive',
+            } else {
+                await prisma.bookCategory.create({
+                    data: {
+                        category_id: categoryExists.id,
+                        book_id: book.id
+                    }
+                })
             }
         }
-    })
 
-    if (!book) {
-        book = await prisma.book.create({
-            data: {
-                title: bookTitle,
-                pages: parseInt(bookPages),
-                author_id: author.id,
-                about: bookAbout
-            }
-        })
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({message: 'Categories not found'});
     }
 
-    const review = await prisma.review.create({
-        data: {
-            published: published,
-            title: reviewTitle,
-            body: DOMPurify.sanitize(body),
-            favouriteQuoute: quote,
-            book_id: book.id,
-            user_id: user_id,
-            thumbnail: req.file.originalname
-        },
-    });
-    await saveFile(req, res);
-    res.status(201).json(review);
+
+}
+
+
+
+export const createNewBookReview = async (user_id, req, res) => {
+
+
+    try {
+        const published = req.body.publish === 'true';
+        const {
+            bookAuthor, body,
+            bookTitle, bookPages,
+            quote, reviewTitle,
+            bookAbout,
+        } = req.body;
+
+        let author = await prisma.author.findFirst({
+            where: {
+                name: {
+                    equals: bookAuthor,
+                    mode: 'insensitive',
+                },
+            },
+        });
+
+        if (!author) {
+            author = await prisma.author.create({
+                data: {
+                    name: bookAuthor,
+                },
+            });
+        }
+
+        let book = await prisma.book.findFirst({
+            where: {
+                title: {
+                    equals: bookTitle,
+                    mode: 'insensitive',
+                }
+            }
+        })
+
+        if (!book) {
+            book = await prisma.book.create({
+                data: {
+                    title: bookTitle,
+                    pages: parseInt(bookPages),
+                    author_id: author.id,
+                    about: bookAbout
+                }
+            })
+        }
+
+        const review = await prisma.review.create({
+            data: {
+                published: published,
+                title: reviewTitle,
+                body: DOMPurify.sanitize(body),
+                favouriteQuoute: quote,
+                book_id: book.id,
+                user_id: user_id,
+                thumbnail: req.file.originalname
+            },
+        });
+        await saveFile(req, res);
+        await addCategories(book, req, res);
+        res.status(201).json(review);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({message: 'Error inserting book review'});
+    }
 }
 
 

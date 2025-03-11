@@ -4,20 +4,20 @@
 import {Router}  from 'express';
 
 import {getAllComments} from '../controllers/activityController.js'
-import {latestBookReviews, inspectReview, createComment, getComments, deleteComment, likePost, getLikes,
+import {latestBookReviews, inspectReview, postNewComment, getCommentsForReview, deleteComment, likePost, getReviewLikes,
     getAllBookReviews, getAllLikes, getTopThreeQuotes} from "../controllers/homeController.js";
 
 const homeRouter = new Router();
 
 homeRouter.get('/inspect/:id', inspectReview)
 
-homeRouter.get('/:id/comments', getComments)
+homeRouter.get('/:id/comments', getCommentsForReview)
 
-homeRouter.post('/review/create/comment/:id', createComment)
+homeRouter.post('/review/create/comment/:id', postNewComment)
 
 homeRouter.delete('/review/delete/:commentId/', deleteComment)
 
-homeRouter.get('/like/:postid', getLikes)
+homeRouter.get('/like/:postid', getReviewLikes)
 
 homeRouter.post('/like/:postid', likePost)
 
@@ -29,7 +29,7 @@ homeRouter.get('/likes/all', getAllLikes)
 
 homeRouter.get('/comments/all', getAllComments)
 
-homeRouter.get('/top-five-quotes', getTopThreeQuotes)
+homeRouter.get('/top-three-quotes', getTopThreeQuotes)
 
 
 
