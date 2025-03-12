@@ -76,6 +76,11 @@ export const getReviews = async (req, res) => {
                 Book: {
                     include: {
                         Author: true,
+                        BookCategory: {
+                            include: {
+                                category: true,
+                            }
+                        }
                     }
                 }
             }
@@ -102,6 +107,12 @@ export const deleteReview = async (req, res) => {
                     }
                 }
             }))
+
+            await prisma.BookCategory.deleteMany({
+                where: {
+                    book_id: review.Book.id
+                }
+            })
 
             await prisma.review.delete(({
                 where: {

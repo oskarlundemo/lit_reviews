@@ -92,6 +92,111 @@ export const updatedThumbnail = async (reviewId, req, res) => {
 }
 
 
+export const updateCategories = async (req, res) => {
+    try {
+        const categories = JSON.parse(req.body.categories);  // Get categories from request
+
+        const book = await prisma.book.findUnique({
+            where: {
+                id: parseInt(req.body.bookId),
+            }
+        });
+
+        // Get the current categories associated with the book
+        const currentCategories = await prisma.bookCategory.findMany({
+            where: {
+                book_id: book.id,
+            },
+            include: {
+                category: true,  // Include category details to check existing categories
+            }
+        });
+
+
+        const currentCategoryNames = currentCategories.map(item => item.category.category.toLowerCase());
+
+        // Compare and remove categories that are no longer part of the updated list
+        const newCategoryNames = categories.map(category => category.toLowerCase().trim());
+
+        // Find the categories to remove (those in current but not in new)
+        const categoriesToRemove = currentCategories.filter(item => !newCategoryNames.includes(item.category.category.toLowerCase().trim()));
+
+
+        for (const categoryToRemove of categoriesToRemove) {
+            await prisma.bookCategory.delete({
+                where: {
+                    category_id_book_id: {
+                        category_id: categoryToRemove.category_id,
+                        book_id: book.id,
+                    }
+                }
+            });
+        }
+
+        // Now add the new categories
+        for (const category of categories) {
+
+            // First, check if the book already has this category (case insensitive)
+            const existingBookCategory = await prisma.bookCategory.findFirst({
+                where: {
+                    book_id: book.id, // The book id you're looking for
+                    category: {
+                        category: {  // Accessing the 'category' field of the related 'Category' model
+                            equals: category,  // Category name you're matching
+                            mode: 'insensitive',  // Case-insensitive comparison
+                        }
+                    }
+                },
+                include: {
+                    category: true  // Include category details if needed
+                }
+            });
+
+            // If the book does not have this category, we need to add it
+            if (!existingBookCategory) {
+                // Does the category already exist in the Category table?
+                const categoryExists = await prisma.category.findFirst({
+                    where: {
+                        category: {
+                            equals: category,
+                            mode: "insensitive"  // case insensitive comparison
+                        }
+                    }
+                });
+
+                // If the category does not exist, create it
+                if (!categoryExists) {
+                    const newCategory = await prisma.category.create({
+                        data: {
+                            category: category,
+                        }
+                    });
+
+                    // Insert the new category into the bookCategory table
+                    await prisma.bookCategory.create({
+                        data: {
+                            category_id: newCategory.id,
+                            book_id: book.id,
+                        }
+                    });
+                } else {
+                    // If the category already exists, just create the bookCategory entry
+                    await prisma.bookCategory.create({
+                        data: {
+                            category_id: categoryExists.id,
+                            book_id: book.id,
+                        }
+                    });
+                }
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+
+
 export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 
     try {
@@ -135,6 +240,8 @@ export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
                 published: published,
             }
         })
+
+        await updateCategories(req, res);
         res.status(201).json({message: 'Review updated'});
     } catch (error) {
         console.log(error);
@@ -147,7 +254,6 @@ export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 export const addCategories = async (book,req, res) => {
 
     try {
-
         const categories = JSON.parse(req.body.categories);
         for (const category of categories) {
 
@@ -155,7 +261,10 @@ export const addCategories = async (book,req, res) => {
 
             const categoryExists = await prisma.category.findFirst({
                 where: {
-                    category: category,
+                    category: {
+                        contains: category,
+                        mode: "insensitive"
+                    }
                 }
             })
 
@@ -166,13 +275,13 @@ export const addCategories = async (book,req, res) => {
                     }
                 })
 
+
                 await prisma.bookCategory.create({
                     data: {
                         category_id: newCategory.id,
                         book_id: book.id
                     }
                 })
-
             } else {
                 await prisma.bookCategory.create({
                     data: {
@@ -183,13 +292,9 @@ export const addCategories = async (book,req, res) => {
             }
         }
 
-
     } catch (err) {
         console.log(err);
-        res.status(400).json({message: 'Categories not found'});
     }
-
-
 }
 
 

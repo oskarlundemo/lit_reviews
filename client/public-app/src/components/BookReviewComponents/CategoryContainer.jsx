@@ -1,11 +1,10 @@
-import {useEffect, useState} from "react";
-
 
 export const CategoryContainer = ({categories, setCategories}) => {
 
 
-
-
+    categories.forEach(category => {
+        console.log(category);
+    })
 
     const deleteCategory = (id) => {
         setCategories(prevCategories => prevCategories.filter((_, index) => index !== id));

@@ -77,8 +77,6 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
                         </tr>
                     )}
 
-
-
                     </tbody>
         </table>
             <PageSelector numberOfPages={numberOfPages} pageComments={pagePosts} setComments={setPosts}/>
