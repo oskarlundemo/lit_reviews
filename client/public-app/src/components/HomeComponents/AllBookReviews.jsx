@@ -58,16 +58,18 @@ export const AllBookReviews = ({likes, comments}) => {
                                     inspectReview={inspectReview}
                                 />
                             ))}
-                            {bookReviews.length > displayedReviews && (
-                                <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
-                                    Load More
-                                </button>
-                            )}
+
                         </>
                     ) : (
                         <div className="loading-reviews"></div>
                     )}
                 </div>
+
+                {bookReviews.length > displayedReviews && (
+                    <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
+                        Load More
+                    </button>
+                )}
             </section>
 
         </>

@@ -25,11 +25,15 @@ export const WriteBookReview = () => {
     const navigate = useNavigate();
     const [publish, setPublished] = useState(true);
     const [thumbnail, setThumbnail] = useState(null);
+    const [bookCategories, setbookCategories] = useState([]);
+    const [category, setCategory] = useState('');
+
 
     const [errors, setErrors] = useState([]);
 
     const location = useLocation();
     const {post} = location.state || {}
+
 
     console.log(post);
 
@@ -49,12 +53,33 @@ export const WriteBookReview = () => {
         reviewId: post?.id || null,
         bookId: post?.Book.id || null,
         authorId: post?.Book.Author.id || null,
+        categories: post?.Book.BookCategory?.map(c => c.category.category) || [],
     });
 
 
+
     useEffect(() => {
-        setEditorContent(formData.body);
-    }, [formData.body]);
+        if (post) {
+            setbookCategories(post.Book.BookCategory.map(c => c.category.category));
+            setEditorContent(formData.body);
+        }
+    }, [post]);
+
+
+    const handleTextChange = (e) => {
+        setCategory(e.target.value);
+    }
+
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (category.trim() !== "" && bookCategories.length < 5) {
+                setbookCategories(prev => [...prev, category.trim()]);
+                setCategory("");
+            }
+        }
+    };
 
     const handleEditorChange = (content) => {
         setEditorContent(content);
@@ -120,7 +145,7 @@ export const WriteBookReview = () => {
         formPayload.append('reviewTitle', formData.reviewTitle);
         formPayload.append('body', formData.body);
         formPayload.append('thumbnail', thumbnail);
-        formPayload.append('categories', JSON.stringify(categories));
+        formPayload.append('categories', JSON.stringify(bookCategories));
 
 
         if (formData.reviewId) {
@@ -152,23 +177,6 @@ export const WriteBookReview = () => {
     };
 
 
-    const [categories, setCategories] = useState([]);
-    const [category, setCategory] = useState('');
-
-    const handleTextChange = (e) => {
-        setCategory(e.target.value);
-    }
-
-
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            if (category.trim() !== "" && categories.length < 5) {
-                setCategories(prev => [...prev, category.trim()]);
-                setCategory("");
-            }
-        }
-    };
 
 
 
@@ -230,11 +238,9 @@ export const WriteBookReview = () => {
 
                             <CategoryInput category={category} handleTextChange={handleTextChange} handleKeyDown={handleKeyDown} />
 
-                            
-
                             <CategoryContainer
-                                categories={categories}
-                                setCategories={setCategories}
+                                categories={bookCategories}
+                                setCategories={setbookCategories}
                             />
 
                         </div>

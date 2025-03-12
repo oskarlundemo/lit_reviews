@@ -54,6 +54,7 @@ export const Posts = () => {
         })
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 const pages = postsIntoPages(data, 10);
                 setNumberOfPages(pages.length);
                 setPagePosts(pages);
@@ -74,7 +75,8 @@ export const Posts = () => {
             let splitTitle = title.substring(0, 40);
             let lastSpace = splitTitle.lastIndexOf(" ");
             return title.substring(0, lastSpace) + ' ...';
-        }
+        } else
+            return title;
     }
 
     const closePopup = () => {
@@ -118,6 +120,9 @@ export const Posts = () => {
     }
 
 
+    // Fix so it updates automatically if (res) fetch review again
+
+
     const deleteClick = (postId) => {
         const token  = localStorage.getItem("token");
         fetch(`/api/posts/${postId}`, {
@@ -143,6 +148,9 @@ export const Posts = () => {
             setShowPopup(false);
         }
     }
+
+
+    console.log(posts)
 
 
 

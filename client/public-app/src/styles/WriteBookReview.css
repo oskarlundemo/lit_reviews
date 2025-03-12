@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin: 4rem 0;
+    margin: 0 0 4rem 0;
 
     button {
         width: fit-content;
@@ -16,6 +16,7 @@
         font-weight: 400;
     }
 }
+
 
 .book-review-form {
     height: 100%;

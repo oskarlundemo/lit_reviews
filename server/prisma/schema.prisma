@@ -102,7 +102,7 @@ model BookCategory {
   category    Category @relation(fields: [category_id], references: [id])
 
   book_id Int
-  book    Book @relation(fields: [book_id], references: [id])
+  book    Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
 
   @@id([category_id, book_id])
 }

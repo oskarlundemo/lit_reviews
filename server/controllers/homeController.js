@@ -174,7 +174,7 @@ export const getCommentsForReview = async (req, res) => {
 
         // If the length is longer than 201 (0 or many comments associated with the review) else
         // Set the status to 404 not found
-        comments.length > 0 ? res.status(200).json(comments) : res.status(404).json({ error: 'Not Found' });
+        res.status(200).json(comments);
     } catch (err) {
         // Error fetching the comments from the back-end
         console.error(err);
@@ -300,7 +300,7 @@ export const getReviewLikes = async (req, res) => {
         });
 
         // No likes for the review? 404: Not found, else 201 the list of likes
-        likes.length > 0 ? res.status(200).json(likes) : res.status(404).json({ error: 'Not Found' });
+        res.status(200).json(likes);
     } catch (err) {
         // Error with retrieving the likes for the review
         console.error(err);
