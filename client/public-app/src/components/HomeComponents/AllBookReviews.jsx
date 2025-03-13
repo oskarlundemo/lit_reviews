@@ -13,6 +13,7 @@ export const AllBookReviews = ({likes, comments}) => {
     const [loadingError, setLoadingError] = useState('');
     const [displayedReviews, setDisplayedReviews] = useState(4);
     const [loading, setLoading] = useState(true);
+    const [categoires, setCategoires] = useState([]);
 
 
 
@@ -33,6 +34,22 @@ export const AllBookReviews = ({likes, comments}) => {
                 setLoadingError(err.message);
                 console.log(err);
             })
+
+        fetch('/api/home/categories-top', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setCategoires(data)
+                console.log(data)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
     }, [])
 
 
@@ -42,9 +59,19 @@ export const AllBookReviews = ({likes, comments}) => {
 
     return (
         <>
-
             <section className={`reviews-grid`}>
                 <h2>All reviews</h2>
+
+
+                <div className="category-box">
+
+                    {categoires.length > 0 && (
+                        categoires.map((category) => (
+                            <button key={category.id}>{category.category}</button>
+                        ))
+                    )}
+
+                </div>
 
                 <div className={`reviews-container ${loading ? "loading" : ""}`}>
                     {bookReviews.length > 0 ? (

@@ -1,7 +1,32 @@
 import {ImageComponent} from "../ImageComponent.jsx";
+import {useEffect, useState} from "react";
 
 
-export const BookCard = ({review, comments, likes, inspectReview}) => {
+export const BookCard = ({review, comments, likes, inspectReview, categories = []}) => {
+
+    const [testCategory, setTestCategory] = useState([]);
+
+
+    useEffect(() => {
+
+
+        fetch(`/api/home/categories/books/${review.Book.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setTestCategory(data)
+                console.log(data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+
+    }, [])
 
 
     return (
@@ -51,6 +76,16 @@ export const BookCard = ({review, comments, likes, inspectReview}) => {
                     <h3>{review.Book.Author.name}</h3>
                     <p className="book-description">{review.Book.about}</p>
                 </div>
+
+
+                <div className="book-card-footer">
+                    {testCategory.length > 0 && (
+                        testCategory.map((item, index) => (
+                            <p key={index}>{item.category.category}</p>
+                        ))
+                    )}
+                </div>
+
             </div>
         </article>
     )

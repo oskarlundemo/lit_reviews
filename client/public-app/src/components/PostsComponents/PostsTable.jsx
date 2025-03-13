@@ -79,7 +79,11 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
 
                     </tbody>
         </table>
-            <PageSelector numberOfPages={numberOfPages} pageComments={pagePosts} setComments={setPosts}/>
+
+            {numberOfPages > 1 && (
+                <PageSelector numberOfPages={numberOfPages} pageComments={pagePosts} setComments={setPosts}/>
+
+            )}
         </div>
     )
 }

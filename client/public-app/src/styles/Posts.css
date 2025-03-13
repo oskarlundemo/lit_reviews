@@ -31,6 +31,10 @@ body {
 }
 
 
+.table-container {
+    padding: 1rem;
+}
+
 .search-result {
     box-shadow: var(--box-shadow);
     border-radius: 10px;

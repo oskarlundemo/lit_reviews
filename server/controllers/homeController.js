@@ -278,6 +278,45 @@ export const getAllLikes = async (req, res) => {
 
 
 
+
+
+export const getTopCategories = async (req, res) => {
+    try {
+
+        const topFiveCategories = await prisma.category.findMany({})
+        res.status(200).json(topFiveCategories);
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+
+export const getBookCategories = async (req, res) => {
+    try {
+        const bookCategories = await prisma.bookCategory.findMany({
+            include: {
+                category: true, // Only include the Category data
+            },
+            where: {
+                book_id: parseInt(req.params.id),
+            }
+        });
+        console.log(bookCategories);
+        res.status(200).json(bookCategories); // Return only the BookCategory with the associated Category data
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+
+
+
+
 /**
  * 1. This function retrieves all the likes associated to a specific book review
  *

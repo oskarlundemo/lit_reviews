@@ -6,7 +6,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {ImageComponent} from "../ImageComponent.jsx";
 import {BookCard} from "./BookCard.jsx";
 
-export const LatestReviews = ({comments, likes}) => {
+export const LatestReviews = ({comments, categories, likes}) => {
 
     const [reviews, setReviews] = useState([]);
     const location = useLocation();
@@ -35,11 +35,9 @@ export const LatestReviews = ({comments, likes}) => {
                 {reviews.length > 0 ? (
                     reviews.map((review) => (
                         <BookCard
-                        key={review.id}
-                        review={review}
-                        likes={likes}
-                        inspectReview={inspectReview}
-                        comments={comments}/>
+                            categories={review.category} key={review.id}
+                            review={review} likes={likes} inspectReview={inspectReview}
+                            comments={comments}/>
                     ))
                 ) : null}
             </div>

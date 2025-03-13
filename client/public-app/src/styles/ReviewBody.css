@@ -8,7 +8,7 @@
     padding: 2rem;
 
     h1 {
-        border-bottom: 2px solid var(--accent-color);
+        border-bottom: 2px solid var(--secondary-color);
         font-family: "Playfair Display", serif;
         font-optical-sizing: auto;
         font-weight: 400;

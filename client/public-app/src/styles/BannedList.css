@@ -9,7 +9,8 @@
     width: 100%;
 
     h2 {
-        border-bottom: 2px solid var(--accent-color);
+        border-bottom: 2px solid var(--secondary-color);
+        margin: 1rem;
     }
 
     ul {
@@ -45,7 +46,6 @@
     border-radius: 10px;
     padding: 0.5rem 1rem;
     transition: 200ms ease-in-out;
-    border: 0.5px solid var(--text-color);
 
     span {
         text-decoration: underline;
@@ -55,6 +55,7 @@
 .banned-card:hover {
     cursor: pointer;
     scale: 1.01;
+    box-shadow: var(--box-shadow);
 }
 
 .no-banned {

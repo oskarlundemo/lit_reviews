@@ -83,6 +83,13 @@
 }
 
 
+.category-box {
+    display: flex;
+    margin: 1rem 0;
+    gap: 1rem;
+}
+
+
 .loading-reviews  {
 
     height: 400px;
