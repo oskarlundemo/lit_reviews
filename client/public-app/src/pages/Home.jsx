@@ -11,6 +11,7 @@ export default function Home  () {
 
     const [likes, setLikes] = useState([]);
     const [comments, setComments] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetch('/api/home/likes/all', {
@@ -37,14 +38,15 @@ export default function Home  () {
             .catch((err) => {
                 console.log(err)
             })
+
     }, [])
 
 
     return (
         <main className="home-container">
             <AboutSection/>
-            <LatestReviews comments={comments} likes={likes} />
-            <AllBookReviews comments={comments} likes={likes}/>
+            <LatestReviews categories={categories} comments={comments} likes={likes} />
+            <AllBookReviews categories={categories} comments={comments} likes={likes}/>
             <Footer/>
         </main>
     )

@@ -2,16 +2,11 @@
 
 .about-section {
     background-color: var(--secondary-color);
-    padding: 3rem 4rem;
-
+    padding: 2rem 4rem;
     display: flex;
     gap: 1rem;
-    justify-content: space-between;
     position: relative;
-
-    > div {
-        width: 50%;
-    }
+    justify-content: center;
 
     color: hsl(0, 0%, 100%) !important;
 
@@ -19,6 +14,10 @@
         fill: hsl(0, 0%, 100%) !important;
     }
 }
+
+
+
+
 
 .about-section::before {
     content: '';
@@ -30,17 +29,81 @@
     background-image: url('../../public/images/books.jpg');
     background-size: cover;
     background-position: center;
-    filter: blur(3px);
-    z-index: 1;
+    filter: blur(2px);
+    z-index: 0;
 }
 
 .left-container {
+    width: 50%;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+
     align-items: center;
     justify-content: center;
     text-align: left;
+    grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+    gap: 1rem;
+    place-items: center; /* Centers items inside the grid */
+
+}
+
+
+
+.bento-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    height: 350px;
+    max-width: 1200px;
+}
+
+.bento-text-container {
+    grid-area: 1 / 1 / 2 / 3;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        padding: 0 1rem;
+    }
+
+}
+
+.box-one,
+.box-two {
+    background-color: var(--secondary-color);
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.widget {
+    position: relative;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 15px;
+    backdrop-filter: blur(4px);
+}
+
+
+.left-container {
+    overflow: hidden;
+
+    p {
+        font-size: clamp(0.75rem, 1.2vw, 1rem); /* Keeps text small and readable */
+        line-height: 1.5; /* Improves readability */
+        margin: 0.5rem 0; /* Adds spacing */
+
+    }
 }
 
 .left-container h2 {
@@ -48,7 +111,7 @@
     text-align: left;
     width: 100%;
     text-wrap: nowrap;
-    font-size: clamp(1.4rem, 5vw, 5rem);
+    font-size: clamp(1.4rem, 3vw, 3rem);
 }
 
 .left-container h2 span {
@@ -60,10 +123,9 @@
 }
 
 .divider-stretch {
-    width: 100%;
     height: 1px;
     background-color: hsl(0, 0%, 100%);
-    margin: 10px 0;
+    margin: 10px 1rem;
 }
 
 .right-container {
@@ -73,13 +135,10 @@
     align-items: center;
     z-index: 1;
     position: relative;
+    width: 50%;
 }
 
-.right-container img {
-    object-fit: cover;
-    width: 100%;
-    height: 80%;
-}
+
 
 
 @media screen and (max-width: 800px) {
@@ -87,8 +146,16 @@
         display: none !important;
     }
 
+    .bento-container {
+        display: flex;
+        height: fit-content;
+        width: 70%;
+    }
+
     .left-container {
         width: 100% !important;
+        align-self: center;
+        display: flex;
 
         h2 {
             text-align: center;
@@ -99,6 +166,13 @@
             }
         }
     }
+
+
+    .box-one,
+    .box-two {
+        display: none;
+    }
+
 
     .about-section {
         justify-content: center;
