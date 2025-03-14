@@ -2,7 +2,7 @@
 
 .about-section {
     background-color: var(--secondary-color);
-    padding: 2rem 4rem;
+    padding: 2rem 0;
     display: flex;
     gap: 1rem;
     position: relative;

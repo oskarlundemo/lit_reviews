@@ -25,7 +25,7 @@ export const WriteBookReview = () => {
     const navigate = useNavigate();
     const [publish, setPublished] = useState(true);
     const [thumbnail, setThumbnail] = useState(null);
-    const [bookCategories, setbookCategories] = useState([]);
+    const [bookCategories, setBookCategories] = useState([]);
     const [category, setCategory] = useState('');
 
 
@@ -33,9 +33,6 @@ export const WriteBookReview = () => {
 
     const location = useLocation();
     const {post} = location.state || {}
-
-
-    console.log(post);
 
     const [formData, setFormData] = useState({
         bookTitle: post?.Book.title || '',
@@ -57,10 +54,9 @@ export const WriteBookReview = () => {
     });
 
 
-
     useEffect(() => {
         if (post) {
-            setbookCategories(post.Book.BookCategory.map(c => c.category.category));
+            setBookCategories(post.Book.BookCategory.map(c => c.category.category));
             setEditorContent(formData.body);
         }
     }, [post]);
@@ -75,7 +71,11 @@ export const WriteBookReview = () => {
         if (e.key === "Enter") {
             e.preventDefault();
             if (category.trim() !== "" && bookCategories.length < 5) {
-                setbookCategories(prev => [...prev, category.trim()]);
+
+                setBookCategories(prev => [
+                    ...prev,
+                    category.trim().toLowerCase().replace(/^\w/, (c) => c.toUpperCase())
+                    ]);
                 setCategory("");
             }
         }
@@ -88,6 +88,9 @@ export const WriteBookReview = () => {
             body: content
         }));
     };
+
+
+
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -117,13 +120,16 @@ export const WriteBookReview = () => {
 
     const validateForm = () => {
         const { bookTitle, bookAuthor, bookPages, body, thumbnail, reviewTitle } = formData;
+
+        const updatedPost = post?.reviewId;
+        const isThumbnailValid = updatedPost ? true : (thumbnail && thumbnail.size > 0);
+
         return (
             bookTitle &&
             bookAuthor &&
             reviewTitle &&
             bookPages > 0 &&
-            thumbnail &&
-            thumbnail.size > 0 &&
+            isThumbnailValid &&
             body
         );
     };
@@ -135,23 +141,24 @@ export const WriteBookReview = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formPayload = new FormData();
-        formPayload.append('bookTitle', formData.bookTitle);
-        formPayload.append('bookAuthor', formData.bookAuthor);
-        formPayload.append('bookPages', formData.bookPages);
-        formPayload.append('bookAbout', formData.bookAbout);
-        formPayload.append('publish', formData.publish);
-        formPayload.append('quote', formData.quote);
-        formPayload.append('reviewTitle', formData.reviewTitle);
-        formPayload.append('body', formData.body);
-        formPayload.append('thumbnail', thumbnail);
-        formPayload.append('categories', JSON.stringify(bookCategories));
+        const formPayload = {
+            bookTitle: formData.bookTitle,
+            bookAuthor: formData.bookAuthor,
+            bookPages: formData.bookPages,
+            bookAbout: formData.bookAbout,
+            publish: formData.publish,
+            quote: formData.quote,
+            reviewTitle: formData.reviewTitle,
+            body: formData.body,
+            categories: bookCategories,
+        };
+
 
 
         if (formData.reviewId) {
-            formPayload.append('reviewId', formData.reviewId);
-            formPayload.append('authorId', formData.authorId);
-            formPayload.append('bookId', formData.bookId);
+            formPayload.reviewId = formData.reviewId;
+            formPayload.authorId = formData.authorId;
+            formPayload.bookId = formData.bookId;
         }
 
         try {
@@ -159,9 +166,10 @@ export const WriteBookReview = () => {
             const response = await fetch('/api/book-review', {
                 method: 'POST',
                 headers: {
-                    'Authorization': token ? `Bearer ${token}` : ''
+                    'Authorization': token ? `Bearer ${token}` : '',
+                    'Content-Type': 'application/json',
                 },
-                body: formPayload
+                body: JSON.stringify(formPayload)
             });
 
             const result = await response.json()
@@ -236,11 +244,16 @@ export const WriteBookReview = () => {
                             />
 
 
-                            <CategoryInput category={category} handleTextChange={handleTextChange} handleKeyDown={handleKeyDown} />
+                            <CategoryInput category={category}
+                                           handleTextChange={handleTextChange}
+                                           handleKeyDown={handleKeyDown}
+                                           errors={errors}
+                                           name='categories'
+                            />
 
                             <CategoryContainer
                                 categories={bookCategories}
-                                setCategories={setbookCategories}
+                                setCategories={setBookCategories}
                             />
 
                         </div>
@@ -257,8 +270,6 @@ export const WriteBookReview = () => {
                                 example="My review of Oscar Wilde´s Dorian Grey"
                                 errors={errors}
                             />
-
-
 
 
                             <TextAreaComponent
@@ -295,7 +306,7 @@ export const WriteBookReview = () => {
 
                         </div>
 
-                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Submit</button>                    </div>
+                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" >Submit</button>                    </div>
                 </form>
         </main>
     )

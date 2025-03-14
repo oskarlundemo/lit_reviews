@@ -14,9 +14,6 @@
 
 
 
-
-
-
 import {prisma} from '../prisma/index.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

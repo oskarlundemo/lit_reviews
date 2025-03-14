@@ -57,8 +57,10 @@ export const QuoteSlider = ({slides}) => {
             setIsAnimating(true);
             setCurrentIndex((prevIndex) => (prevIndex + 1) % quotes.length);
         }, 6000);
+
         return () => clearInterval(interval);
-    }, [quotes]);
+    }, [currentIndex, quotes]);
+
 
 
 
