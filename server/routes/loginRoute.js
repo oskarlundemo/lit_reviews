@@ -4,7 +4,7 @@
 import {Router} from "express";
 
 
-import {getReviews} from "../controllers/postController.js";
+import {getAllReviews} from "../controllers/postController.js";
 import {login} from "../controllers/loginController.js";
 const loginRoute = new Router();
 
@@ -24,7 +24,9 @@ export const validateLoginInfo = [
         .withMessage('Invalid username or password'),
 ];
 
-loginRoute.get('/',getReviews)
+loginRoute.get('/',getAllReviews)
+
+
 loginRoute.post('/', validateLoginInfo, (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

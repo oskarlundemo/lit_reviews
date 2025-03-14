@@ -8,6 +8,7 @@
     "start": "node server",
     "dev": "nodemon server"
   },
+  "start ": "env-cmd -f ./config/dev.env node scripts/dev-run.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "cors": "^2.8.5",
     "dompurify": "^3.2.4",
     "dotenv": "^16.4.7",
+    "env-cmd": "^10.1.0",
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
     "jsdom": "^26.0.0",

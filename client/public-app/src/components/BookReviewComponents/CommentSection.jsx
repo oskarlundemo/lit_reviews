@@ -67,6 +67,7 @@ export const CommentSection = () => {
             .then(data => {
                 setComments(data);
                 setErrorShake(false);
+                console.log(user);
             })
             .catch(err => console.log(err));
 
@@ -78,7 +79,10 @@ export const CommentSection = () => {
             }
         })
             .then(res => res.json())
-            .then(data => setBannedUsers(data))
+            .then(data => {
+                setBannedUsers(data)
+                console.log(data)
+            })
             .catch(err => console.log(err))
 
     }, []);
@@ -153,7 +157,6 @@ export const CommentSection = () => {
             <div className="comment-section-comments">
                 {comments.length > 0 ? (
                     <>
-
                         <div className="comments-container">
                         {comments.length < 5 ? (
                             comments.map((comment) => (
@@ -174,9 +177,8 @@ export const CommentSection = () => {
             </div>
 
 
-
             {user ? (
-                bannedUsers && bannedUsers.some((user) => user.id === user.id) ? (
+                bannedUsers && bannedUsers.some((bannedUser) => bannedUser.user_id === user.id) ? (
                     <div className="banned-input">
                         <form className="banned-form">
                             <input

@@ -1,8 +1,14 @@
+import {useEffect, useState} from "react";
 
 
+export const CategoryInput = ({errors, handleTextChange, handleKeyDown, category, name}) => {
 
-export const CategoryInput = ({handleTextChange, handleKeyDown, category}) => {
+    const [errorMessage, setErrorMessage] = useState('');
 
+    useEffect(() => {
+        const error = errors.find(error => error.path === name);
+        setErrorMessage(error ? error.msg : '');
+    }, [errors, name]);
 
     return (
         <>
@@ -20,6 +26,11 @@ export const CategoryInput = ({handleTextChange, handleKeyDown, category}) => {
                 />
             </div>
         </fieldset>
+
+            {errors && (
+                <p className="error-msg">{errorMessage}</p>
+            )}
+
             <p>Press enter to apply the category, you can add up to five categories per book!</p>
         </>
     )

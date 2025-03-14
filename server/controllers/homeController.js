@@ -277,6 +277,14 @@ export const getAllLikes = async (req, res) => {
 }
 
 
+/**
+ * 1. This function is used for retrieve the top categories on the book reviews
+ *
+ * 2. The function requires a 'GET' request in the Home.jsx page
+ *
+ * 3. 201: Top five categories are sent to the front end
+ *    401: Error retrieving the top categories
+ */
 
 
 
@@ -286,11 +294,24 @@ export const getTopCategories = async (req, res) => {
         const topFiveCategories = await prisma.category.findMany({})
         res.status(200).json(topFiveCategories);
 
+        // Take: 5 else take all
+
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err.message });
     }
 }
+
+
+/**
+ * 1. This function is used to retrieve all categories on for book reviews
+ *
+ * 2. The function requires a 'GET' request in the Home.jsx page
+ *
+ * 3. 201: All categories are sent to the front end
+ *    401: Error retrieving the top categories
+ */
+
 
 
 
@@ -311,9 +332,6 @@ export const getBookCategories = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
-
-
-
 
 
 

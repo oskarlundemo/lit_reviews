@@ -8,8 +8,6 @@ const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window);
 
 
-
-
 import { body } from 'express-validator';
 import {deleteImageFromDb, saveFile} from "./supabaseController.js";
 
@@ -17,9 +15,11 @@ export const validateBookReview = [
     body('bookTitle')
         .trim()
         .isLength({ min: 1, max: 50})
+        .escape()
         .withMessage('Please enter a title for the book'),
     body('bookAuthor')
         .trim()
+        .escape()
         .isLength({ min: 1, max: 50})
         .withMessage('Please enter an author'),
     body('bookAbout')
@@ -29,6 +29,7 @@ export const validateBookReview = [
     body('bookPages')
         .trim()
         .isInt()
+        .isLength({ min: 1, max: 10 })
         .withMessage('Please enter the number of book pages'),
     body('quote')
         .trim()
@@ -38,14 +39,28 @@ export const validateBookReview = [
         .trim()
         .isLength({ min: 1, max: 150})
         .withMessage('Please enter a review title'),
+    body('categories').custom((value, { req }) => {
+        if (value.length === 0) {
+            throw new Error('Categories is required');
+        } else if (value.length > 5) {
+            throw new Error('You can only provide up to five categories');
+        }
+        return true;
+    }),
+
     body('body')
         .trim()
         .isLength({min: 1})
         .withMessage('You must write something in your review'),
     body('thumbnail').custom((value, { req }) => {
-        if (!req.file) {
-            throw new Error('Thumbnail is required');
+        // Check if it's a new post by looking for reviewId or bookId
+        const isNewPost = !req.body.reviewId && !req.body.bookId;
+
+        // If it's a new post and no file is provided, throw an error
+        if (isNewPost && !req.file) {
+            throw new Error('Thumbnail is required for new posts');
         }
+
         return true;
     })
 ];
@@ -54,6 +69,13 @@ export const validateBookReview = [
 
 export const updatedThumbnail = async (reviewId, req, res) => {
     try {
+
+
+        if (!req.file) {
+            return { message: 'No thumbnail provided, no changes made' };
+        }
+
+
         const reviewHasSameThumbnail = await prisma.review.findUnique({
             where: {
                 id: reviewId,
@@ -92,9 +114,19 @@ export const updatedThumbnail = async (reviewId, req, res) => {
 }
 
 
+const safeParse = (data) => {
+    try {
+        return data ? JSON.parse(data) : null;
+    } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return null;  // or some fallback
+    }
+};
+
+
 export const updateCategories = async (req, res) => {
     try {
-        const categories = JSON.parse(req.body.categories);  // Get categories from request
+        const categories = safeParse(req.body.categories);
 
         const book = await prisma.book.findUnique({
             where: {
@@ -254,7 +286,7 @@ export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 export const addCategories = async (book,req, res) => {
 
     try {
-        const categories = JSON.parse(req.body.categories);
+        const categories = safeParse(req.body.categories);
         for (const category of categories) {
 
             let newCategory;

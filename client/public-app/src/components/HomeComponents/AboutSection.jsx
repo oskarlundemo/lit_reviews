@@ -2,7 +2,7 @@
 
 import '../../styles/AboutSection.css';
 import {QuoteSlider} from "./QuoteSlider.jsx";
-import {Widget} from "../Widget.jsx";
+import {Widget} from "./Widget.jsx";
 
 export const AboutSection = () => {
 
