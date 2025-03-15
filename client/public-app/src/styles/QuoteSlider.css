@@ -98,6 +98,11 @@
     animation: fade-in 2s ease-in-out, fade-out 2s ease-in-out 4s;
 }
 
+
+.active-quote-container {
+    transition: 200ms ease-in-out;
+}
+
 .active-quote-container:hover {
     cursor: pointer;
     color: var(--accent-color);

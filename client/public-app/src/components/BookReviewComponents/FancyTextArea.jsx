@@ -24,9 +24,8 @@ export const FancyTextArea = ({errors, name, editorContent, handleEditorChange})
                 plugins: 'link image code',
                 toolbar: 'undo redo | formatselect | bold italic | link image | code',
                 content_style: `
-                                     body {    background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--background-color')};
-                                               color: ${getComputedStyle(document.documentElement).getPropertyValue('--text-color')};
-            }`
+                                body {background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--background-color')};   
+                                     color: ${getComputedStyle(document.documentElement).getPropertyValue('--text-color')}; }`
             }}
             onEditorChange={handleEditorChange}
         />

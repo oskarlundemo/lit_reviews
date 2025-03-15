@@ -114,19 +114,11 @@ export const updatedThumbnail = async (reviewId, req, res) => {
 }
 
 
-const safeParse = (data) => {
-    try {
-        return data ? JSON.parse(data) : null;
-    } catch (error) {
-        console.error("Error parsing JSON:", error);
-        return null;  // or some fallback
-    }
-};
-
 
 export const updateCategories = async (req, res) => {
     try {
-        const categories = safeParse(req.body.categories);
+
+        const categories = req.body.categories;
 
         const book = await prisma.book.findUnique({
             where: {
@@ -232,14 +224,14 @@ export const updateCategories = async (req, res) => {
 export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 
     try {
-        const published = req.body.publish === 'true';
-
         const {bookAuthor, body,
             bookTitle, bookPages,
             quote, reviewTitle,
-            bookAbout, bookId, authorId
+            bookAbout, bookId,
+            publish, authorId
         } = req.body;
 
+        console.log(req.body);
         await updatedThumbnail(reviewId, req, res);
 
         await prisma.author.update({
@@ -266,13 +258,12 @@ export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
                 id: reviewId,
             },
             data: {
-                favouriteQuoute: quote,
+                favoriteQuote: quote,
                 body: body,
                 title: reviewTitle,
-                published: published,
+                published: publish,
             }
         })
-
         await updateCategories(req, res);
         res.status(201).json({message: 'Review updated'});
     } catch (error) {
@@ -286,9 +277,8 @@ export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 export const addCategories = async (book,req, res) => {
 
     try {
-        const categories = safeParse(req.body.categories);
+        const categories = req.body.categories;
         for (const category of categories) {
-
             let newCategory;
 
             const categoryExists = await prisma.category.findFirst({
@@ -333,14 +323,12 @@ export const addCategories = async (book,req, res) => {
 
 export const createNewBookReview = async (user_id, req, res) => {
 
-
     try {
-        const published = req.body.publish === 'true';
         const {
             bookAuthor, body,
             bookTitle, bookPages,
             quote, reviewTitle,
-            bookAbout,
+            bookAbout, published
         } = req.body;
 
         let author = await prisma.author.findFirst({
@@ -385,7 +373,7 @@ export const createNewBookReview = async (user_id, req, res) => {
                 published: published,
                 title: reviewTitle,
                 body: DOMPurify.sanitize(body),
-                favouriteQuoute: quote,
+                favoriteQuote: quote,
                 book_id: book.id,
                 user_id: user_id,
                 thumbnail: req.file.originalname
@@ -408,11 +396,13 @@ export const configureBookReview = async (req, res) => {
     const {reviewId} = req.body;
 
     try {
-        if (reviewId) {
-            await updatePreviousBookReview(parseInt(id), parseInt(reviewId), req, res);
-        } else {
-            await createNewBookReview(id, req, res);
-        }
+        const result = await prisma.$transaction(async (prisma) => {
+            if (reviewId) {
+                return await updatePreviousBookReview(parseInt(id), parseInt(reviewId), req, res);
+            } else {
+                return await createNewBookReview(id, req, res);
+            }
+        });
     } catch (err) {
         console.error(err);
         res.status(400).json({message: err.message});

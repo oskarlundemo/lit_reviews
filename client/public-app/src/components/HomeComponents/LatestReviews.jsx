@@ -35,7 +35,7 @@ export const LatestReviews = ({comments, categories, likes}) => {
                 {reviews.length > 0 ? (
                     reviews.map((review) => (
                         <BookCard
-                            categories={review.category} key={review.id}
+                            categories={categories} key={review.id}
                             review={review} likes={likes} inspectReview={inspectReview}
                             comments={comments}/>
                     ))

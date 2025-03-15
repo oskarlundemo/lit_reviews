@@ -26,7 +26,7 @@ export const AboutSection = () => {
 
 
                 <Widget  text="Reviews 📚" count={10} box="box-one"/>
-                <Widget text="Categoires 🗄️" count={10} box='box-two'/>
+                <Widget text="Categories 🗄️" count={10} box='box-two'/>
 
             </div>
 

@@ -23,7 +23,6 @@ export const Header = () => {
         if (isDarkMode) {
             document.querySelector('.App').classList.add("dark");
         } else {
-            document.querySelector('.App').classList.remove("dark");
             document.querySelector('.App').classList.add("light");
         }
     }, []);
@@ -31,9 +30,10 @@ export const Header = () => {
     useEffect(() => {
         if (darkMode) {
             document.querySelector('.App').classList.add("dark");
+            document.querySelector('.App').classList.remove('light');
             localStorage.setItem("theme", "dark");
         } else {
-            document.querySelector('.App').classList.remove("dark");
+            document.querySelector('.App').classList.remove('dark');
             document.querySelector('.App').classList.add("light");
             localStorage.setItem("theme", "light");
         }

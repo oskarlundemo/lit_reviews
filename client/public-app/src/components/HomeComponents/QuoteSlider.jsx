@@ -86,7 +86,7 @@ export const QuoteSlider = ({slides}) => {
                             onAnimationEnd={handleAnimationEnd}
 
                         >
-                            <h2>"{quotes[currentIndex].favouriteQuoute}"</h2>
+                            <h2>"{quotes[currentIndex].favoriteQuote}"</h2>
                             <p>- <span>{quotes[currentIndex].Book.title}</span> {quotes[currentIndex].Book.Author.name}</p>
                         </div>
                     ) : (

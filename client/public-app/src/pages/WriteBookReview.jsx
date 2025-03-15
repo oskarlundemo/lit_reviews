@@ -40,8 +40,8 @@ export const WriteBookReview = () => {
         bookPages: post?.Book.pages || '',
         bookAbout: post?.Book.about || '',
 
-        publish: publish,
-        quote: post?.favouriteQuoute || '',
+        publish: post?.publish || publish,
+        quote: post?.favoriteQuote || '',
         reviewTitle: post?.title || '',
         body: post?.body || editorContent,
 
@@ -108,6 +108,8 @@ export const WriteBookReview = () => {
             ...prevData,
             publish: newPublishState
         }));
+
+        console.log(newPublishState);
     };
 
     const handleInputChange = (e) => {
@@ -152,8 +154,6 @@ export const WriteBookReview = () => {
             body: formData.body,
             categories: bookCategories,
         };
-
-
 
         if (formData.reviewId) {
             formPayload.reviewId = formData.reviewId;

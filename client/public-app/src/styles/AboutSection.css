@@ -43,7 +43,7 @@
     text-align: left;
     grid-template: repeat(2, 1fr) / repeat(2, 1fr);
     gap: 1rem;
-    place-items: center; /* Centers items inside the grid */
+    place-items: center;
 
 }
 
@@ -81,6 +81,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+
+    h3 {
+        margin: 0;
+        font-size: 2rem;
+    }
 }
 
 

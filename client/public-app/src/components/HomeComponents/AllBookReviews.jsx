@@ -1,21 +1,16 @@
-import {useEffect, useState} from "react";
-
-
+import { useEffect, useState } from "react";
 import '../../styles/AllBookReviews.css'
-import {useNavigate} from "react-router-dom";
-import {BookCard} from "./BookCard.jsx";
+import { useNavigate } from "react-router-dom";
+import { BookCard } from "./BookCard.jsx";
+import { CategoryBox } from "./CategoryBox.jsx";
 
-export const AllBookReviews = ({likes, comments}) => {
-
-
-    const [bookReviews, setBookReviews] = useState([]);
+export const AllBookReviews = ({ likes, comments, categories }) => {
+    const [bookReviews, setBookReviews] = useState([]); // Holds the original reviews
+    const [filteredReviews, setFilteredReviews] = useState([]); // Holds the filtered reviews
     const navigate = useNavigate();
     const [loadingError, setLoadingError] = useState('');
     const [displayedReviews, setDisplayedReviews] = useState(4);
     const [loading, setLoading] = useState(true);
-    const [categoires, setCategoires] = useState([]);
-
-
 
     useEffect(() => {
         fetch('/api/home/reviews/all', {
@@ -26,7 +21,8 @@ export const AllBookReviews = ({likes, comments}) => {
         })
             .then(res => res.json())
             .then((data) => {
-                setBookReviews(data)
+                setBookReviews(data)  // Set all reviews once they are fetched
+                setFilteredReviews(data)  // Initialize filteredReviews with all reviews
                 setLoading(false)
             })
             .catch((err) => {
@@ -34,72 +30,49 @@ export const AllBookReviews = ({likes, comments}) => {
                 setLoadingError(err.message);
                 console.log(err);
             })
-
-        fetch('/api/home/categories-top', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(res => res.json())
-            .then((data) => {
-                setCategoires(data)
-                console.log(data)
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-
     }, [])
-
 
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }
+
+    const handleFilter = (filtered) => {
+        setFilteredReviews(filtered);
+    };
+
 
     return (
         <>
             <section className={`reviews-grid`}>
                 <h2>All reviews</h2>
 
-
-                <div className="category-box">
-
-                    {categoires.length > 0 && (
-                        categoires.map((category) => (
-                            <button key={category.id}>{category.category}</button>
-                        ))
-                    )}
-
-                </div>
+                <CategoryBox setReviews={handleFilter} allReviews={bookReviews} />
 
                 <div className={`reviews-container ${loading ? "loading" : ""}`}>
-                    {bookReviews.length > 0 ? (
+                    {filteredReviews.length > 0 ? (
                         <>
-                            {bookReviews.slice(0, displayedReviews).map((review) => (
+                            {filteredReviews.slice(0, displayedReviews).map((review) => (
                                 <BookCard
                                     key={review.id}
                                     review={review}
                                     comments={comments}
                                     likes={likes}
                                     inspectReview={inspectReview}
+                                    categories={categories}
                                 />
                             ))}
-
                         </>
                     ) : (
-                        <div className="loading-reviews"></div>
+                        <div className="loading-reviews">No reviews to display</div>
                     )}
                 </div>
 
-                {bookReviews.length > displayedReviews && (
+                {filteredReviews.length > displayedReviews && (
                     <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
                         Load More
                     </button>
                 )}
             </section>
-
         </>
     )
-
 }
