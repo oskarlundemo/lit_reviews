@@ -58,6 +58,12 @@ textarea {
     outline: none;
     width: 100%;
     color: inherit;
+    font-size: inherit;
+}
+
+
+textarea:first-of-type {
+    height: 10rem;
 }
 
 
@@ -123,6 +129,17 @@ input[type="file"]::file-selector-button:hover {
     display: flex;
     justify-content: space-around;
     gap: 2rem;
+    align-items: center;
+
+    > div {
+        display: flex;
+        align-content: center;
+        gap: 0.5rem;
+
+        input {
+            margin: 0;
+        }
+    }
 }
 
 

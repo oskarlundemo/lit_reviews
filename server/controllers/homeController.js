@@ -32,15 +32,20 @@ import {jwtDecode} from "jwt-decode";
 export const getAllBookReviews = async (req, res) => {
     try {
         // Get all the reviews from the review table
-        const reviews = await prisma.review.findMany({
+       const reviews = await prisma.review.findMany({
             // Get the book the review is about
             include: {
                 Book: {
                     // Include also the author of the book
                     include: {
-                        Author: true
-                    }
+                        Author: true,
+                        BookCategory: true,
+                    },
                 }
+            },
+
+            where: {
+                published: true,
             },
 
             // Order them by their created/posted data ascending
@@ -287,20 +292,55 @@ export const getAllLikes = async (req, res) => {
  */
 
 
+const postLikes = await prisma.like.groupBy({
+    by: ['post_id'],
+    _count: {
+        user_id: true
+    },
+
+    // Order the result by the most liked posts descending
+    orderBy: {
+        _count: {
+            user_id: 'desc'
+
+        }
+    },
+
+    // Only retrieve the three most liked reviews
+    take: 3,
+});
 
 export const getTopCategories = async (req, res) => {
     try {
+        // Group the BookCategory records by category_id and count the number of books per category
+        const groupedCategories = await prisma.bookCategory.groupBy({
+            by: ['category_id'],
+            _count: { book_id: true },
+            orderBy: { _count: { book_id: 'desc' } },
+            take: 5,
+        });
 
-        const topFiveCategories = await prisma.category.findMany({})
-        res.status(200).json(topFiveCategories);
+        const results = await Promise.all(
+            groupedCategories.map(async (group) => {
+                const categoryDetails = await prisma.category.findUnique({
+                    where: { id: group.category_id },
+                });
+                return {
+                    id: group.category_id,
+                    category: categoryDetails.category,
+                    count: group._count.book_id,
+                };
+            })
+        );
 
-        // Take: 5 else take all
+        res.status(200).json(results);
 
     } catch (err) {
         console.error(err);
         res.status(400).json({ error: err.message });
     }
-}
+};
+
 
 
 /**
@@ -319,13 +359,9 @@ export const getBookCategories = async (req, res) => {
     try {
         const bookCategories = await prisma.bookCategory.findMany({
             include: {
-                category: true, // Only include the Category data
-            },
-            where: {
-                book_id: parseInt(req.params.id),
+                category: true,
             }
         });
-        console.log(bookCategories);
         res.status(200).json(bookCategories); // Return only the BookCategory with the associated Category data
     } catch (err) {
         console.error(err);
@@ -355,7 +391,6 @@ export const getReviewLikes = async (req, res) => {
                 post_id: parseInt(req.params.postid),
             }
         });
-
         // No likes for the review? 404: Not found, else 201 the list of likes
         res.status(200).json(likes);
     } catch (err) {
@@ -411,7 +446,7 @@ export const getTopThreeQuotes = async (req, res) => {
 
             // Select only the favorite quote
             select: {
-                favouriteQuoute: true,
+                favoriteQuote: true,
                 id: true,
                 // Include the book
                 Book: {

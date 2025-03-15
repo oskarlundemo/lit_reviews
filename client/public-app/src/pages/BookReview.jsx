@@ -43,7 +43,7 @@ export const BookReview= () => {
         <main className="book-review">
             {review ? (
                 <>
-                    <QouteSection favoriteQoute={review.favouriteQuoute} book={review.Book.title} author={review.Book.Author.name}/>
+                    <QouteSection favoriteQoute={review.favoriteQuote} book={review.Book.title} author={review.Book.Author.name}/>
                     <ReviewBody reviewId={review.id} date={review.created.split('T')[0]} writer={review.User.username} body={review.body} title={review.title}/>
                     <CommentSection/>
                 </>

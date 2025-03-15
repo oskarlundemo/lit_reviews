@@ -17,8 +17,10 @@
     }
 
     p {
-        text-align: right;
+        text-align: center;
         font-size: clamp(0.8rem, 1vw, 1.5rem) !important;
+        width: fit-content;
+        margin: auto;
         span {
             font-style: italic;
         }

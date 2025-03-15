@@ -35,7 +35,7 @@ homeRouter.get('/top-three-quotes', getTopThreeQuotes)
 
 homeRouter.get('/categories-top', getTopCategories)
 
-homeRouter.get('/categories/books/:id', getBookCategories)
+homeRouter.get('/categories/books/', getBookCategories)
 
 
 

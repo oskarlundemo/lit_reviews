@@ -39,6 +39,22 @@ export default function Home  () {
                 console.log(err)
             })
 
+
+        fetch(`/api/home/categories/books/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setCategories(data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+
     }, [])
 
 

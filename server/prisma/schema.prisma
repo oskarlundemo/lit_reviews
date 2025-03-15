@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,18 +8,15 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  email    String @unique
+  id       Int       @id @default(autoincrement())
+  username String    @unique
+  email    String    @unique
   password String
-
-  Comment Comment[]
-  Like    Like[]
-
-  Admin  Admin[]
-  Review Review[]
-
-  Banned Banned[]
+  Admin    Admin[]
+  Banned   Banned?
+  Comment  Comment[]
+  Like     Like[]
+  Review   Review[]
 }
 
 model Admin {
@@ -35,16 +26,14 @@ model Admin {
 }
 
 model Book {
-  id        Int     @id @default(autoincrement())
-  title     String
-  pages     Int
-  author_id Int
-  about     String?
-
-  Author Author   @relation(fields: [author_id], references: [id])
-  Review Review[]
-
+  id           Int            @id @default(autoincrement())
+  title        String
+  pages        Int
+  author_id    Int
+  about        String?
+  Author       Author         @relation(fields: [author_id], references: [id])
   BookCategory BookCategory[]
+  Review       Review[]
 }
 
 model Author {
@@ -54,71 +43,61 @@ model Author {
 }
 
 model Review {
-  id              Int      @id @default(autoincrement())
-  published       Boolean  @default(false)
-  title           String
-  body            String
-  favouriteQuoute String?
-  created         DateTime @default(now())
-  book_id         Int
-  user_id         Int
-  thumbnail       String?
-
-  Book    Book      @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  User    User      @relation(fields: [user_id], references: [id])
-  Comment Comment[]
-  Like    Like[]
+  id            Int       @id @default(autoincrement())
+  published     Boolean   @default(false)
+  title         String
+  body          String
+  created       DateTime  @default(now())
+  book_id       Int
+  favoriteQuote String?
+  user_id       Int
+  thumbnail     String?
+  Comment       Comment[]
+  Like          Like[]
+  Book          Book      @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  User          User      @relation(fields: [user_id], references: [id])
 }
 
 model Comment {
-  id Int @id @default(autoincrement())
-
-  post Review @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user User   @relation(fields: [user_id], references: [id])
-
   post_id Int
   user_id Int
-
-  checked Boolean @default(false)
-
   comment String
   created DateTime @default(now())
+  id      Int      @id @default(autoincrement())
+  checked Boolean  @default(false)
+  post    Review   @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [user_id], references: [id])
 }
 
 model Like {
-  post Review @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user User   @relation(fields: [user_id], references: [id])
-
   post_id Int
   user_id Int
-
   created DateTime @default(now())
+  post    Review   @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user    User     @relation(fields: [user_id], references: [id])
 
   @@id([post_id, user_id])
 }
 
 model BookCategory {
+  book_id     Int
   category_id Int
-  category    Category @relation(fields: [category_id], references: [id])
-
-  book_id Int
-  book    Book @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  book        Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@id([category_id, book_id])
 }
 
 model Category {
-  id       Int    @id @default(autoincrement())
-  category String
-
+  id           Int            @id @default(autoincrement())
+  category     String
   BookCategory BookCategory[]
 }
 
 model Banned {
-  id      Int @default(autoincrement())
-  user_id Int @unique
-
-  user User @relation(fields: [user_id], references: [id])
+  id      Int  @default(autoincrement())
+  user_id Int  @unique
+  user    User @relation(fields: [user_id], references: [id])
 
   @@id([id, user_id])
 }
