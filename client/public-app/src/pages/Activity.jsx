@@ -38,6 +38,7 @@ export const Activity = () => {
     const [pageComments, setPageComments] = useState([[]]);
 
 
+
     const closePopup = () => {
         setShowPopup(false);
         setShowOverlay(false)
@@ -74,17 +75,8 @@ export const Activity = () => {
                 setPageComments(pages);
             })
             .catch(err => console.log(err));
-    }, []);
 
 
-    useEffect(() => {
-        if (pageComments.length > 0) {
-            setComments(pageComments[0]);
-        }
-    }, [pageComments]);
-
-
-    useEffect(() => {
         fetch("/api/activity/", {
             method: "GET",
             headers: {
@@ -94,7 +86,18 @@ export const Activity = () => {
             .then(res => res.json())
             .then(data => setBannedUsers(data))
             .catch(err => console.log(err))
-    }, [])
+
+
+
+
+    }, []);
+
+
+    useEffect(() => {
+        if (pageComments.length > 0) {
+            setComments(pageComments[0]);
+        }
+    }, [pageComments]);
 
 
     const commentsIntoPages = (comments, commentsPerPage = 10) => {
@@ -215,7 +218,6 @@ export const Activity = () => {
                     .then(data => setBannedUsers(data))
                     .catch(err => console.log(err))
             }
-
         } catch (err) {
             console.error(err)
         }

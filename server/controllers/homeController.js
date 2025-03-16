@@ -530,3 +530,78 @@ export const likePost = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
+
+
+/**
+ *
+ *
+ *
+ *
+ */
+
+
+export const getNumberOfReviews = async (req, res) => {
+
+    try {
+
+        const amountOfReviews = await prisma.review.findMany({
+            where: {
+                published: true,
+            }
+        })
+        res.status(200).json(amountOfReviews.length);
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+export const getNumberOfCategories = async (req, res) => {
+
+    try {
+        const numberOfCategories = await prisma.category.findMany({})
+        res.status(200).json(numberOfCategories.length);
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+}
+
+
+
+export const getCategoriesForBook = async (req, res) => {
+
+    try {
+
+        console.log(req.params)
+
+        const review = await prisma.review.findUnique({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            include: {
+                Book: true, // Include the related book
+            },
+        });
+
+
+        const bookCategory = await prisma.bookCategory.findMany({
+            where: {
+                book_id: review.Book.id
+            },
+            include: {
+                category: true,
+            }
+        })
+
+        console.log(bookCategory)
+
+        res.status(200).json(bookCategory);
+
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({ error: err.message });
+    }
+
+}

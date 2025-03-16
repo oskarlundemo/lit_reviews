@@ -12,6 +12,7 @@ export default function Home  () {
     const [likes, setLikes] = useState([]);
     const [comments, setComments] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [numberOfReviews, setNumberOfReviews] = useState(0);
 
     useEffect(() => {
         fetch('/api/home/likes/all', {
@@ -55,14 +56,26 @@ export default function Home  () {
             })
 
 
+        fetch('api/home/reviews/number', {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setNumberOfReviews(data);
+            })
+            .catch(err => console.log(err));
+
     }, [])
 
 
     return (
         <main className="home-container">
-            <AboutSection/>
+            <AboutSection numberOfReviews={numberOfReviews} />
             <LatestReviews categories={categories} comments={comments} likes={likes} />
-            <AllBookReviews categories={categories} comments={comments} likes={likes}/>
+            <AllBookReviews numberOfReviews={numberOfReviews} categories={categories} comments={comments} likes={likes}/>
             <Footer/>
         </main>
     )

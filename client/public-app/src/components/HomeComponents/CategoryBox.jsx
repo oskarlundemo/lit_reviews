@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export const CategoryBox = ({ setReviews, allReviews }) => {
+export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
     const [categories, setCategories] = useState([]);
     const [activeBtn, setActiveBtn] = useState(0);
 
@@ -36,7 +36,7 @@ export const CategoryBox = ({ setReviews, allReviews }) => {
 
     return (
         <div className="category-box">
-            <button className={activeBtn === 0 ? 'active-btn' : ''} onClick={() => showAllReviews()}>All</button>
+            <button className={activeBtn === 0 ? 'active-btn' : ''} onClick={() => showAllReviews()}>All ({numberOfReviews})</button>
             {categories.length > 0 &&
                 categories.map((category, index) => (
                     <button className={activeBtn === index + 1 ? 'active-btn' : ''} onClick={() => filterReviewsByCategory(category.id, index + 1)} key={category.id + 1}>
