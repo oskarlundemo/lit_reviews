@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BookCard } from "./BookCard.jsx";
 import { CategoryBox } from "./CategoryBox.jsx";
 
-export const AllBookReviews = ({ likes, comments, categories }) => {
+export const AllBookReviews = ({ numberOfReviews, likes, comments, categories }) => {
     const [bookReviews, setBookReviews] = useState([]); // Holds the original reviews
     const [filteredReviews, setFilteredReviews] = useState([]); // Holds the filtered reviews
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const AllBookReviews = ({ likes, comments, categories }) => {
             <section className={`reviews-grid`}>
                 <h2>All reviews</h2>
 
-                <CategoryBox setReviews={handleFilter} allReviews={bookReviews} />
+                <CategoryBox numberOfReviews={numberOfReviews} setReviews={handleFilter} allReviews={bookReviews} />
 
                 <div className={`reviews-container ${loading ? "loading" : ""}`}>
                     {filteredReviews.length > 0 ? (

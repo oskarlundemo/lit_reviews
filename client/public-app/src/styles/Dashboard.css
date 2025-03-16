@@ -5,6 +5,8 @@
 
 
 .dashboard {
+    max-width: 1000px;
+    align-self: center;
     display: grid;
     grid-template: 1fr / repeat(3, 1fr);
 
@@ -39,6 +41,7 @@
     a {
         width: 100%;
         color: inherit;
+        padding: 1rem;
     }
 
     h2 {

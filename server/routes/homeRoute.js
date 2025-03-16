@@ -5,8 +5,20 @@ import {Router}  from 'express';
 
 import {getAllComments} from '../controllers/activityController.js'
 import {
-    latestBookReviews, inspectReview, postNewComment, getCommentsForReview, deleteComment, likePost, getReviewLikes,
-    getAllBookReviews, getAllLikes, getTopThreeQuotes, getTopCategories, getBookCategories
+    latestBookReviews,
+    inspectReview,
+    postNewComment,
+    getCommentsForReview,
+    deleteComment,
+    likePost,
+    getReviewLikes,
+    getAllBookReviews,
+    getAllLikes,
+    getTopThreeQuotes,
+    getTopCategories,
+    getBookCategories,
+    getNumberOfReviews,
+    getNumberOfCategories, getCategoriesForBook
 } from "../controllers/homeController.js";
 
 const homeRouter = new Router();
@@ -37,6 +49,11 @@ homeRouter.get('/categories-top', getTopCategories)
 
 homeRouter.get('/categories/books/', getBookCategories)
 
+homeRouter.get('/reviews/number', getNumberOfReviews)
+
+homeRouter.get('/categories/number', getNumberOfCategories)
+
+homeRouter.get('/get-categories/:id', getCategoriesForBook)
 
 
 

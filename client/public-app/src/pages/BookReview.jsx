@@ -23,7 +23,7 @@ export const BookReview= () => {
     /**
      * Fetch the book review from the backend
      */
-
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetch(`/api/home/inspect/${id}`)
@@ -35,6 +35,18 @@ export const BookReview= () => {
             })
             .then(data => setReview(data))
             .catch((err) => console.log(err));
+
+        fetch(`/api/home/get-categories/${id}`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => setCategories(data))
+            .catch((err) => console.log(err));
+
     }, [id])
 
 

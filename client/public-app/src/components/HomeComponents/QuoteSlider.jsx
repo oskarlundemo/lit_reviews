@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 import '../../styles/QuoteSlider.css'
 
-export const QuoteSlider = ({slides}) => {
+export const QuoteSlider = () => {
 
 
     const [quotes, setQuotes] = useState([]);
