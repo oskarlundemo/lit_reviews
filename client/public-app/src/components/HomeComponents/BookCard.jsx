@@ -10,6 +10,7 @@ export const BookCard = ({review, comments, likes, inspectReview, categories = [
             key={review.id}
             onClick={() => inspectReview(review.Book.title, review.id)}>
 
+            <div className="book-review-card-wrapper">
             <div className="book-card-cover">
                 <ImageComponent fileName={review.thumbnail} />
             </div>
@@ -51,6 +52,7 @@ export const BookCard = ({review, comments, likes, inspectReview, categories = [
                     <h3>{review.Book.Author.name}</h3>
                     <p className="book-description">{review.Book.about}</p>
                 </div>
+            </div>
             </div>
 
             <div className="book-card-footer">

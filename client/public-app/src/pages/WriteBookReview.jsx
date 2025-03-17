@@ -143,22 +143,27 @@ export const WriteBookReview = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formPayload = {
-            bookTitle: formData.bookTitle,
-            bookAuthor: formData.bookAuthor,
-            bookPages: formData.bookPages,
-            bookAbout: formData.bookAbout,
-            publish: formData.publish,
-            quote: formData.quote,
-            reviewTitle: formData.reviewTitle,
-            body: formData.body,
-            categories: bookCategories,
-        };
+        const formPayload = new FormData();
+        formPayload.append("bookTitle", formData.bookTitle);
+        formPayload.append("bookAuthor", formData.bookAuthor);
+        formPayload.append("bookPages", formData.bookPages);
+        formPayload.append("bookAbout", formData.bookAbout);
+        formPayload.append("publish", formData.publish);
+        formPayload.append("quote", formData.quote);
+        formPayload.append("reviewTitle", formData.reviewTitle);
+        formPayload.append("body", formData.body);
+        formPayload.append("thumbnail", formData.thumbnail);
+
+
+        bookCategories.forEach((category, index) => {
+            formPayload.append(`categories[${index}]`, category);
+        });
+
 
         if (formData.reviewId) {
-            formPayload.reviewId = formData.reviewId;
-            formPayload.authorId = formData.authorId;
-            formPayload.bookId = formData.bookId;
+            formPayload.append("reviewId", formData.reviewId);
+            formPayload.append("authorId", formData.authorId);
+            formPayload.append("bookId", formData.bookId);
         }
 
         try {
@@ -167,9 +172,8 @@ export const WriteBookReview = () => {
                 method: 'POST',
                 headers: {
                     'Authorization': token ? `Bearer ${token}` : '',
-                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formPayload)
+                body: formPayload
             });
 
             const result = await response.json()
@@ -191,9 +195,9 @@ export const WriteBookReview = () => {
     return (
         <main className="book-review">
             {post ? (
-                <h2>Update review</h2>
+                <h2 className="review-title">Update review</h2>
             ) : (
-                <h2>New book review</h2>
+                <h2 className="review-title">New book review</h2>
             )}
                 <form onSubmit={handleSubmit} className="book-review-form">
                     <div className="book-info-container">

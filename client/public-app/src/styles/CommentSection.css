@@ -4,13 +4,14 @@
 .comment-section {
     width: 100%;
     display: flex;
-    margin-bottom: 2rem;
-
+    margin: 2rem 0;
+    gap: 1rem;
 
     flex-direction: column;
 
     h3 {
         border-bottom: 2px solid var(--secondary-color);
+        opacity: 0.8;
     }
 
 
@@ -44,7 +45,8 @@
 }
 
 .comment-card {
-    border-bottom: 1px solid var(--light-grey);
+    border-bottom: 1px solid var(--secondary-color);
+    opacity: 0.8;
 }
 
 .comment-card:last-of-type {
@@ -55,7 +57,6 @@
     display: flex;
     box-shadow: var(--box-shadow);
     flex-direction: column;
-    margin-bottom: 2rem;
 }
 
 .load-more-comments {
@@ -63,6 +64,7 @@
     align-items: center;
     justify-content: center;
     transition: 200ms ease-in-out;
+    margin-bottom: 1rem;
 }
 
 .load-more-comments:hover {

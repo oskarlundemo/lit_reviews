@@ -224,11 +224,12 @@ export const updateCategories = async (req, res) => {
 export const updatePreviousBookReview = async (user_id, reviewId, req, res) => {
 
     try {
+
+        const publish = req.body.publish === "true";
         const {bookAuthor, body,
             bookTitle, bookPages,
             quote, reviewTitle,
-            bookAbout, bookId,
-            publish, authorId
+            bookAbout, bookId, authorId
         } = req.body;
 
         console.log(req.body);

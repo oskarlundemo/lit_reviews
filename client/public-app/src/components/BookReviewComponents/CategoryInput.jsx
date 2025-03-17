@@ -31,7 +31,7 @@ export const CategoryInput = ({errors, handleTextChange, handleKeyDown, category
                 <p className="error-msg">{errorMessage}</p>
             )}
 
-            <p>Press enter to apply the category, you can add up to five categories per book!</p>
+            <p className="category-container-info">Press enter to apply the category, you can add up to five categories per book!</p>
         </>
     )
 }
