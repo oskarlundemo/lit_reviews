@@ -41,12 +41,14 @@
     a {
         width: 100%;
         color: inherit;
-        padding: 1rem;
     }
 
     h2 {
         color: var(--svg-color);
-        font-size: clamp(1rem, 2vw, 3rem);
+        font-size: clamp(1rem, 2vw, 2rem);
+        text-align: center;
+        padding: 1rem;
+        margin: 0;
     }
 
 

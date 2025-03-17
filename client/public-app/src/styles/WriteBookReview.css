@@ -11,10 +11,13 @@
         align-self: center;
     }
 
-    h2:first-of-type {
-        margin-left: 0;
-        font-weight: 400;
-    }
+}
+
+
+.review-title {
+    font-weight: 400;
+    margin: 4rem 0;
+    font-size: 2rem;
 }
 
 
@@ -92,7 +95,6 @@ input[type="file"]::file-selector-button:hover {
     height: 100%;
     flex-direction: row;
     flex-wrap: wrap;
-
     gap: 0.5rem;
 
 
@@ -123,6 +125,10 @@ input[type="file"]::file-selector-button:hover {
 
 
 
+.category-container-info {
+    padding-left: 0.5rem;
+    opacity: 0.5;
+}
 
 
 .published-component {
@@ -144,4 +150,7 @@ input[type="file"]::file-selector-button:hover {
 
 
 @media screen and (max-width: 800px) {
+
+
+
 }

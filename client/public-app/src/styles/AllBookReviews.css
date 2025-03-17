@@ -20,6 +20,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 
@@ -30,10 +31,13 @@
 }
 
 .book-card-footer {
-    align-items: center;
-    text-wrap: nowrap;
-    margin-top: auto;
+    height: 100px;
     padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    p {
+        height: fit-content;
+    }
 }
 
 
