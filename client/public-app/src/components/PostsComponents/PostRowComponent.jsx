@@ -7,7 +7,7 @@ export const PostRowComponent = ({post, parseTitle, inspectClick}) => {
     return (
         <tr>
             <td>{post.id}</td>
-            <td>{parseTitle(post.title)}</td>
+            <td>{post.title}</td>
             <td>{post.Book.title}</td>
             <td>{post.Book.Author.name}</td>
             {post.published ? (

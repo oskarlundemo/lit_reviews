@@ -16,6 +16,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
 
     const [likes, setLikes] = useState([]);
     const [liked, setLiked] = useState(false);
+    const [categories, setCategories] = useState([]);
 
     const {user} = useAuth();
 
@@ -38,6 +39,19 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
         })
             .then(res => res.json())
             .then(data => setLikes(data))
+            .catch(err => console.log(err))
+
+        fetch(`/api/home/get-categories/${reviewId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setCategories(data)
+                console.log(data)
+            })
             .catch(err => console.log(err))
 
         isLikedByUser();
@@ -76,7 +90,6 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
                     },
                 })
 
-
                 if (res.ok) {
                     const updatedComments = await fetch(`/api/home/like/${reviewId}`);
                     const data = await updatedComments.json();
@@ -112,6 +125,20 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
                 </div>
             </div>
             <h1>{title}</h1>
+
+
+            <div className="category-container">
+
+            </div>
+
+            {categories.length > 0 && (
+                <div className="book-category-container">
+                    {categories.map((c, index) => (
+                        <p key={index}>{c.category.category}</p>
+                    ))}
+                </div>
+            )}
+
 
             <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}/>
         </section>
