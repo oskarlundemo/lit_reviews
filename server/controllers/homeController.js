@@ -575,6 +575,7 @@ export const getCategoriesForBook = async (req, res) => {
     try {
 
         console.log(req.params)
+        console.log('I back end')
 
         const review = await prisma.review.findUnique({
             where: {
