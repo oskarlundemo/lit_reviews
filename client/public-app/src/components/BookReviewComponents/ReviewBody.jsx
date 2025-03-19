@@ -127,10 +127,6 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
             <h1>{title}</h1>
 
 
-            <div className="category-container">
-
-            </div>
-
             {categories.length > 0 && (
                 <div className="book-category-container">
                     {categories.map((c, index) => (
@@ -140,7 +136,8 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
             )}
 
 
-            <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}/>
+            <div style={{ color: "var(--text-color)" }}
+                dangerouslySetInnerHTML={{ __html: sanitizedBody }}/>
         </section>
     )
 

@@ -42,7 +42,7 @@ export const Header = () => {
 
     return (
         <header className="App-header">
-            <Link to="/"><h1>Lit reviews 🔥</h1></Link>
+            <Link to="/"><h1>Lit reviews</h1></Link>
             <nav>
                 {user ? (
                     <>

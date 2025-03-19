@@ -85,8 +85,8 @@
 
     h3 {
         margin: 0;
-        font-size: 2rem;
         font-weight: 400;
+        font-size: clamp(1.2rem, 2vw, 2rem);
     }
 }
 
@@ -106,24 +106,22 @@
     overflow: hidden;
 
     p {
-        font-size: clamp(0.75rem, 1.2vw, 1rem); /* Keeps text small and readable */
-        line-height: 1.5; /* Improves readability */
-        margin: 0.5rem 0; /* Adds spacing */
-
+        font-size: clamp(0.75rem, 1.2vw, 1rem);
+        line-height: 1.5;
+        margin: 0.5rem 0;
+        padding: 0 1rem 1rem 1rem;
     }
 }
 
 .left-container h2 {
     margin: 0;
-    text-align: left;
-    width: 100%;
+    text-align: center;
     text-wrap: nowrap;
     font-size: clamp(1.4rem, 3vw, 3rem);
 }
 
 .left-container h2 span {
     text-align: left;
-    display: block;
     background: var(--gradient-color);
     background-clip: text;
     color: transparent;
@@ -165,8 +163,10 @@
         display: flex;
 
         h2 {
+            width: 100%;
             text-align: center;
-
+            padding: 0;
+            margin: 1rem 0 0 0;
 
             span {
                 display: inline;

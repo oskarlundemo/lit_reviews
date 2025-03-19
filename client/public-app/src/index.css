@@ -84,8 +84,6 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px hsl(240, 15%, 15%) inset !important;
 }
 
-
-
 .light {
   color: hsl(0, 0%, 0%);
   --background-color: hsl(0, 0%, 98%);
