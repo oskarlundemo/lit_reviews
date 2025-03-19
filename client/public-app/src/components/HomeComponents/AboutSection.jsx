@@ -38,7 +38,7 @@ export const AboutSection = ({numberOfReviews}) => {
                 <div className="bento-text-container widget">
                     <h2>Welcome to <span>Lit reviews</span></h2>
                     <div className="divider-stretch"></div>
-                    <p>Lite Reviews is your go-to destination for quick, insightful book reviews. We explore literature from around the world, offering concise critiques and recommendations to help you discover your next great read. From new releases to timeless classics, Lite Reviews provides thoughtful analysis to guide your reading journey.</p>
+                    <p>Lit Reviews is my personal space for thoughtful, in-depth book reviews. I explore stories across genres, offering insights without spoilers. Whether you're looking for your next great read or a fresh perspective on a favorite book, Lit Reviews delivers honest, engaging takes on literature.</p>
                 </div>
 
                 <Widget  text="Reviews 📚" count={numberOfReviews} box="box-one"/>

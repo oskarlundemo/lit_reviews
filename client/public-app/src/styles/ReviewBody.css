@@ -10,15 +10,15 @@
     h1 {
         border-bottom: 2px solid var(--secondary-color);
         font-family: "Playfair Display", serif;
-        font-optical-sizing: auto;
         font-weight: 400;
         font-style: normal;
         margin: 0.2rem 0;
         padding: 0.2rem 0;
         letter-spacing: 0.03rem;
-        font-size: clamp(1rem, 5vw, 3rem);
-        text-overflow: ellipsis;
+        max-width: 100%;
+        font-size: clamp(1rem, 10vw, 3rem); /* Adjust to fit width better */
     }
+
 }
 
 .review-body-header {

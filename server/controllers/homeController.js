@@ -317,7 +317,7 @@ export const getTopCategories = async (req, res) => {
             by: ['category_id'],
             _count: { book_id: true },
             orderBy: { _count: { book_id: 'desc' } },
-            take: 5,
+            take: 10,
         });
 
         const results = await Promise.all(
@@ -531,52 +531,76 @@ export const likePost = async (req, res) => {
     }
 }
 
-
 /**
+ * 1. This function is used to display the numbers of book reviews on the site
  *
+ * 2. It requires a 'GET' request triggered in the AboutSection.jsx component and is handled in the homeRoute.js
  *
- *
- *
+ * 3. 200: The number of posts
+ *    400: Error trying to fetch the posts in the db
  */
 
 
 export const getNumberOfReviews = async (req, res) => {
 
     try {
-
+        // Get reviews
         const amountOfReviews = await prisma.review.findMany({
             where: {
                 published: true,
             }
         })
+        // Send the length of that list
         res.status(200).json(amountOfReviews.length);
     } catch (err) {
+        // Error trying to fetch reviews
         console.error(err);
         res.status(400).json({ error: err.message });
     }
 }
+
+
+
+/**
+ * 1. This function is used to display the numbers of book reviews on the site
+ *
+ * 2. It requires a 'GET' request triggered in the AboutSection.jsx component and is handled in the homeRoute.js
+ *
+ * 3. 200: The number of categories
+ *    400: Error trying to fetch the posts in the db
+ */
 
 
 export const getNumberOfCategories = async (req, res) => {
-
     try {
+        // Get all categories
         const numberOfCategories = await prisma.category.findMany({})
+        // Send them to the front end
         res.status(200).json(numberOfCategories.length);
     } catch (err) {
+        // Error trying to fetch reviews
         console.error(err);
         res.status(400).json({ error: err.message });
     }
 }
+
+
+
+/**
+ * 1. This function is used to display the numbers of book reviews on the site
+ *
+ * 2. It requires a 'GET' request triggered in the ReviewBody.jsx component and is handled in the homeRoute.js
+ *
+ * 3. 200: The categories associated with the book
+ *    400: Error trying to fetch the categories in the db
+ */
 
 
 
 export const getCategoriesForBook = async (req, res) => {
 
     try {
-
-        console.log(req.params)
-        console.log('I back end')
-
+        // Find the review matching the req.params.id
         const review = await prisma.review.findUnique({
             where: {
                 id: parseInt(req.params.id),
@@ -586,7 +610,7 @@ export const getCategoriesForBook = async (req, res) => {
             },
         });
 
-
+        // Fetch the categories associated to that book the reivew is written about
         const bookCategory = await prisma.bookCategory.findMany({
             where: {
                 book_id: review.Book.id
@@ -595,12 +619,11 @@ export const getCategoriesForBook = async (req, res) => {
                 category: true,
             }
         })
-
-        console.log(bookCategory)
-
+        // Send the categories to the front-end
         res.status(200).json(bookCategory);
-
     } catch (err) {
+
+        // Error getting the categories
         console.error(err);
         res.status(400).json({ error: err.message });
     }

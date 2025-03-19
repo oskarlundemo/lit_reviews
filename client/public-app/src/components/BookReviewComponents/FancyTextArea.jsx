@@ -23,9 +23,8 @@ export const FancyTextArea = ({errors, name, editorContent, handleEditorChange})
                 menubar: false,
                 plugins: 'link image code',
                 toolbar: 'undo redo | formatselect | bold italic | link image | code',
-                content_style: `
-                                body {background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--background-color')};   
-                                     color: ${getComputedStyle(document.documentElement).getPropertyValue('--text-color')}; }`
+                content_style: ` body {background-color: ${getComputedStyle(document.documentElement).getPropertyValue('--background-color')};   
+                color: ${getComputedStyle(document.documentElement).getPropertyValue('--text-color')}; }`
             }}
             onEditorChange={handleEditorChange}
         />
