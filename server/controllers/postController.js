@@ -149,9 +149,26 @@ export const getAllReviews = async (req, res) => {
 }
 
 
+/**
+ * 1. This function is used to delete book reviews
+ *
+ *
+ * 2. It requires a 'DELETE' request triggered in the Post.jsx / PostsTable.jsx through the postsRoute.js
+ *
+ * 3. 201: Successfully deleted review
+ *    401: Error deleting review from db
+ *
+ * @param req
+ * @param res
+ */
+
+
+
+
 export const deleteReview = async (req, res) => {
     try {
         await prisma.$transaction(async (prisma) => {
+            // Get the review were trying to delete
             const review = await prisma.review.findUnique(({
                 where: {
                     id: parseInt(req.params.id),
@@ -164,24 +181,28 @@ export const deleteReview = async (req, res) => {
                 }
             }))
 
+            // Delete all the entries for the book categories
             await prisma.BookCategory.deleteMany({
                 where: {
                     book_id: review.Book.id
                 }
             })
 
+            // Delete the review itself
             await prisma.review.delete(({
                 where: {
                     id: parseInt(req.params.id)
                 }
             }))
 
+            // Delete the book aswell
             await prisma.Book.delete({
                 where: {
                     id: review.Book.id
                 }
             })
 
+            // If the author has not written more books that are in the db, delete them aswell
             const books = await prisma.Book.findMany({
                 where: {
                     Author: {
@@ -190,6 +211,7 @@ export const deleteReview = async (req, res) => {
                 }
             })
 
+            // If no more books by author, delete them
             if (!books) {
                 await prisma.Author.delete({
                     where: {

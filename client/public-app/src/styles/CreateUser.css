@@ -41,8 +41,9 @@
 .error-msg {
     color: var(--error-color);
     text-align: left !important;
-    font-size: 1rem;
     padding: 0 0 0 0.5rem;
+    transition: 200ms ease-in-out;
+    font-size: clamp(0.5rem, 1vh, 1rem);
 }
 
 
