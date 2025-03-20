@@ -5,6 +5,21 @@ const supabaseUrl = process.env.VITE_SUPABASE_ANON_URL;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 
+/**
+ *
+ * 1. This function is used for storing thumbnails onto supabase
+ *
+ * 2. It is triggered in the bookReview.js router when both updating a review or creating a new one
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<*|{message: string}>}
+ */
+
+
+
+
+
 export const saveFile = async (req, res) => {
 
     if (!req.file) {
