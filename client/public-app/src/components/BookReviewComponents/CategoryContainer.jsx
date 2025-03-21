@@ -1,6 +1,18 @@
+/**
+ * This component is used for adding and displaying the categories of books
+ * @param categories for the books
+ * @param setCategories state to set the categories
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
+
+
 
 export const CategoryContainer = ({categories, setCategories}) => {
 
+    // If users click remove category, remove it from the list
     const deleteCategory = (id) => {
         setCategories(prevCategories => prevCategories.filter((_, index) => index !== id));
     }

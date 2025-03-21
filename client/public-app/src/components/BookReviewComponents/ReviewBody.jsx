@@ -1,5 +1,4 @@
 
-
 import DOMPurify from "dompurify";
 
 
@@ -8,29 +7,46 @@ import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import {useAuth} from "../../context/AuthContext.jsx";
 
+
+/**
+ * This component is used for rendering the text component of the book review
+ *
+ * @param date when the review was written
+ * @param writer who wrote it
+ * @param body the text or review itself
+ * @param title of the review
+ * @param reviewId of the reivew
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
 export const ReviewBody = ({date, writer, body, title, reviewId}) => {
 
-    /**
-     * Sanitize the userdata
-     */
+    const [likes, setLikes] = useState([]); // The likes of the book review
+    const [liked, setLiked] = useState(false); // Check if the logged in user has liked the post
+    const [categories, setCategories] = useState([]); // The categories for the book
+    const {user} = useAuth(); // Get the logged in user from the context
 
-    const [likes, setLikes] = useState([]);
-    const [liked, setLiked] = useState(false);
-    const [categories, setCategories] = useState([]);
+    const sanitizedBody = DOMPurify.sanitize(body); // Sanitize the body since it is saved with tags ex <p>
 
-    const {user} = useAuth();
-
-    const sanitizedBody = DOMPurify.sanitize(body);
-
+    // Function to estimate the time to read the review
     const estimateReadingTime = (body) => {
-        const averageReadingTime = 225;
+
+        // Average reading time of a human per minute
+        const averageHumanReadingTimePerMinute = 225;
+
+        // Split the body, and count each space a word
         const words = body.split(' ').length;
 
-        let readingTime = words / averageReadingTime;
+        // Divide the number of words / by avg
+        let readingTime = words / averageHumanReadingTimePerMinute;
         return Math.ceil(readingTime);
     }
 
     useEffect (() => {
+
+        // Get the likes for the book review
         fetch(`/api/home/like/${reviewId}`, {
             method: 'GET',
             headers: {
@@ -41,6 +57,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
             .then(data => setLikes(data))
             .catch(err => console.log(err))
 
+        // Get the categories about the book
         fetch(`/api/home/get-categories/${reviewId}`, {
             method: 'GET',
             headers: {
@@ -54,10 +71,12 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
             })
             .catch(err => console.log(err))
 
+        // Check if the looged in user already likes the post
         isLikedByUser();
     }, [])
 
 
+    // If the number of likes is 0, then  always set user liked to false
     useEffect(() => {
         if (likes.length !== null) {
             isLikedByUser();
@@ -65,23 +84,32 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
     }, [likes]);
 
 
+    // Function to check if the user has liked the review
     const isLikedByUser = () => {
         const token = localStorage.getItem('token');
 
+        // If there is a token (logged in) and the there a likes
         if (token && likes) {
             const { id } = jwtDecode(token);
+            // Check if logged in user is in the list of likes
             const userLiked = likes.some(like => like.user_id === id);
             setLiked(userLiked);
         }
     };
 
+
+    // Triggered when the user click the like button
     const handleLike = async (e) => {
         e.preventDefault();
 
+        // If there is a logged-in user
         if (user) {
+
+            // Parse their jwt token
             const token = localStorage.getItem('token');
 
             try {
+                // Update that the user clicked the button
                 const res = await fetch(`/api/home/like/${reviewId}`, {
                     method: 'POST',
                     headers: {
@@ -90,6 +118,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
                     },
                 })
 
+                // If the like was ok, fetch again to update the number of likes
                 if (res.ok) {
                     const updatedComments = await fetch(`/api/home/like/${reviewId}`);
                     const data = await updatedComments.json();
@@ -125,7 +154,6 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
                 </div>
             </div>
             <h1>{title}</h1>
-
 
             {categories.length > 0 && (
                 <div className="book-category-container">

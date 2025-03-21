@@ -1,3 +1,10 @@
+/**
+ * This component is used to display all the banned users in a list at the Activity.jsx page
+ *
+ * @param banned list of banned users
+ * @param openPopUp function to toggle the popup window
+ */
+
 
 
 import '../../styles/BannedList.css'
