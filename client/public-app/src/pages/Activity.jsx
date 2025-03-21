@@ -282,8 +282,8 @@ export const Activity = () => {
                            inspectUserComment={inspectUserComment}
                            bannedUsers={bannedUsers}
                            predicate={(user) => inspectUserComment.id === user.user_id}
-                           onClick1={() => {closePopup(); unBanUser(inspectUserComment);}}
-                           onClick2={() => {closePopup(); banUser(inspectUserComment);
+                           unBan={() => {closePopup(); unBanUser(inspectUserComment);}}
+                           ban={() => {closePopup(); banUser(inspectUserComment);
             }}/>
 
             <Overlay showOverlay={showOverlay} toggleOverlay={toggleOverlay}></Overlay>
