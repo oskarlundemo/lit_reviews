@@ -18,14 +18,10 @@ export const BookReview= () => {
 
     const [review, setReview] = useState(null); // Store and set book reviews
     const {id} = useParams(); // Get the id of the book review through the params
-
-
-    /**
-     * Fetch the book review from the backend
-     */
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]); // Get the list of categories
 
     useEffect(() => {
+        // Fetch the data for a specific review
         fetch(`/api/home/inspect/${id}`)
             .then(res => {
                 if (!res.ok) {
@@ -36,6 +32,7 @@ export const BookReview= () => {
             .then(data => setReview(data))
             .catch((err) => console.log(err));
 
+        // Get the categories for that book the review is about
         fetch(`/api/home/get-categories/${id}`, {
             method: "GET",
             headers: {

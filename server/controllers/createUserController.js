@@ -60,7 +60,7 @@ export async function uniqueUsername(username) {
  * 3. Return true if the email does not exist else throw a new error displayed in the front-end
  */
 
-export async function uniqueEmail(email) {
+export async function uniqueEmail (email) {
     try {
         // Check if the email already exists in the user table
         const existingEmail = await prisma.user.findUnique({
@@ -100,6 +100,8 @@ export const createUser = async (req, res) => {
     const {username, email, password} = req.body;
 
     try {
+
+        console.log(req.body);
 
         // Hash the password using bcrypt
         const hashedPassword = await bcrypt.hash(password, 10);

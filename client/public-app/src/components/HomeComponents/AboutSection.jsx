@@ -5,14 +5,25 @@ import {QuoteSlider} from "./QuoteSlider.jsx";
 import {Widget} from "./Widget.jsx";
 import {useEffect, useState} from "react";
 
+
+/**
+ * This component is a section in the homePage.jsx contain info about the latest reviews
+ *
+ * @param numberOfReviews how man reviews there are on the page
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
 export const AboutSection = ({numberOfReviews}) => {
 
 
-    const [numberOfCategories, setNumberOfCategories] = useState(0);
+    const [numberOfCategories, setNumberOfCategories] = useState(0); // Set the number of reviews
 
 
 
     useEffect(() => {
+        // Get the number of reviews
         fetch('api/home/categories/number', {
             method: 'GET',
             headers: {
@@ -43,7 +54,6 @@ export const AboutSection = ({numberOfReviews}) => {
 
                 <Widget  text="Reviews 📚" count={numberOfReviews} box="box-one"/>
                 <Widget text="Categories 🗄️" count={numberOfCategories} box='box-two'/>
-
             </div>
 
             <div className="right-container widget">

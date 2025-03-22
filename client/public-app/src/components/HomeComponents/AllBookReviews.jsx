@@ -4,15 +4,28 @@ import { useNavigate } from "react-router-dom";
 import { BookCard } from "./BookCard.jsx";
 import { CategoryBox } from "./CategoryBox.jsx";
 
+
+/**
+ * This component is a section in the homePage.jsx, used for displaying all the book reviews
+ * @param numberOfReviews
+ * @param likes
+ * @param comments
+ * @param categories
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
 export const AllBookReviews = ({ numberOfReviews, likes, comments, categories }) => {
     const [bookReviews, setBookReviews] = useState([]); // Holds the original reviews
     const [filteredReviews, setFilteredReviews] = useState([]); // Holds the filtered reviews
-    const navigate = useNavigate();
-    const [loadingError, setLoadingError] = useState('');
-    const [displayedReviews, setDisplayedReviews] = useState(4);
-    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate(); // Navigate to read full review
+    const [loadingError, setLoadingError] = useState(''); // Loading error
+    const [displayedReviews, setDisplayedReviews] = useState(4); // Only display 4 reviews first
+    const [loading, setLoading] = useState(true); // Update loading
 
     useEffect(() => {
+        // Get all the book reviews
         fetch('/api/home/reviews/all', {
             method: 'GET',
             headers: {
@@ -32,10 +45,12 @@ export const AllBookReviews = ({ numberOfReviews, likes, comments, categories })
             })
     }, [])
 
+    // User clicked on a review, take the to the full review
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }
 
+    // Filter reviews based on category
     const handleFilter = (filtered) => {
         setFilteredReviews(filtered);
     };
@@ -67,6 +82,7 @@ export const AllBookReviews = ({ numberOfReviews, likes, comments, categories })
                     )}
                 </div>
 
+                {/*If there are more reviews than 4, display a button to load more */}
                 {filteredReviews.length > displayedReviews && (
                     <button onClick={() => setDisplayedReviews(displayedReviews + 4)} className="load-more-btn">
                         Load More

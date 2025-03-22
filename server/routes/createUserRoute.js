@@ -7,16 +7,17 @@ const createUserRoute = new Router();
 
 import { body, validationResult } from 'express-validator';
 
-
 export const validateUserInfo = [
     body('username')
         .trim()
-        .isLength({ min: 3, max: 10})
+        .isLength({ min: 3, max: 10 })
         .withMessage('Username must be between 3 and 10 characters')
         .escape()
-        .custom(async(username) => {
-            await uniqueUsername(username);
-            return true;
+        .custom(async (username) => {
+            const isValid = await uniqueUsername(username).catch(err => {
+                throw new Error(err.message); // Ensure error is thrown correctly
+            });
+            return isValid;
         }),
 
     body('email')
@@ -24,30 +25,31 @@ export const validateUserInfo = [
         .isEmail()
         .withMessage('Please provide a valid email address')
         .normalizeEmail()
-        .custom(async (email) =>{
-            await uniqueEmail(email);
-            return true;
+        .custom(async (email) => {
+            const isValid = await uniqueEmail(email).catch(err => {
+                throw new Error(err.message);
+            });
+            return isValid;
         }),
 
-    body('password').custom((value, { req }) => {
-        const hasSpecialChar = /[^A-Za-z0-9]/;
-        const hasNumber = /\d/;
+    body('password').custom((value) => {
+        const hasSpecialChar = /[^A-Za-z0-9]/.test(value);
+        const hasNumber = /\d/.test(value);
+        const isValidLength = value.length >= 8;
 
-        if (!hasSpecialChar.test(value)) {
-            throw new Error('Password must contain at least one special character');
-        }
+        if (!isValidLength) throw new Error('Password must be at least 8 characters long');
+        if (!hasSpecialChar) throw new Error('Password must contain at least one special character');
+        if (!hasNumber) throw new Error('Password must contain at least one number');
 
-        if (!hasNumber.test(value)) {
-            throw new Error('Password must contain at least one number');
-        }
         return true;
     })
-]
+];
 
 createUserRoute.post('/', validateUserInfo, (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        console.log(errors);
+        return res.status(400).json({ errors: errors.array() }); // Ensure correct format
     }
     createUser(req, res, next);
 });

@@ -3,14 +3,32 @@ import {PostRowComponent} from "./PostRowComponent.jsx";
 import {PageSelector} from "../ActivityComponents/PageSelector.jsx";
 
 
-export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfPages, pagePosts}) => {
+/**
+ *
+ * This component is used for storing all the posts in one single table
+ *
+ * @param posts all the book reviews / posts
+ * @param setPosts update the state of the reviews
+ * @param parseTitle
+ * @param inspectClick
+ * @param numberOfPages
+ * @param pagePosts
+ * @returns {JSX.Element}
+ * @constructor
+ */
 
+
+
+export const PostsTable = ({posts, setPosts, inspectClick, numberOfPages, pagePosts}) => {
+
+    // Sort posts by id
     const sortById = (e) => {
         setPosts((prev) => {
             return [...prev].sort((a, b) => a.id - b.id)
         })
     }
 
+    // Sort posts by title
     const sortByTitle = () => {
         setPosts((prev) => {
             return [...prev].sort((a,b) => {
@@ -19,6 +37,7 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
         })
     }
 
+    // Sort posts by author
     const sortByAuthor = () => {
         setPosts((prev) => {
             return [...prev].sort((a,b) => {
@@ -27,6 +46,7 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
         })
     }
 
+    // Sort posts by date
     const sortByDate = () => {
         setPosts((prev) => {
             return [...prev].sort((a,b) => {
@@ -35,6 +55,7 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
         })
     }
 
+    // Sort posts by book title
     const sortByBook = () => {
         setPosts((prev) => {
             return [...prev].sort((a,b) => {
@@ -67,7 +88,6 @@ export const PostsTable = ({posts, setPosts, parseTitle, inspectClick, numberOfP
                             <PostRowComponent
                                 key={post.id}
                                 post={post}
-                                parseTitle={parseTitle}
                                 inspectClick={inspectClick}
                             />
                         ))

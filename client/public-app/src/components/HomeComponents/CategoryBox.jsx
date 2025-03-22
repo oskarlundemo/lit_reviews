@@ -1,12 +1,23 @@
 import {useEffect, useState} from "react";
 
-export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
-    const [categories, setCategories] = useState([]);
-    const [activeBtn, setActiveBtn] = useState(0);
 
+/**
+ * This component is used to display which categories the book has
+ *
+ * @param setReviews update the review in AllBookReviews.jsx by category
+ * @param numberOfReviews
+ * @param allReviews all the book reviews
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
+    const [categories, setCategories] = useState([]); // Store categories
+    const [activeBtn, setActiveBtn] = useState(0); // Used for css styling
 
 
     useEffect(() => {
+        // Get the top 5 categories from the back end
         fetch('/api/home/categories-top', {
             method: "GET",
             headers: {
@@ -21,6 +32,7 @@ export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
             .catch(err => console.log(err));
     }, [])
 
+    // When the user clicks a button with a category, filter the reviews with that category
     const filterReviewsByCategory = (categoryId, index) => {
         setActiveBtn(index);
         const filtered = allReviews.filter(review =>
@@ -29,6 +41,7 @@ export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
         setReviews(filtered);
     };
 
+    // When user click the button all, show all reviews (like a reset)
     const showAllReviews = () => {
         setActiveBtn(0);
         setReviews(allReviews);

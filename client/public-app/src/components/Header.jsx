@@ -3,18 +3,31 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useEffect, useState } from "react";
 
-export const Header = () => {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
 
+/**
+ * This component is just the header
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
+
+export const Header = () => {
+    const { user, logout } = useAuth(); // Get the logged-in user and log out function from context
+    const navigate = useNavigate(); // Used for navigating once logged out// or clicked "Home"
+
+    // Function to set light or dark mode in css
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.getItem("theme") === "dark";
     });
 
+    // Toggle dark mode
     const toggleDarkMode = () => {
         setDarkMode((prev) => !prev);
     };
 
+    // Used for updating the color theme of the application
     useEffect(() => {
         const themeFromLocalStorage = localStorage.getItem("theme");
         const isDarkMode = themeFromLocalStorage === "dark";
@@ -27,6 +40,7 @@ export const Header = () => {
         }
     }, []);
 
+    // Used for updating the color theme of the application
     useEffect(() => {
         if (darkMode) {
             document.querySelector('.App').classList.add("dark");
@@ -42,11 +56,14 @@ export const Header = () => {
 
     return (
         <header className="App-header">
+            {/* Takes user to homepage*/}
             <Link to="/"><h1>Lit reviews</h1></Link>
             <nav>
+                {/* Is there a logged-in user ?*/}
                 {user ? (
                     <>
                         <p className="welcome-user">Welcome {user.username}</p>
+                        {/* Display the dashboard shortcut if the user is an admin */}
                         {user.admin ? (
                             <>
                             <div className="admin-container">
@@ -59,21 +76,25 @@ export const Header = () => {
                                     </div>
                                 </Link>
                             </div>
+                                {/* Takes user to homepage after logout*/}
                                 <button onClick={() => { logout(); redirect(); }}>Sign out</button>
                             </>
                             ) : (
                                 <>
+                                    {/* Takes user to homepage after logout*/}
                                     <button onClick={() => { logout(); navigate('/'); }}>Sign out</button>
                                 </>
                         )}
                     </>
                 ) : (
                     <>
+                        {/*Options if the user is not logged-in*/}
                         <Link to="/login">Sign in</Link>
                         <Link to="/create-user">Sign up</Link>
                     </>
                 )}
                 <div className="dark-mode-toggle" onClick={toggleDarkMode}>
+                    {/*SVG:s change depending on current theme*/}
                     {darkMode ? (
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"/></svg>
                     ) : (

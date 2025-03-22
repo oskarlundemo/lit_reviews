@@ -3,18 +3,30 @@
 import '../../styles/LatestReviews.css'
 import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {ImageComponent} from "../ImageComponent.jsx";
 import {BookCard} from "./BookCard.jsx";
+
+
+/**
+ * This component is used to display the latest book reviews on the page
+ *
+ * @param comments for each review
+ * @param categories for each review
+ * @param likes for each review
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
 
 export const LatestReviews = ({comments, categories, likes}) => {
 
-    const [reviews, setReviews] = useState([]);
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [reviews, setReviews] = useState([]); // Store the three latest reviews
+    const location = useLocation(); // So users can click on a review that takes them to the article / review
+    const navigate = useNavigate(); // See above
+    const [loading, setLoading] = useState(true); // Update loading state
 
 
     useEffect(() => {
+        // Get the three latest book reviews from back end
         fetch("api/home/latest")
             .then((res) => res.json())
             .then((data) => {
@@ -24,6 +36,7 @@ export const LatestReviews = ({comments, categories, likes}) => {
             .catch((err) => console.log("Error fetching reviews:", err));
     }, [location.pathname]);
 
+    // User clicks on a BookCard that takes the to the full review
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }

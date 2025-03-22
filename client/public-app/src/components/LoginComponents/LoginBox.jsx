@@ -1,8 +1,22 @@
+/**
+ *
+ * This component is used for logging in at the Login.jsx page
+ *
+ * @param handleSubmit function to handle submit
+ * @param handleInputChange function to update state in input
+ * @param passwordValue value of the user input
+ * @param usernameValue value of the password input
+ * @param loginError error message from backend
+ * @param isDisabled disable button state
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
 
 
 
 export const LoginBox = ({handleSubmit, handleInputChange, passwordValue, usernameValue,  loginError, isDisabled}) => {
-
 
     return (
         <div className="login-box-right">
@@ -40,7 +54,7 @@ export const LoginBox = ({handleSubmit, handleInputChange, passwordValue, userna
                         </div>
                     </fieldset>
                 </div>
-
+                {/*If the field are null or empty, do not allow submit*/}
                 <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Sign In</button>
             </form>
         </div>
