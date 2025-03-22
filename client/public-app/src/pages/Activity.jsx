@@ -19,37 +19,35 @@ import {PageSelector} from "../components/ActivityComponents/PageSelector.jsx";
 
 export const Activity = () => {
 
-    /**
-     * comments: Store comments from the server
-     * searchQuery: The search string entered by the user
-     */
+
+    const [comments, setComments] = useState([]); // Store all the comments
+    const [searchQuery, setSearchQuery] = useState(""); // Set the search query input
+
+    const [showPopup, setShowPopup] = useState(false); // State to display pop up window
+    const [showOverlay, setShowOverlay] = useState(false); // State to display overlay
+
+    const [inspectUserComment, setInspectUserComment] = useState(null); // Function to send data to render in pop up window
+    const [bannedUsers, setBannedUsers] = useState([]); // List of banned users
+
+    const [numberOfPages, setNumberOfPages] = useState(0); // Number of pages full of comments
+    const [pageComments, setPageComments] = useState([[]]); // Filter the comments into a 2D array
 
 
-    const [comments, setComments] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-
-    const [showPopup, setShowPopup] = useState(false);
-    const [showOverlay, setShowOverlay] = useState(false);
-
-    const [inspectUserComment, setInspectUserComment] = useState(null);
-    const [bannedUsers, setBannedUsers] = useState([]);
-
-    const [numberOfPages, setNumberOfPages] = useState(0);
-    const [pageComments, setPageComments] = useState([[]]);
-
-
-
+    // Function to close pop up
     const closePopup = () => {
         setShowPopup(false);
         setShowOverlay(false)
     }
 
+    // Function to open pop up
     const openPopup = (user) => {
+        // user param is the data of the user who wrote the comment
         setShowPopup(true);
         setShowOverlay(true);
         setInspectUserComment(user)
     }
 
+    // Function to toggle overlay
     const toggleOverlay = (e) => {
         if (e.target.classList.contains('overlay')) {
             setShowOverlay(false);
@@ -57,11 +55,10 @@ export const Activity = () => {
         }
     }
 
-    /**
-     * Fetch all the comments when the components mounts
-     */
+
 
     useEffect(() => {
+        // Fetch all the comments
         fetch("/api/comments/all", {
             method: "GET",
             headers: {
@@ -77,6 +74,7 @@ export const Activity = () => {
             .catch(err => console.log(err));
 
 
+        // Fetch all the banned users
         fetch("/api/activity/", {
             method: "GET",
             headers: {
@@ -147,14 +145,18 @@ export const Activity = () => {
     }
 
 
+    // Function to delete a comment, commetId is the id of the comment
     const deleteComment = async (commentId) => {
         try {
+            // Delet request to back end
             const res = await fetch(`/api/comments/${commentId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
+
+            // If delete was successful, update the comments
             if (res.ok) {
                 const updatedComments = await fetch("/api/comments/all");
                 const data = await updatedComments.json();
@@ -171,8 +173,10 @@ export const Activity = () => {
         }
     }
 
+    // Function to ban user, @param user is the user to ban
     const banUser = async (user) => {
         try {
+            // Send a request to backend
             const res = await fetch(`/api/activity/ban`, {
                 method: "POST",
                 headers: {
@@ -181,6 +185,7 @@ export const Activity = () => {
                 body: JSON.stringify({user}),
             })
 
+            // If ok, update the list of banned users to reflect changes
             if (res.ok) {
                 fetch("/api/activity/", {
                     method: "GET",
@@ -197,8 +202,10 @@ export const Activity = () => {
         }
     }
 
+    // Function to unban users, @param user is the user getting unban
     const unBanUser = async (user) => {
         try {
+            // Send a request to unban to back-end
             const res = await fetch(`/api/activity/unban`, {
                 method: "POST",
                 headers: {
@@ -207,6 +214,7 @@ export const Activity = () => {
                 body: JSON.stringify({user}),
             })
 
+            // If successful, fetch again to reflect changes
             if (res.ok) {
                 fetch("/api/activity/", {
                     method: "GET",
@@ -225,13 +233,14 @@ export const Activity = () => {
 
 
 
+    // Sort comments by id
     const sortById = (e) => {
         setComments((prev) => {
             return [...prev].sort((a, b) => a.id - b.id)
         })
     }
 
-
+    // Sort comments by date
     const sortByDate = () => {
         setComments((prev) => {
             return [...prev].sort((a,b) => {
@@ -239,7 +248,6 @@ export const Activity = () => {
             })
         })
     }
-
 
     return (
         <main className="activity-container">

@@ -1,24 +1,32 @@
 import {useEffect, useState} from "react";
-
 import {useNavigate} from "react-router-dom";
-
 import '../../styles/QuoteSlider.css'
+
+
+/**
+ * This component is displayed in the AboutSection.jsx component, basically
+ * it just show the top three quotes from the most liked reviews
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
 
 export const QuoteSlider = () => {
 
 
-    const [quotes, setQuotes] = useState([]);
-    const [error, setError] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentQuote, setCurrentQuote] = useState(null);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const navigate = useNavigate();
-    const [animateClass, setAnimateClass] = useState('');
-
-
+    const [quotes, setQuotes] = useState([]); // The state for the quotes
+    const [error, setError] = useState(null); // Eror messages
+    const [currentIndex, setCurrentIndex] = useState(0); // Index for the quote carousel
+    const [currentQuote, setCurrentQuote] = useState(null); // State for the current quote in the carousel
+    const [isAnimating, setIsAnimating] = useState(false); // Reset the css transition on change
+    const navigate = useNavigate(); // Navigate to that book review
+    const [animateClass, setAnimateClass] = useState(''); // Reset the css transition on change
 
 
     useEffect(() => {
+        // Get the three quotes from the top three book reviews
         fetch('/api/home/top-three-quotes', {
             method: 'GET',
             headers: {
@@ -37,24 +45,28 @@ export const QuoteSlider = () => {
     }, []);
 
 
-
+    // Used for resetting the css animation once the user clicks another page / index
     useEffect(() => {
         setCurrentQuote(quotes[currentIndex]);
     }, [currentIndex] );
 
 
+    // Apply the css everytime the users clicks on an index
     useEffect(() => {
         setAnimateClass('animate');
     }, [currentQuote]);
 
+    // Apply the css everytime the users clicks on an index
     const handleAnimationEnd = () => {
         setAnimateClass('');
         setIsAnimating(false);
     };
 
+    // Interval to add timer to carousel, so it rotates
     useEffect(() => {
         const interval = setInterval(() => {
             setIsAnimating(true);
+            // If one the last index, go to first
             setCurrentIndex((prevIndex) => (prevIndex + 1) % quotes.length);
         }, 6000);
 
@@ -62,15 +74,14 @@ export const QuoteSlider = () => {
     }, [currentIndex, quotes]);
 
 
-
-
+    // Used so when the user changes index, reset animation and change index / carousel
     const handleIndexChange = (index) => {
         setIsAnimating(false);
         setCurrentIndex(index);
         setIsAnimating(true);
     }
 
-
+    // If the user clicks on a quote, take them to the review
     const inspectReview = (bookTitle, id) => {
         navigate(`/${bookTitle}/${id}`);
     }

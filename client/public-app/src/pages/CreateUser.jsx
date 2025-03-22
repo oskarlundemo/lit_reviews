@@ -4,6 +4,8 @@ import '../styles/CreateUser.css';
 import {useState} from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.jsx";
+import {InputComponent} from "../components/InputComponent.jsx";
+import {PasswordRequirementContainer} from "../components/CreateUserComponents/PasswordRequirementContainer.jsx";
 
 
 
@@ -25,16 +27,14 @@ export default function CreateUser() {
     const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
 
-    const [isPasswordLenght, setIsPasswordLength] = useState(false);
+    const [isPasswordLength, setIsPasswordLength] = useState(false);
     const [isNumber, setIsNumber] = useState(false);
     const [isSymbol, setIsSymbol] = useState(false);
 
-    const [errorMessage, setErrorMessage] = useState([]);
 
 
+    const [inputError, setInputError] = useState([]);
     const { login } = useAuth(); // Login context
-    const [usernameError, setUsernameError] = useState(null);
-    const [emailError, setEmailError] = useState(null);
 
 
     const [formData, setFormData] = useState({
@@ -71,18 +71,11 @@ export default function CreateUser() {
     };
 
 
-
-    const errorSetter = {
-        username: setUsernameError,
-        email: setEmailError,
-    }
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setUsernameError(null);
-        setEmailError(null)
+
+        setInputError(null);
         setIsDisabled(false);
 
         try {
@@ -96,13 +89,9 @@ export default function CreateUser() {
             const result = await response.json();
 
             if (!response.ok) {
-                if (result.errors.length > 0 && result.errors) {
-                    result.errors.forEach(error => {
-                        const setter = errorSetter[error.path];
-                        if (setter) {
-                            setter(error.msg)
-                        }
-                    })
+                if (result.errors && result.errors.length > 0) {
+                    setInputError(result.errors); // Correct error handling
+                    console.error(result.errors);
                 }
                 return;
             }
@@ -118,79 +107,54 @@ export default function CreateUser() {
         <main className="create-user">
             <form onSubmit={handleSubmit} className="create-user-form">
                 <h2>Sign Up</h2>
-                <p>Let's get started with your reading trial</p>
-                <div className="create-user-input">
-                    <fieldset className="input-fieldset">
-                        <legend>Username</legend>
-                        <div className="input-card">
-                            <input type="text"
-                                   placeholder="johnDoe"
-                                   id="username"
-                                   name="username"
-                                   onChange={handleInputChange}
-                                   value={formData.username}
-                            />
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
-                        </div>
-                    </fieldset>
+                <p>Let's get started with your account!</p>
 
-                    <p className="error-msg">{usernameError}</p>
+                <InputComponent
+                    title="Username"
+                    type="text"
+                    name="username"
+                    id="username"
+                    onChange={handleInputChange}
+                    value={formData.username}
+                    errors={inputError || []} // 👈 Ensures it's always an array
+                    svg={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>}
+                    example='johnDoe'
+                />
 
-                    <fieldset className="input-fieldset">
-                        <legend>E-mail</legend>
-                        <div className="input-card">
-                            <input type="mail"
-                                   placeholder="axa@doe.com"
-                                   id="email"
-                                   name="email"
-                                   onChange={handleInputChange}
-                                   value={formData.email}
-                            />
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
-                        </div>
-                    </fieldset>
+                <InputComponent
+                    title="E-mail"
+                    type="mail"
+                    name="email"
+                    id="email"
+                    onChange={handleInputChange}
+                    value={formData.email}
+                    errors={inputError || []} // 👈 Ensures it's always an array
+                    svg={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>}
+                    example='johnDoe@domain.com'
+                />
 
-                    <p className="error-msg">{emailError}</p>
 
-                    <fieldset className="input-fieldset">
-                        <legend>Password</legend>
+                <InputComponent
+                    title="Password"
+                    type="password"
+                    name="password"
+                    id="password"
+                    onChange={handleInputChange}
+                    value={formData.password}
+                    errors={inputError || []} // 👈 Ensures it's always an array
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                    svg={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z"/></svg>}
+                    example='******'
+                />
 
-                        <div className="input-card password-input">
-                            <input type="password"
-                                   placeholder="********"
-                                   id="username"
-                                   name="password"
-                                   onChange={handleInputChange}
-                                   value={formData.password}
-                                   onFocus={() => setPasswordFocused(true)}
-                                   onBlur={() => setPasswordFocused(false)}
-                            />
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z"/></svg>
-                        </div>
-                    </fieldset>
+                <PasswordRequirementContainer
+                    isPasswordFocused={isPasswordFocused}
+                    isPasswordLength={isPasswordLength}
+                    isNumber={isNumber}
+                    isSymbol={isSymbol}
+                />
 
-                    <div className={`password-checks ${isPasswordFocused ? "show" : ""}`}>
-
-                        <div className={`password-check ${isPasswordLenght ? "length" : ""}`}>
-                            {isPasswordLenght ? (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z"/></svg>)
-                                : (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>)}
-                            <p>At least 8 characters</p>
-                        </div>
-
-                        <div className={`password-check ${isNumber ? "special" : ""}`}>
-                            {isNumber ? (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z"/></svg>)
-                                : (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>)}
-                            <p>Contains a number</p>
-                        </div>
-
-                        <div className={`password-check ${isSymbol ? "special" : ""}`}>
-                            {isNumber ? (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M400-304 240-464l56-56 104 104 264-264 56 56-320 320Z"/></svg>)
-                                : (<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z"/></svg>)}
-                            <p>Contains a symbol ex. (!@$%&)</p>
-                        </div>
-                    </div>
-
-                </div>
                 <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" disabled={isDisabled}>Sign Up</button>
                 <p>Already have an account? <Link to="/login">Log in</Link></p>
             </form>

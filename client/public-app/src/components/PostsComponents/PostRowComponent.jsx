@@ -1,11 +1,22 @@
 import {Link} from "react-router-dom";
 
 
-export const PostRowComponent = ({post, parseTitle, inspectClick}) => {
+/**
+ * This component is used to render entries / rows in the PostsTable.jsx in the Posts.jsx page
+ *
+ * @param post itself
+ * @param inspectClick inspect the post / book review
+ * @returns {JSX.Element}
+ * @constructor
+ */
 
 
+
+
+export const PostRowComponent = ({post, inspectClick}) => {
     return (
         <tr>
+            {/*Parse the post*/}
             <td>{post.id}</td>
             <td>{post.title}</td>
             <td>{post.Book.title}</td>
