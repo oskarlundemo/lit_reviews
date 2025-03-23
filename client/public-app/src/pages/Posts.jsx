@@ -3,26 +3,37 @@ import {useEffect, useState} from "react";
 
 
 import '../styles/Posts.css'
-import {Link} from "react-router-dom";
 import {PostsPopUp} from "../components/PostsComponents/PostsPopUp.jsx";
 import {Overlay} from "../components/ActivityComponents/Overlay.jsx";
 import {PostsTable} from "../components/PostsComponents/PostsTable.jsx";
 
+
+/**
+ * This is an page for the admin to quickly glance over all the book reviews and edit them if need
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
+
 export const Posts = () => {
 
 
-    const [posts, setPosts] = useState([])
-    const [inspectPost, setInspectPost] = useState(null)
-    const [showPopup, setShowPopup] = useState(false)
-    const [showOverlay, setShowOverlay] = useState(false)
-    const [numberOfPages, setNumberOfPages] = useState(0)
-    const [pagePosts, setPagePosts] = useState([[]]);
+    const [posts, setPosts] = useState([]) // ALl the book reviews
+    const [inspectPost, setInspectPost] = useState(null) // Inspect a specific post
+    const [showPopup, setShowPopup] = useState(false) // Toggle pop up c
+    const [showOverlay, setShowOverlay] = useState(false) // Toggle overlay
+    const [numberOfPages, setNumberOfPages] = useState(0) // The number of pages filled with 10 book reviews each
+    const [pagePosts, setPagePosts] = useState([[]]); // Each page contain 10 post
 
 
+    // Update searchquery data
     const [formData, setFormData] = useState({
         search: "",
     });
 
+    // Handle updating state
     const handleInputChange = (e) => {
         const {value, name} = e.target;
         setFormData((prev) => {
@@ -34,6 +45,7 @@ export const Posts = () => {
         })
     }
 
+    // Parse all the posts into pages of 10 posts per page
     const postsIntoPages = (posts, postsPerPage = 10) => {
         const pages = [];
         for (let i = 0; i < posts.length; i += postsPerPage) {
@@ -45,6 +57,7 @@ export const Posts = () => {
 
 
     useEffect(() => {
+        // Get all posts from the back-end
         const token = localStorage.getItem("token");
         fetch("/api/posts", {
             method: "GET",
@@ -63,6 +76,7 @@ export const Posts = () => {
     }, [])
 
 
+    // If admin switches pages, change index in array
     useEffect(() => {
         if (pagePosts.length > 0) {
             setPosts(pagePosts[0]);
@@ -70,6 +84,7 @@ export const Posts = () => {
     }, [pagePosts]);
 
 
+    // Parse title for better readability
     const parseTitle = (title) => {
         if (title && title.length > 40) {
             let splitTitle = title.substring(0, 40);
@@ -79,11 +94,13 @@ export const Posts = () => {
             return title;
     }
 
+    // Close pop up
     const closePopup = () => {
         setShowPopup(false);
         setShowOverlay(false)
     }
 
+    // Inspect a specific post
     const inspectClick = (postId) => {
         const token  = localStorage.getItem("token");
         setShowPopup(true);
@@ -101,6 +118,7 @@ export const Posts = () => {
     }
 
 
+    // Handle submit search
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token')
@@ -119,10 +137,7 @@ export const Posts = () => {
             .catch(err => console.log(err));
     }
 
-
-    // Fix so it updates automatically if (res) fetch review again
-
-
+    // Delete a specific post / book review
     const deleteClick = (postId) => {
         const token  = localStorage.getItem("token");
         fetch(`/api/posts/${postId}`, {
@@ -142,17 +157,13 @@ export const Posts = () => {
         closePopup();
     }
 
+    // Toggle overlay
     const toggleOverlay = (e) => {
         if (e.target.classList.contains('overlay')) {
             setShowOverlay(false);
             setShowPopup(false);
         }
     }
-
-
-    console.log(posts)
-
-
 
     return (
         <main className="posts">

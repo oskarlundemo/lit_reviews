@@ -59,7 +59,7 @@ export const AllBookReviews = ({ numberOfReviews, likes, comments, categories })
     return (
         <>
             <section className={`reviews-grid`}>
-                <h2>All reviews</h2>
+                <h2 className="home-title">All reviews</h2>
 
                 <CategoryBox numberOfReviews={numberOfReviews} setReviews={handleFilter} allReviews={bookReviews} />
 

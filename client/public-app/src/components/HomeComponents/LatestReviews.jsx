@@ -43,7 +43,7 @@ export const LatestReviews = ({comments, categories, likes}) => {
 
     return (
         <section className={`latest-reviews`}>
-            <h2>Latest reviews</h2>
+            <h2 className="home-title">Latest reviews</h2>
             <div className={`latest-book-grid ${loading ? 'loading' : ''}`}>
                 {reviews.length > 0 ? (
                     reviews.map((review) => (

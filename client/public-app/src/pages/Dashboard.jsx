@@ -2,7 +2,14 @@
 
 
 import '../styles/Dashboard.css'
-import {Link} from "react-router-dom";
+
+
+
+/**
+ * This page is used as a navigation screen, were the admin
+ * go select what they want to do
+ */
+
 
 import {MenuButton} from "../components/DashboardComponents/MenuButton.jsx";
 

@@ -12,7 +12,7 @@ import {PageSelector} from "../components/ActivityComponents/PageSelector.jsx";
  * Activity page
  *
  * This is a part of the admin dashboard. On this page, the admin can review
- * all the comments and also delete inappropriate ones and even block users
+ * all the comments and also delete inappropriate ones and block users from commenting
  *
  */
 
