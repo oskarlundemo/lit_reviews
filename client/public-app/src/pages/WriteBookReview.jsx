@@ -16,25 +16,32 @@ import {CategoryContainer} from "../components/BookReviewComponents/CategoryCont
 import {CategoryInput} from "../components/BookReviewComponents/CategoryInput.jsx";
 
 
+/**
+ * This page is used for updating and creating new book reviews
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
 
 export const WriteBookReview = () => {
 
-    const initialBodyData = '';
-    const [editorContent, setEditorContent] = useState(initialBodyData);
-    const [isDisabled, setIsDisabled] = useState(true);
-    const navigate = useNavigate();
-    const [publish, setPublished] = useState(true);
-    const [thumbnail, setThumbnail] = useState(null);
-    const [bookCategories, setBookCategories] = useState([]);
-    const [category, setCategory] = useState('');
+    const [editorContent, setEditorContent] = useState(''); // Set text editor to ''
+    const [isDisabled, setIsDisabled] = useState(true); // Disable button
+    const navigate = useNavigate(); // Navigate to next page
+    const [publish, setPublished] = useState(true); // Publish post now or later
+    const [thumbnail, setThumbnail] = useState(null); // Thumbnail for the post
+    const [bookCategories, setBookCategories] = useState([]); // Categories for the book
+    const [category, setCategory] = useState(''); // Set new categories
+    const [errors, setErrors] = useState([]); // Validation errors
+    const location = useLocation(); // Get data from previous page when updating
+    const {post} = location.state || {} // If there is a location.state, then edit review, else create a new one
 
 
-    const [errors, setErrors] = useState([]);
-
-    const location = useLocation();
-    const {post} = location.state || {}
-
+    // Used for updating the form data
     const [formData, setFormData] = useState({
+
+        // Basically, if there is a post provided with the location.state, set the field to that value, else ''
         bookTitle: post?.Book.title || '',
         bookAuthor: post?.Book.Author.name || '',
         bookPages: post?.Book.pages || '',
@@ -53,7 +60,7 @@ export const WriteBookReview = () => {
         categories: post?.Book.BookCategory?.map(c => c.category.category) || [],
     });
 
-
+    // Set categories for the book
     useEffect(() => {
         if (post) {
             setBookCategories(post.Book.BookCategory.map(c => c.category.category));
@@ -62,25 +69,27 @@ export const WriteBookReview = () => {
     }, [post]);
 
 
+    // Handle text change for categories
     const handleTextChange = (e) => {
         setCategory(e.target.value);
     }
 
-
+    // If user clicks enter after writing a category, parse it and add it into to the array
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
             if (category.trim() !== "" && bookCategories.length < 5) {
-
                 setBookCategories(prev => [
                     ...prev,
                     category.trim().toLowerCase().replace(/^\w/, (c) => c.toUpperCase())
                     ]);
+                // Reset the field so the user can add more categories
                 setCategory("");
             }
         }
     };
 
+    // Update text editor changes
     const handleEditorChange = (content) => {
         setEditorContent(content);
         setFormData((prevData) => ({
@@ -89,9 +98,7 @@ export const WriteBookReview = () => {
         }));
     };
 
-
-
-
+    // Handle file changes
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setThumbnail(selectedFile);
@@ -101,6 +108,7 @@ export const WriteBookReview = () => {
         }));
     };
 
+    // Handle radio state
     const handleRadio = (e) => {
         const newPublishState = e.target.id === 'publish';
         setPublished(newPublishState);
@@ -108,10 +116,9 @@ export const WriteBookReview = () => {
             ...prevData,
             publish: newPublishState
         }));
-
-        console.log(newPublishState);
     };
 
+    // Handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -120,6 +127,8 @@ export const WriteBookReview = () => {
         }));
     };
 
+
+    // Validate form, make sure each field has a value before submitting
     const validateForm = () => {
         const { bookTitle, bookAuthor, bookPages, body, thumbnail, reviewTitle } = formData;
 
@@ -136,6 +145,7 @@ export const WriteBookReview = () => {
         );
     };
 
+    // Update the state of the button if all fields are filled
     useEffect(() => {
         setIsDisabled(!validateForm());
     }, [formData, thumbnail]);
@@ -143,6 +153,7 @@ export const WriteBookReview = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Append all the data to form
         const formPayload = new FormData();
         formPayload.append("bookTitle", formData.bookTitle);
         formPayload.append("bookAuthor", formData.bookAuthor);
@@ -159,7 +170,7 @@ export const WriteBookReview = () => {
             formPayload.append(`categories[${index}]`, category);
         });
 
-
+        // If we are just updating a review, send the id, authorId and bookId
         if (formData.reviewId) {
             formPayload.append("reviewId", formData.reviewId);
             formPayload.append("authorId", formData.authorId);
@@ -187,9 +198,6 @@ export const WriteBookReview = () => {
             console.error('Fetch error:', err);
         }
     };
-
-
-
 
 
     return (
@@ -248,11 +256,12 @@ export const WriteBookReview = () => {
                             />
 
 
-                            <CategoryInput category={category}
-                                           handleTextChange={handleTextChange}
-                                           handleKeyDown={handleKeyDown}
-                                           errors={errors}
-                                           name='categories'
+                            <CategoryInput
+                                category={category}
+                                handleTextChange={handleTextChange}
+                                handleKeyDown={handleKeyDown}
+                                errors={errors}
+                                name='categories'
                             />
 
                             <CategoryContainer
@@ -275,7 +284,6 @@ export const WriteBookReview = () => {
                                 errors={errors}
                             />
 
-
                             <TextAreaComponent
                                 handleInputChange={handleInputChange}
                                 bookTitle={formData.quote}
@@ -285,7 +293,6 @@ export const WriteBookReview = () => {
                                 placeholder={"I don't want to be at the mercy of my emotions. I want to use them, to enjoy them, and to dominate them"}
                                 fieldsetName={"Favorite quote"}
                             />
-
 
                             <InputComponent
                                 title="Thumbnail"
@@ -309,8 +316,8 @@ export const WriteBookReview = () => {
                                 />
 
                         </div>
-
-                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" >Submit</button>                    </div>
+                        <button className={`${isDisabled ? 'disabled' : ''}`} type="submit" >Submit</button>
+                    </div>
                 </form>
         </main>
     )

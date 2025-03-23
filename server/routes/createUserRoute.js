@@ -10,8 +10,10 @@ import { body, validationResult } from 'express-validator';
 export const validateUserInfo = [
     body('username')
         .trim()
-        .isLength({ min: 3, max: 10 })
-        .withMessage('Username must be between 3 and 10 characters')
+        .isLength({ max: 10 })
+        .withMessage('Username is to long, must be between 3 and 10 characters')
+        .isLength({ min: 3 })
+        .withMessage('Username is to short, must be between 3 and 10 characters')
         .escape()
         .custom(async (username) => {
             const isValid = await uniqueUsername(username).catch(err => {

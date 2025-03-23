@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import error from "eslint-plugin-react/lib/util/error.js";
 
 /**
  * This is the default input component used when asking for user data, used in the Login.jsx and WriteBookReview.jsx pages
@@ -23,9 +24,12 @@ export const InputComponent = ({ title, type, id, name, onChange, value, example
 
 
     useEffect(() => {
-        // In the array of errors, find the corresponding to this input field if there is one and show it
-        const error = errors.find(error => error.path === name);
-        setErrorMessage(error ? error.msg : '');
+        if (Array.isArray(errors)) {
+            const error = errors.find(err => err.path === name);
+            setErrorMessage(error ? error.msg : '');
+        } else if (typeof errors === 'string') {
+            setErrorMessage(errors);
+        }
     }, [errors, name]);
 
     return (

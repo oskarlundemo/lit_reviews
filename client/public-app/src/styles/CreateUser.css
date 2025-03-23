@@ -6,17 +6,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 2rem 0;
 }
 
 
 
 .create-user-form {
-    width: 30%;
+    max-width: 450px;
+    width: 50%;
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding: 1rem 2rem;
+    padding: 1rem 3rem;
     justify-self: center;
+    margin: 4rem 0;
 
     h2 {
         margin-bottom: 0;
@@ -28,7 +29,17 @@
     }
 
     button {
+        transition: 200ms ease-in-out;
         margin: 1rem;
+        width: fit-content;
+        align-self: center;
+        padding: 1rem 2rem;
+    }
+
+    button:hover {
+        cursor: pointer;
+        scale: 1.05;
+        color: var(--accent-color);
     }
 }
 
@@ -107,6 +118,8 @@
         fill: green;
     }
 }
+
+
 
 
 

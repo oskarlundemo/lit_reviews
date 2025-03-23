@@ -11,7 +11,7 @@
     overflow: hidden;
     justify-self: center;
     align-self: center;
-    margin: 4rem 2rem;
+    margin: 8rem 2rem;
     padding: 2rem;
 }
 
@@ -55,7 +55,17 @@ form {
     display: flex;
 
     button {
-        margin-top: 1rem;
+        transition: 200ms ease-in-out;
+        margin: 1rem;
+        width: fit-content;
+        align-self: center;
+        padding: 1rem 2rem;
+    }
+
+    button:hover {
+        cursor: pointer !important;
+        scale: 1.05;
+        color: var(--accent-color);
     }
 }
 
@@ -72,11 +82,22 @@ form {
     font-size: clamp(1rem, 1vw, 1rem);
 }
 
+.box-subheader {
+}
+
+.box-header {
+    margin-bottom: 0;
+}
 
 
 @media screen and (max-width: 800px) {
     .divider {
         display: none;
+    }
+
+    .login-box {
+        width: 70%;
+        margin: 20rem 2rem;
     }
 
     .login-box-left {
@@ -89,3 +110,5 @@ form {
         padding: 0;
     }
 }
+
+

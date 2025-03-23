@@ -6,15 +6,26 @@ import {AllBookReviews} from "../components/HomeComponents/AllBookReviews.jsx";
 import {useEffect, useState} from "react";
 
 
+/**
+ * This is the homepage of the application
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
+
+
+
 export default function Home  () {
 
 
-    const [likes, setLikes] = useState([]);
-    const [comments, setComments] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [numberOfReviews, setNumberOfReviews] = useState(0);
+    const [likes, setLikes] = useState([]); // List of likes
+    const [comments, setComments] = useState([]); // List of all comments
+    const [categories, setCategories] = useState([]); // List of all categories for each book
+    const [numberOfReviews, setNumberOfReviews] = useState(0); // Number of book reviews
 
     useEffect(() => {
+
+        // Fetch all likes from the back-end
         fetch('/api/home/likes/all', {
             method: 'GET',
             headers: {
@@ -27,7 +38,7 @@ export default function Home  () {
                 console.log(err)
             })
 
-
+        // Fetch all the comments from the back-end
         fetch('/api/home/comments/all', {
             method: 'GET',
             headers: {
@@ -40,7 +51,7 @@ export default function Home  () {
                 console.log(err)
             })
 
-
+        // Fetch all the book categoreis from the back-end
         fetch(`/api/home/categories/books/`, {
             method: 'GET',
             headers: {
@@ -55,7 +66,7 @@ export default function Home  () {
                 console.log(err)
             })
 
-
+        // Fetch the nuumber of reviews from the back-end
         fetch('api/home/reviews/number', {
             method: 'GET',
             headers: {

@@ -121,6 +121,13 @@
         transition: 200ms ease-in-out;
     }
 
+    button:focus {
+        outline: none;
+        box-shadow: var(--box-shadow);
+        scale: 1.05;
+        border: none;
+    }
+
     button:hover {
         color: var(--accent-color);
     }
