@@ -34,7 +34,7 @@ app.use('/login', loginRoute);
 app.use('/create-user', createUserRoute);
 app.use('/book-review', bookReview);
 app.use('/home', homeRoute);
-app.use('/api/posts', postRoute);
+app.use('/posts', postRoute);
 app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
 

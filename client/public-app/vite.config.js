@@ -1,5 +1,3 @@
-// vite.config.js
-
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -9,9 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://let-reviews-back-end.onrender.com', // Backend deployed URL
+        target: 'https://let-reviews-back-end.onrender.com', // Your deployed backend URL
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '') // Remove /api from the URL before sending
+        rewrite: (path) => path // Keep /api in the path, no change needed
       },
     },
   },
