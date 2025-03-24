@@ -91,6 +91,16 @@
 
 
 @media screen and (max-width: 800px) {
+
+    .loading {
+        min-height: 400px;
+
+    }
+
+    .latest-book-grid .loading {
+        min-height: 200px;
+    }
+
     .latest-book-grid {
         display: grid;
         grid-template: repeat(3, 1fr) / repeat(1, 1fr);
