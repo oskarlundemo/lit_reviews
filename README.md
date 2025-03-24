@@ -45,3 +45,6 @@ Registered users can like and comment on reviews.
 Author: Oskar LundemoEmail: oskarlundemo@gmail.com
 
 
+## Screenshots 
+
+![Image](https://github.com/user-attachments/assets/b0b794b2-cb50-432a-8f6f-a5a8cff71640)
