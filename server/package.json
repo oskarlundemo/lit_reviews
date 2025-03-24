@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
-  "start ": "env-cmd -f ./config/dev.env node scripts/dev-run.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
