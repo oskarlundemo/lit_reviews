@@ -78,7 +78,7 @@ export const AllBookReviews = ({ numberOfReviews, likes, comments, categories })
                             ))}
                         </>
                     ) : (
-                        <div className="loading-reviews">No reviews to display</div>
+                        <div className="loading-reviews"></div>
                     )}
                 </div>
 

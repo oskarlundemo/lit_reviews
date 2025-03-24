@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 
 import loginRoute from './routes/loginRoute.js';
