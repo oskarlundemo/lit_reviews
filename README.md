@@ -1,31 +1,47 @@
-# Lit reviews 🔥
-
-
-Lundemo´s Library - React & Node.js
+Lit Reviews - React & Node.js
 
 📌 Project Overview
-This project is a React and Node.js-based web application that hosts a bunch of book reviews. Users can sign up and interact with the content by either like and comments. 
+
+Lit Reviews is a web application that allows users to explore and interact with book reviews. The admin can write, update and delete book reviews which registered users can engage with by liking and commenting on them. While all visitors can read the reviews, an account is required to like or comment.
 
 🛠 Tech Stack
-Frontend: React, React Router
 
-Backend: Node.js, Express, PostgreSQL
+Frontend:
 
-Styling: CSS
+React
 
-
-
-🚀 Installation & Setup
+Vite
 
 
+Styling: 
+
+CSS
+
+
+Backend:
+
+Node.js
+
+Express
+
+PostgreSQL
+
+Prisma ORM
 
 
 
 📌 Features
 
+Admin can post, update and delete book reviews.
 
+Users can sign up and log in.
 
+Everyone can read reviews.
 
-Author: Oskar Lundemo 💻 Contact: oskarlundemo@gmail.com 📧 
+Registered users can like and comment on reviews.
+
+📧 Contact
+
+Author: Oskar LundemoEmail: oskarlundemo@gmail.com
 
 
