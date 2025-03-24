@@ -107,6 +107,8 @@ export const Login = () => {
     return (
         <main className="login-box">
 
+
+            <div className="login-box-wrapper">
             <QuoteBox
                 quotes={quotes}
                 randomQuote={randomQuote}
@@ -122,6 +124,7 @@ export const Login = () => {
                 passwordValue={formData.password}
                 usernameValue={formData.username}/>
 
+            </div>
         </main>
     )
 }
