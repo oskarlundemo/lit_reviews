@@ -2,7 +2,7 @@ Lit Reviews - React & Node.js
 
 📌 Project Overview
 
-Lit Reviews is a web application that allows users to explore and interact with book reviews. The admin can write, update and delete book reviews which registered users can engage with by liking and commenting on them. While all visitors can read the reviews, an account is required to like or comment.
+Lit (short for literary) Reviews is a web application that allows users to explore and interact with book reviews. The admin can write, update and delete book reviews which registered users can engage with by liking and commenting on them. While all visitors can read the reviews, an account is required to like or comment.
 
 🛠 Tech Stack
 
