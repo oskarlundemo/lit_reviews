@@ -37,6 +37,7 @@
 
     p {
         height: fit-content;
+        margin: 0;
     }
 }
 
