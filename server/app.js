@@ -24,7 +24,10 @@ const corsOptions = {
     credentials: true, // Allow credentials like cookies or Authorization headers
 };
 
+app.use(express.static(reactBuildPath));
 app.use(cors(corsOptions));
+app.use(app.router);
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,15 +41,14 @@ app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
 
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const reactBuildPath = path.join(__dirname, "../client/public-app/dist");
-app.use(express.static(reactBuildPath));
+
 
 // Handle React routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(reactBuildPath, "index.html"), (err) => {
+    res.sendFile(path.join(reactBuildPath, "new_index_file.html"), (err) => {
         if (err) {
             console.error("Error serving index.html:", err);
             res.status(500).send(err);
