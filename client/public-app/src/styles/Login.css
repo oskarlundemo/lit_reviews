@@ -8,6 +8,7 @@
     justify-self: center;
     align-self: center;
     justify-content: center;
+    margin: 0 2rem;
 }
 
 
@@ -19,7 +20,7 @@
     border-radius: 15px;
     align-self: center;
     padding: 8rem 2rem;
-    margin: 0 2rem;
+    margin: 0 1rem;
 }
 
 
@@ -105,9 +106,15 @@ form {
         display: none;
     }
 
+
     .login-box {
         width: 100% !important;
         margin: 5rem 2rem;
+    }
+
+    .login-box-wrapper {
+        margin: 2rem;
+        padding: 1rem;
     }
 
     .login-box-left {

@@ -48,6 +48,10 @@ html {
   background-color: var(--background-color);
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
 
 
 @media screen and (max-width: 400px) {
