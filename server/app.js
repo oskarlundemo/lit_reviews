@@ -41,11 +41,11 @@ app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
 
 
-
-app.use(express.static(path.join(__dirname, '../client/public-app/dist')));
+const reactBuildPath = path.join(__dirname, '../client/public-app/dist');
+app.use(express.static(reactBuildPath));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
