@@ -12,8 +12,6 @@ import activityRouter from './routes/activityRoute.js';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import express from 'express';
-
 
 
 const PORT = process.env.PORT || 5001;
