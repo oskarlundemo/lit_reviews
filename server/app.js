@@ -30,7 +30,6 @@ const reactBuildPath = path.join(__dirname, "../client/public-app/dist");
 
 app.use(express.static(reactBuildPath));
 app.use(cors(corsOptions));
-app.use(app.router);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
