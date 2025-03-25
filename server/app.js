@@ -10,7 +10,9 @@ import postRoute from './routes/postsRoute.js';
 import commentsRoute from './routes/commentsRoute.js';
 import activityRouter from './routes/activityRoute.js';
 import cors from 'cors';
-import * as path from "node:path";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import express from 'express';
 
 
 
@@ -39,6 +41,9 @@ app.use('/posts', postRoute);
 app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
