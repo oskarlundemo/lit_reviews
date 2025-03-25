@@ -47,7 +47,8 @@ Registered users can like and comment on reviews.
 
 ## 📧 Contact
 
-Author: Oskar LundemoEmail: oskarlundemo@gmail.com
+Author: Oskar Lundemo
+Email: oskarlundemo@gmail.com
 
 
 ## Screenshots 
