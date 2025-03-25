@@ -24,9 +24,12 @@ export const AllBookReviews = ({ numberOfReviews, likes, comments, categories })
     const [displayedReviews, setDisplayedReviews] = useState(4); // Only display 4 reviews first
     const [loading, setLoading] = useState(true); // Update loading
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     useEffect(() => {
+
         // Get all the book reviews
-        fetch('/api/home/reviews/all', {
+        fetch(`${API_BASE_URL}/home/reviews/all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

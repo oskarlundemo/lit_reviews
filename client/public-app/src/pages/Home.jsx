@@ -23,6 +23,8 @@ export default function Home  () {
     const [categories, setCategories] = useState([]); // List of all categories for each book
     const [numberOfReviews, setNumberOfReviews] = useState(0); // Number of book reviews
 
+
+
     useEffect(() => {
 
         // Fetch all likes from the back-end
