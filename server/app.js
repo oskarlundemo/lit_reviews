@@ -40,6 +40,13 @@ app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
 
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+
+app.use(express.static(path.join(__dirname, 'build')));
+
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

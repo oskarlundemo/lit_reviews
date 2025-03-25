@@ -81,7 +81,7 @@ export const Login = () => {
 
         try {
             // Send form data to the back-end
-            const response = await fetch(`${API_BASE_URL}/sign-up`, {
+            const response = await fetch(`${API_BASE_URL}/sign-in`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
