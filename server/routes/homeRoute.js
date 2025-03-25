@@ -55,6 +55,6 @@ homeRouter.get('/categories/number', getNumberOfCategories)
 
 homeRouter.get('/get-categories/:id', getCategoriesForBook)
 
-
+homeRouter.get('', )
 
 export default homeRouter;

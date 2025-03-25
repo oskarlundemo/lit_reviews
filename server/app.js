@@ -10,6 +10,7 @@ import postRoute from './routes/postsRoute.js';
 import commentsRoute from './routes/commentsRoute.js';
 import activityRouter from './routes/activityRoute.js';
 import cors from 'cors';
+import * as path from "node:path";
 
 
 
@@ -37,6 +38,14 @@ app.use('/home', homeRoute);
 app.use('/posts', postRoute);
 app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
+
+app.get('/:review-title/:reviewId', homeRoute);
+
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
