@@ -8,9 +8,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://let-reviews-back-end.onrender.com', // Backend deployed URL
+        target: 'https://let-reviews-back-end.onrender.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\//, '/'), // Ensure /api is removed properly
+        rewrite: (path) => path.replace(/^\/api\//, '/'),
       },
     },
   },

@@ -21,6 +21,7 @@ const corsOptions = {
     origin: 'https://lit-reviews.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Allow credentials like cookies or Authorization headers
 };
 
 app.use(cors(corsOptions));

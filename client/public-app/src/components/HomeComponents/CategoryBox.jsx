@@ -27,7 +27,6 @@ export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
             .then(res => res.json())
             .then(data => {
                 setCategories(data);
-                console.log(data);
             })
             .catch(err => console.log(err));
     }, [])
