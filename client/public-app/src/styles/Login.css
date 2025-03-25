@@ -21,6 +21,7 @@
     align-self: center;
     padding: 8rem 2rem;
     margin: 0 1rem;
+    max-width: 800px;
 }
 
 
@@ -114,7 +115,7 @@ form {
 
     .login-box-wrapper {
         margin: 2rem;
-        padding: 1rem;
+        padding: 4rem 1rem;
     }
 
     .login-box-left {
@@ -124,7 +125,7 @@ form {
 
     .login-box-right {
         width: 100%;
-        padding: 0;
+        padding: 1rem;
     }
 }
 
