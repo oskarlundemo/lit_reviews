@@ -44,6 +44,10 @@ main {
   background-color: var(--background-color);
 }
 
+html {
+  background-color: var(--background-color);
+}
+
 
 
 @media screen and (max-width: 400px) {

@@ -2,7 +2,7 @@
 
 
 .login-box {
-    width: 70%;
+    width: 100%;
     display: flex;
     overflow: hidden;
     justify-self: center;
@@ -19,6 +19,7 @@
     border-radius: 15px;
     align-self: center;
     padding: 8rem 2rem;
+    margin: 0 2rem;
 }
 
 
@@ -105,8 +106,8 @@ form {
     }
 
     .login-box {
-        width: 70%;
-        margin: 20rem 2rem;
+        width: 100% !important;
+        margin: 5rem 2rem;
     }
 
     .login-box-left {

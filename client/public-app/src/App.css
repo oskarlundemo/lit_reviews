@@ -7,11 +7,15 @@
     flex-direction: column;
 }
 
+
 header {
     height: 10%;
     background-color: #f0f0f0;
 }
 
+
+
 main {
     flex-grow: 1;
+    height: 90%;
 }

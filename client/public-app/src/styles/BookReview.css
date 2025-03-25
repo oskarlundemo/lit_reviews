@@ -14,13 +14,15 @@
     animation: fadeIn 2s;
     background-color: transparent;
     margin: 0;
-
+    justify-content: flex-start;
 }
 
 
 @media screen and (max-width: 800px) {
 
+
     .book-review {
         width: 90%;
+        height: fit-content;
     }
 }
