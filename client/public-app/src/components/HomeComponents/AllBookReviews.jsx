@@ -24,12 +24,12 @@ export const AllBookReviews = ({ numberOfReviews, likes, comments, categories })
     const [displayedReviews, setDisplayedReviews] = useState(4); // Only display 4 reviews first
     const [loading, setLoading] = useState(true); // Update loading
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
     const API_BASE_URL = import.meta.env.PROD
-        ? "https://let-reviews-back-end.onrender.com"  // Use backend in production
+        ? PRODUCTION_URL  // Use backend in production
         : "/api";  // Use Vite proxy in development
 
     useEffect(() => {
-
         // Get all the book reviews
         fetch(`${API_BASE_URL}/home/reviews/all`, {
             method: 'GET',

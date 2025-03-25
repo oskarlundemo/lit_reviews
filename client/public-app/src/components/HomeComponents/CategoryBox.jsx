@@ -15,10 +15,14 @@ export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
     const [categories, setCategories] = useState([]); // Store categories
     const [activeBtn, setActiveBtn] = useState(0); // Used for css styling
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
     useEffect(() => {
         // Get the top 5 categories from the back end
-        fetch('/api/home/categories-top', {
+        fetch(`${API_BASE_URL}/home/categories-top`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -29,6 +33,7 @@ export const CategoryBox = ({ setReviews, numberOfReviews, allReviews }) => {
                 setCategories(data);
             })
             .catch(err => console.log(err));
+
     }, [])
 
     // When the user clicks a button with a category, filter the reviews with that category

@@ -24,13 +24,18 @@ export const LatestReviews = ({comments, categories, likes}) => {
     const navigate = useNavigate(); // See above
     const [loading, setLoading] = useState(true); // Update loading state
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
+
 
     useEffect(() => {
         // Get the three latest book reviews from back end
-        fetch("api/home/latest")
+        fetch(`${API_BASE_URL}/home/latest`)
             .then((res) => res.json())
             .then((data) => {
-                setReviews(data)
+                setReviews(data);
                 setLoading(false);
             })
             .catch((err) => console.log("Error fetching reviews:", err));

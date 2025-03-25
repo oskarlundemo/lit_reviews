@@ -20,11 +20,15 @@ export const AboutSection = ({numberOfReviews}) => {
 
     const [numberOfCategories, setNumberOfCategories] = useState(0); // Set the number of reviews
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
 
     useEffect(() => {
         // Get the number of reviews
-        fetch('api/home/categories/number', {
+        fetch(`${API_BASE_URL}/home/categories/number`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

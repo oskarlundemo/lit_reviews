@@ -25,9 +25,15 @@ export const QuoteSlider = () => {
     const [animateClass, setAnimateClass] = useState(''); // Reset the css transition on change
 
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
+
+
     useEffect(() => {
         // Get the three quotes from the top three book reviews
-        fetch('/api/home/top-three-quotes', {
+        fetch(`${API_BASE_URL}/home/top-three-quotes`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

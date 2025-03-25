@@ -23,12 +23,15 @@ export default function Home  () {
     const [categories, setCategories] = useState([]); // List of all categories for each book
     const [numberOfReviews, setNumberOfReviews] = useState(0); // Number of book reviews
 
-
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
     useEffect(() => {
 
-        // Fetch all likes from the back-end
-        fetch('/api/home/likes/all', {
+        // Fetch all the likes from the back-end
+        fetch(`${API_BASE_URL}/home/likes/all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,10 +41,10 @@ export default function Home  () {
             .then((data) => setLikes(data))
             .catch((err) => {
                 console.log(err)
-            })
+            });
 
         // Fetch all the comments from the back-end
-        fetch('/api/home/comments/all', {
+        fetch(`${API_BASE_URL}/home/comments/all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,10 +54,10 @@ export default function Home  () {
             .then((data) => setComments(data))
             .catch((err) => {
                 console.log(err)
-            })
+            });
 
-        // Fetch all the book categoreis from the back-end
-        fetch(`/api/home/categories/books/`, {
+        // Fetch all the book categories from the back-end
+        fetch(`${API_BASE_URL}/home/categories/books/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,10 +69,10 @@ export default function Home  () {
             })
             .catch((err) => {
                 console.log(err)
-            })
+            });
 
-        // Fetch the nuumber of reviews from the back-end
-        fetch('api/home/reviews/number', {
+        // Fetch the number of reviews from the back-end
+        fetch(`${API_BASE_URL}/home/reviews/number`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
