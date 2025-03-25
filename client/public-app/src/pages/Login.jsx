@@ -33,7 +33,7 @@ export const Login = () => {
 
     useEffect(() => {
         // Fetch the quotes and select a random one
-        fetch(`${API_BASE_URL}/login`, {
+        fetch(`${API_BASE_URL}/sign-in`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -81,7 +81,7 @@ export const Login = () => {
 
         try {
             // Send form data to the back-end
-            const response = await fetch(`${API_BASE_URL}/login`, {
+            const response = await fetch(`${API_BASE_URL}/sign-up`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

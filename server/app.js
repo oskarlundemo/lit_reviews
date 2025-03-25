@@ -31,20 +31,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
-app.use('/login', loginRoute);
-app.use('/create-user', createUserRoute);
+app.use('/sign-in', loginRoute);
+app.use('/sign-up', createUserRoute);
 app.use('/book-review', bookReview);
 app.use('/home', homeRoute);
 app.use('/posts', postRoute);
 app.use('/comments', commentsRoute);
 app.use('/activity', activityRouter);
 
-app.get('/:review-title/:reviewId', homeRoute);
-
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 
 app.listen(PORT, () => {

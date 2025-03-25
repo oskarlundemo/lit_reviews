@@ -78,12 +78,11 @@ export default function CreateUser() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
         setInputError(null);
         setIsDisabled(false);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/create-user`, {
+            const response = await fetch(`${API_BASE_URL}/sign-up`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
