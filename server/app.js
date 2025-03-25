@@ -31,7 +31,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
 app.use('/sign-in', loginRoute);
 app.use('/sign-up', createUserRoute);
 app.use('/book-review', bookReview);
