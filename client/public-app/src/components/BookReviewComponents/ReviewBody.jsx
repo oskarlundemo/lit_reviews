@@ -29,6 +29,10 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
     const {user} = useAuth(); // Get the logged in user from the context
 
     const sanitizedBody = DOMPurify.sanitize(body); // Sanitize the body since it is saved with tags ex <p>
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
     // Function to estimate the time to read the review
     const estimateReadingTime = (body) => {
@@ -47,7 +51,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
     useEffect (() => {
 
         // Get the likes for the book review
-        fetch(`/api/home/like/${reviewId}`, {
+        fetch(`${API_BASE_URL}/home/like/${reviewId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,23 +59,22 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
         })
             .then(res => res.json())
             .then(data => setLikes(data))
-            .catch(err => console.log(err))
-
+            .catch(err => console.log(err));
         // Get the categories about the book
-        fetch(`/api/home/get-categories/${reviewId}`, {
+        fetch(`${API_BASE_URL}/home/get-categories/${reviewId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
         })
             .then(res => res.json())
             .then(data => {
-                setCategories(data)
-                console.log(data)
+                setCategories(data);
+                console.log(data);
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
 
-        // Check if the looged in user already likes the post
+        // Check if the logged-in user already likes the post
         isLikedByUser();
     }, [])
 
@@ -110,7 +113,7 @@ export const ReviewBody = ({date, writer, body, title, reviewId}) => {
 
             try {
                 // Update that the user clicked the button
-                const res = await fetch(`/api/home/like/${reviewId}`, {
+                const res = await fetch(`${API_BASE_URL}/home/like/${reviewId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

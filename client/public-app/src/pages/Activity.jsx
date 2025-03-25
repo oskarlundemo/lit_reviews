@@ -32,6 +32,11 @@ export const Activity = () => {
     const [numberOfPages, setNumberOfPages] = useState(0); // Number of pages full of comments
     const [pageComments, setPageComments] = useState([[]]); // Filter the comments into a 2D array
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
+
 
     // Function to close pop up
     const closePopup = () => {
@@ -59,7 +64,7 @@ export const Activity = () => {
 
     useEffect(() => {
         // Fetch all the comments
-        fetch("/api/comments/all", {
+        fetch(`${API_BASE_URL}/comments/all`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -73,9 +78,8 @@ export const Activity = () => {
             })
             .catch(err => console.log(err));
 
-
-        // Fetch all the banned users
-        fetch("/api/activity/", {
+// Fetch all banned users
+        fetch(`${API_BASE_URL}/activity/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -83,11 +87,7 @@ export const Activity = () => {
         })
             .then(res => res.json())
             .then(data => setBannedUsers(data))
-            .catch(err => console.log(err))
-
-
-
-
+            .catch(err => console.log(err));
     }, []);
 
 
@@ -127,11 +127,11 @@ export const Activity = () => {
         e.preventDefault();
 
         const token = localStorage.getItem("token");
-        fetch(`/api/comments/search?query=${encodeURIComponent(searchQuery)}`, {
+        fetch(`${API_BASE_URL}/comments/search?query=${encodeURIComponent(searchQuery)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             }
         })
             .then(res => res.json())
@@ -141,15 +141,15 @@ export const Activity = () => {
                 setPageComments(pages);
                 setComments(pages.length > 0 ? pages[0] : []);
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
     }
 
 
     // Function to delete a comment, commetId is the id of the comment
     const deleteComment = async (commentId) => {
         try {
-            // Delet request to back end
-            const res = await fetch(`/api/comments/${commentId}`, {
+            // DELETE request to the backend
+            const res = await fetch(`${API_BASE_URL}/comments/${commentId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -158,7 +158,12 @@ export const Activity = () => {
 
             // If delete was successful, update the comments
             if (res.ok) {
-                const updatedComments = await fetch("/api/comments/all");
+                const updatedComments = await fetch(`${API_BASE_URL}/comments/all`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
                 const data = await updatedComments.json();
 
                 const pages = commentsIntoPages(data, 10);
@@ -176,58 +181,60 @@ export const Activity = () => {
     // Function to ban user, @param user is the user to ban
     const banUser = async (user) => {
         try {
-            // Send a request to backend
-            const res = await fetch(`/api/activity/ban`, {
+            // Send a request to the backend
+            const res = await fetch(`${API_BASE_URL}/activity/ban`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({user}),
-            })
+                body: JSON.stringify({ user }),
+            });
 
             // If ok, update the list of banned users to reflect changes
             if (res.ok) {
-                fetch("/api/activity/", {
+                fetch(`${API_BASE_URL}/activity/`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
-                    }
+                    },
                 })
                     .then(res => res.json())
                     .then(data => setBannedUsers(data))
-                    .catch(err => console.log(err))
+                    .catch(err => console.log(err));
             }
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
+
     }
 
     // Function to unban users, @param user is the user getting unban
     const unBanUser = async (user) => {
         try {
-            // Send a request to unban to back-end
-            const res = await fetch(`/api/activity/unban`, {
+            // Send a request to unban to the backend
+            const res = await fetch(`${API_BASE_URL}/activity/unban`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({user}),
-            })
+                body: JSON.stringify({ user }),
+            });
 
             // If successful, fetch again to reflect changes
             if (res.ok) {
-                fetch("/api/activity/", {
+                const response = await fetch(`${API_BASE_URL}/activity/`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
-                    }
-                })
-                    .then(res => res.json())
-                    .then(data => setBannedUsers(data))
-                    .catch(err => console.log(err))
+                    },
+                });
+                const data = await response.json();
+                setBannedUsers(data);
+            } else {
+                console.error("Failed to unban user");
             }
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 

@@ -35,6 +35,12 @@ export const CommentSection = () => {
         comment: ''
     })
 
+
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
+
     // Handle input change for the new comment
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -76,7 +82,7 @@ export const CommentSection = () => {
 
 
         // Load the comments for the book review
-        fetch(`/api/home/${id}/comments`, {
+        fetch(`${API_BASE_URL}/home/${id}/comments`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -91,18 +97,18 @@ export const CommentSection = () => {
             .catch(err => console.log(err));
 
         // Get the list of banned users
-        fetch("/api/activity/", {
+        fetch(`${API_BASE_URL}/activity/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-            }
+            },
         })
             .then(res => res.json())
             .then(data => {
-                setBannedUsers(data)
-                console.log(data)
+                setBannedUsers(data);
+                console.log(data);
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
 
     }, []);
 
@@ -123,26 +129,27 @@ export const CommentSection = () => {
         try {
             // Send form to backend
             const token = localStorage.getItem("token");
-            const res = await fetch(`/api/home/review/create/comment/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/home/review/create/comment/${id}`, {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': token ? `Bearer ${token}` : ''
                 },
-            })
+            });
+
             const responseData = await res.json();
 
-            // If ok, update the comments with the new one aswell
+            // If ok, update the comments with the new one as well
             if (res.ok) {
-                const updatedComments = await fetch(`/api/home/${id}/comments`);
+                const updatedComments = await fetch(`${API_BASE_URL}/home/${id}/comments`);
                 const data = await updatedComments.json();
                 setComments(data);
             } else {
                 console.error("Failed to create comment:", responseData);
             }
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 
@@ -151,22 +158,23 @@ export const CommentSection = () => {
     const handleDelete = async (commentId) => {
         try {
             // Delete comment
-            const res = await fetch(`/api/home/review/delete/${commentId}`, {
+            const res = await fetch(`${API_BASE_URL}/home/review/delete/${commentId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
+
             // If delete was successful, fetch again to show the new comments
             if (res.ok) {
-                const updatedComments = await fetch(`/api/home/${id}/comments`);
+                const updatedComments = await fetch(`${API_BASE_URL}/home/${id}/comments`);
                 const data = await updatedComments.json();
                 setComments(data);
             } else {
                 console.error("Failed to delete comment");
             }
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 

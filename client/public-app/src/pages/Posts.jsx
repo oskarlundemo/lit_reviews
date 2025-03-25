@@ -27,6 +27,10 @@ export const Posts = () => {
     const [numberOfPages, setNumberOfPages] = useState(0) // The number of pages filled with 10 book reviews each
     const [pagePosts, setPagePosts] = useState([[]]); // Each page contain 10 post
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
     // Update searchquery data
     const [formData, setFormData] = useState({
@@ -59,15 +63,15 @@ export const Posts = () => {
     useEffect(() => {
         // Get all posts from the back-end
         const token = localStorage.getItem("token");
-        fetch("/api/posts", {
+        fetch(`${API_BASE_URL}/posts`, {
             method: "GET",
-                headers: {
+            headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
+                console.log(data);
                 const pages = postsIntoPages(data, 10);
                 setNumberOfPages(pages.length);
                 setPagePosts(pages);
@@ -106,7 +110,7 @@ export const Posts = () => {
         setShowPopup(true);
         setShowOverlay(true);
 
-        fetch(`/api/posts/${postId}`, {
+        fetch(`${API_BASE_URL}{postId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -122,7 +126,7 @@ export const Posts = () => {
     const handleSubmitSearch = (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token')
-        fetch(`/api/posts/search?query=${encodeURIComponent(formData.search)}`, {
+        fetch(`${API_BASE_URL}posts/search?query=${encodeURIComponent(formData.search)}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -140,7 +144,7 @@ export const Posts = () => {
     // Delete a specific post / book review
     const deleteClick = (postId) => {
         const token  = localStorage.getItem("token");
-        fetch(`/api/posts/${postId}`, {
+        fetch(`${API_BASE_URL}/posts/${postId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,

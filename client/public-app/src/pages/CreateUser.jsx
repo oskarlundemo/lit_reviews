@@ -31,6 +31,10 @@ export default function CreateUser() {
     const [isNumber, setIsNumber] = useState(false);
     const [isSymbol, setIsSymbol] = useState(false);
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
 
     const [inputError, setInputError] = useState([]);
@@ -79,13 +83,14 @@ export default function CreateUser() {
         setIsDisabled(false);
 
         try {
-            const response = await fetch('/api/create-user', {
+            const response = await fetch(`${API_BASE_URL}/create-user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
-            })
+                body: JSON.stringify(formData),
+            });
+
             const result = await response.json();
 
             if (!response.ok) {

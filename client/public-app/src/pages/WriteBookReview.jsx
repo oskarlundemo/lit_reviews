@@ -37,6 +37,10 @@ export const WriteBookReview = () => {
     const location = useLocation(); // Get data from previous page when updating
     const {post} = location.state || {} // If there is a location.state, then edit review, else create a new one
 
+    const PRODUCTION_URL = import.meta.env.VITE_API_BASE_URL;  // Matches .env variable
+    const API_BASE_URL = import.meta.env.PROD
+        ? PRODUCTION_URL  // Use backend in production
+        : "/api";  // Use Vite proxy in development
 
     // Used for updating the form data
     const [formData, setFormData] = useState({
@@ -179,7 +183,7 @@ export const WriteBookReview = () => {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await fetch('/api/book-review', {
+            const response = await fetch(`${API_BASE_URL}/book-review`, {
                 method: 'POST',
                 headers: {
                     'Authorization': token ? `Bearer ${token}` : '',
@@ -187,7 +191,7 @@ export const WriteBookReview = () => {
                 body: formPayload
             });
 
-            const result = await response.json()
+            const result = await response.json();
             if (response.ok) {
                 navigate('/dashboard');
             } else if (result.errors.length > 0) {
