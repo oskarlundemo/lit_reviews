@@ -48,7 +48,7 @@ const reactBuildPath = path.join(__dirname, "../client/public-app/dist");
 
 // Handle React routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(reactBuildPath, "new_index_file.html"), (err) => {
+    res.sendFile(path.join(reactBuildPath, "index.html"), (err) => {
         if (err) {
             console.error("Error serving index.html:", err);
             res.status(500).send(err);
