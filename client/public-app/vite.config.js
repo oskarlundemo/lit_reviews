@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://let-reviews-back-end.onrender.com',
+        target: 'https://litreviews.onrender.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\//, '/'),
       },
