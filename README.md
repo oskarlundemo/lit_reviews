@@ -4,7 +4,7 @@
 ## Live demo 
 
 Note that the project spins down with inactivity, so it might take 50 seconds before everything is running
-https://let-reviews-back-end.onrender.com/ 
+https://litreviews.onrender.com/
 
 
 ## 📌 Project Overview
