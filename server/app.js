@@ -45,7 +45,7 @@ app.use('/activity', activityRouter);
 
 
 // Handle React routes
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(reactBuildPath, "index.html"), (err) => {
         if (err) {
             console.error("Error serving index.html:", err);
