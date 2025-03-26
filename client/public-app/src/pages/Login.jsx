@@ -79,6 +79,7 @@ export const Login = () => {
         // Disable button to submit
         setIsDisabled(false);
 
+
         try {
             // Send form data to the back-end
             const response = await fetch(`${API_BASE_URL}/sign-in`, {
