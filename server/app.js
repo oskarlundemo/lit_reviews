@@ -14,19 +14,17 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const PORT = process.env.PORT || 5001;
-
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const reactBuildPath = path.join(__dirname, "../client/public-app/dist");
 
 const corsOptions = {
-    origin: 'https://lit-reviews.onrender.com',
+    origin: 'https://lit-reviews.onrender.com', // Frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow credentials like cookies or Authorization headers
 };
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const reactBuildPath = path.join(__dirname, "../client/public-app/dist");
 
 app.use(express.static(reactBuildPath));
 app.use(cors(corsOptions));
