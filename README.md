@@ -1,5 +1,12 @@
 # Lit Reviews - React & Node.js
 
+
+## Live demo 
+
+Note that the project spins down with inactivity, so it might take 50 seconds before everything is running
+https://let-reviews-back-end.onrender.com/ 
+
+
 ## 📌 Project Overview
 
 Lit (short for literary) Reviews is a web application that allows users to explore and interact with book reviews. The admin can write, update and delete book reviews which registered users can engage with by liking and commenting on them. While all visitors can read the reviews, an account is required to like or comment.
